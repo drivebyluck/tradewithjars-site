@@ -1,94 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Presidential Schedule</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       background-color: #0d0d0d;
-      color: #72ff6c;
+      color: #aaff66;
       font-family: Arial, sans-serif;
+      text-align: center;
       margin: 0;
       padding: 0;
-      text-align: center;
-    }
-    header {
-      padding: 20px;
     }
     .logo {
-      max-width: 200px;
-      animation: float 4s ease-in-out infinite;
+      width: 140px;
+      margin: 30px auto 10px;
+      animation: rocket 2s ease-in-out infinite alternate;
     }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    @keyframes rocket {
+      from { transform: translateY(0); }
+      to { transform: translateY(-12px); }
     }
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
+      color: #aaff66;
+      font-size: 36px;
+      margin-top: 10px;
     }
     table {
       width: 90%;
-      margin: 30px auto;
+      margin: 20px auto;
       border-collapse: collapse;
-      background-color: #111;
     }
     th, td {
-      padding: 14px;
-      border: 1px solid #333;
+      padding: 12px;
+      border: 1px solid #222;
     }
     th {
-      background-color: #1a1a1a;
-      color: #72ff6c;
+      background-color: #111;
+      color: #aaff66;
+      font-size: 18px;
     }
-    tr:nth-child(even) {
-      background-color: #181818;
+    td {
+      background-color: #111;
+      color: white;
     }
-    .nav-button {
+    #nav {
       position: absolute;
       top: 20px;
       right: 20px;
+    }
+    #nav select {
       background-color: #111;
-      color: #72ff6c;
-      padding: 10px 15px;
-      border: 1px solid #72ff6c;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 20px;
-      top: 60px;
-      background-color: #1a1a1a;
-      border: 1px solid #72ff6c;
-      z-index: 1;
-    }
-    .dropdown-content a {
-      display: block;
-      color: #72ff6c;
-      padding: 10px;
-      text-decoration: none;
-    }
-    .dropdown-content a:hover {
-      background-color: #2a2a2a;
+      color: #aaff66;
+      border: 1px solid #aaff66;
+      padding: 8px;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
 
-  <div class="nav-button" onclick="toggleMenu()">Navigate</div>
-  <div class="dropdown-content" id="menu">
-    <a href="index.html">Home</a>
-    <a href="schedule.html">Schedule</a>
-    <!-- Add other pages as needed -->
+  <!-- Navigation Dropdown -->
+  <div id="nav">
+    <select onchange="location = this.value;">
+      <option value="#">Navigate</option>
+      <option value="index.html">Home</option>
+      <option value="schedule.html" selected>Schedule</option>
+      <!-- Add more pages here -->
+    </select>
   </div>
 
-  <header>
-    <img src="TradeWithJarslogo.png" alt="Logo" class="logo">
-    <h1>Presidential Schedule</h1>
-  </header>
+  <!-- Rocket Logo -->
+  <img src="TradeWithJarslogo.png" alt="Logo" class="logo"/>
+
+  <h1>Presidential Schedule</h1>
 
   <table>
     <thead>
@@ -98,26 +84,53 @@
         <th>Event</th>
       </tr>
     </thead>
-    <tbody id="schedule-table">
+    <tbody id="schedule">
       <tr><td colspan="3">Loading...</td></tr>
     </tbody>
   </table>
 
   <script>
-    function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
-    }
-
-    async function fetchSchedule() {
-      const table = document.getElementById("schedule-table");
+    async function loadSchedule() {
+      const table = document.getElementById("schedule");
       try {
-        const res = await fetch("https://media-cdn.factba.se/rss/json/trump/calendar-full.json");
+        const res = await fetch("https://api.allorigins.win/raw?url=https://media-cdn.factba.se/rss/json/trump/calendar-full.json");
         const data = await res.json();
 
-        const now = new Date();
-        const past30 = new Date();
-        past30.setDate(past30.getDate() - 30);
+        const events = data.calendar.filter(event => {
+          const date = new Date(event.start);
+          const now = new Date();
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(now.getDate() - 30);
+          return date >= thirtyDaysAgo && date <= now;
+        });
 
-        const filtered = data.
+        if (events.length === 0) {
+          table.innerHTML = '<tr><td colspan="3">No events in the past 30 days.</td></tr>';
+          return;
+        }
+
+        table.innerHTML = '';
+        events.forEach(event => {
+          const date = new Date(event.start);
+          const day = date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+          const time = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+          const row = `<tr>
+            <td>${day}</td>
+            <td>${time}</td>
+            <td>${event.title}</td>
+          </tr>`;
+          table.innerHTML += row;
+        });
+      } catch (e) {
+        table.innerHTML = '<tr><td colspan="3">Failed to load schedule.</td></tr>';
+        console.error(e);
+      }
+    }
+
+    loadSchedule();
+    setInterval(loadSchedule, 60 * 60 * 1000); // Refresh every hour
+  </script>
+</body>
+</html>
+
 
