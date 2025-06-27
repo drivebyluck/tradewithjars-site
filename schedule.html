@@ -13,174 +13,245 @@
       margin: 0;
       padding: 0;
     }
+
     header {
-      background-color: #0d0d0d;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-    }
-    header img {
-      height: 50px;
-      animation: floatRocket 2s infinite ease-in-out;
-    }
-    nav select {
-      background: #1a1a1a;
-      color: #72ff6c;
-      border: 1px solid #72ff6c;
-      padding: 8px;
-      font-size: 16px;
-      border-radius: 5px;
-    }
-    @keyframes floatRocket {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1 {
-      color: #72ff6c;
-      text-align: center;
-    }
-    #searchInput {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
       background-color: #1a1a1a;
-      color: white;
-      border: 1px solid #72ff6c;
-      border-radius: 5px;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+
+    .logo {
+      height: 60px;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translatey(0px); }
+      50% { transform: translatey(-5px); }
+      100% { transform: translatey(0px); }
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn {
+      background-color: #0d0d0d;
+      color: white;
+      padding: 10px 16px;
+      font-size: 16px;
+      border: 1px solid white;
+      cursor: pointer;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #1a1a1a;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      border-bottom: 1px solid #333;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #333;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    h1 {
+      text-align: center;
+      color: #7CFC00;
+      margin: 20px;
+    }
+
+    .schedule-wrapper {
+      max-width: 95%;
+      margin: auto;
+      overflow-x: auto;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 30px;
+      margin: 0 auto;
     }
+
     th, td {
       padding: 12px;
+      border-bottom: 1px solid #333;
       text-align: left;
+      font-size: 14px;
     }
+
     th {
       background-color: #1a1a1a;
-      color: #72ff6c;
-    }
-    tr:nth-child(even) {
-      background-color: #111;
-    }
-    .day-divider {
-      background-color: #2a2a2a;
       color: #7CFC00;
+    }
+
+    tr:hover {
+      background-color: #1f1f1f;
+    }
+
+    .day-divider td {
+      background-color: #333;
       font-weight: bold;
+      color: #72ff6c;
       text-align: center;
     }
+
     .pagination {
       text-align: center;
       margin: 20px 0;
     }
+
     .pagination button {
-      background: #1a1a1a;
-      border: 1px solid #72ff6c;
-      color: #72ff6c;
-      padding: 10px 15px;
-      margin: 5px;
+      background-color: #0d0d0d;
+      color: white;
+      border: 1px solid white;
+      padding: 6px 12px;
+      margin: 0 4px;
       cursor: pointer;
     }
+
+    #searchInput {
+      width: 90%;
+      max-width: 600px;
+      padding: 10px;
+      margin: 20px auto;
+      display: block;
+      background-color: #1a1a1a;
+      color: white;
+      border: 1px solid #555;
+    }
+
     footer {
       text-align: center;
-      color: #666;
+      margin-top: 40px;
+      color: #888;
       font-size: 0.9em;
-      margin-bottom: 20px;
+      padding: 20px;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="TradeWithJarslogo.png" alt="Logo">
-    <nav>
-      <select onchange="location = this.value;">
-        <option value="#">Navigate</option>
-        <option value="index.html">Home</option>
-        <option value="schedule.html">Presidential Schedule</option>
-      </select>
-    </nav>
-  </header>
-  <div class="container">
-    <h1>Presidential Schedule</h1>
-    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for events...">
-    <table id="scheduleTable">
-      <thead>
-        <tr><th>Date</th><th>Time</th><th>Details</th><th>Location</th></tr>
-      </thead>
-      <tbody id="scheduleBody"></tbody>
-    </table>
-    <div class="pagination">
-      <button onclick="changePage(-1)">Previous</button>
-      <button onclick="changePage(1)">Next</button>
+    <img src="TradeWithJarslogo.png" alt="Logo" class="logo">
+    <div class="dropdown">
+      <button class="dropbtn">Menu</button>
+      <div class="dropdown-content">
+        <a href="index.html">Home</a>
+        <a href="schedule.html">Schedule</a>
+      </div>
     </div>
-    <footer>&copy; 2025 TradeWithJars. All rights reserved.</footer>
+  </header>
+
+  <h1>Presidential Schedule</h1>
+  <input type="text" id="searchInput" placeholder="Search events...">
+
+  <div class="schedule-wrapper">
+    <table id="eventsTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Event</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody id="eventBody"></tbody>
+    </table>
   </div>
+
+  <div class="pagination">
+    <button onclick="changePage(-1)">Previous</button>
+    <span id="pageIndicator">Page 1</span>
+    <button onclick="changePage(1)">Next</button>
+  </div>
+
+  <footer>&copy; 2025 TradeWithJars. All rights reserved.</footer>
+
   <script>
-    const data = [{"date": "2025-06-01", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "June", "day": 1, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 1", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-01", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "June", "day": 1, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 2", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-01", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "June", "day": 1, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 3", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-02", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "June", "day": 2, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 4", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-02", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "June", "day": 2, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 5", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-02", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "June", "day": 2, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 6", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-03", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "June", "day": 3, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 7", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-03", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "June", "day": 3, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 8", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-03", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "June", "day": 3, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 9", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-04", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "June", "day": 4, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 10", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-04", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "June", "day": 4, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 11", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-04", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "June", "day": 4, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 12", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-05", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "June", "day": 5, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 13", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-05", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "June", "day": 5, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 14", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-05", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "June", "day": 5, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 15", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-06", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "June", "day": 6, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 16", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-06", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "June", "day": 6, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 17", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-06", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "June", "day": 6, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 18", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-07", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "June", "day": 7, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 19", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-07", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "June", "day": 7, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 20", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-07", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "June", "day": 7, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 21", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-08", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "June", "day": 8, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 22", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-08", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "June", "day": 8, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 23", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-08", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "June", "day": 8, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 24", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-09", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "June", "day": 9, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 25", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-09", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "June", "day": 9, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 26", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-09", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "June", "day": 9, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 27", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-10", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "June", "day": 10, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 28", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-10", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "June", "day": 10, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 29", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-10", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "June", "day": 10, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 30", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-11", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "June", "day": 11, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 31", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-11", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "June", "day": 11, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 32", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-11", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "June", "day": 11, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 33", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-12", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "June", "day": 12, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 34", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-12", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "June", "day": 12, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 35", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-12", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "June", "day": 12, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 36", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-13", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "June", "day": 13, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 37", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-13", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "June", "day": 13, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 38", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-13", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "June", "day": 13, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 39", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-14", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "June", "day": 14, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 40", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-14", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "June", "day": 14, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 41", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-14", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "June", "day": 14, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 42", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-15", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "June", "day": 15, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 43", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-15", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "June", "day": 15, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 44", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-15", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "June", "day": 15, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 45", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-16", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "June", "day": 16, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 46", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-16", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "June", "day": 16, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 47", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-16", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "June", "day": 16, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 48", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-17", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "June", "day": 17, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 49", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-17", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "June", "day": 17, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 50", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-17", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "June", "day": 17, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 51", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-18", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "June", "day": 18, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 52", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-18", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "June", "day": 18, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 53", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-18", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "June", "day": 18, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 54", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-19", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "June", "day": 19, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 55", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-19", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "June", "day": 19, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 56", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-19", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "June", "day": 19, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 57", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-20", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "June", "day": 20, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 58", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-20", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "June", "day": 20, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 59", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-20", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "June", "day": 20, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 60", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-21", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "June", "day": 21, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 61", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-21", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "June", "day": 21, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 62", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-21", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "June", "day": 21, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 63", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-22", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "June", "day": 22, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 64", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-22", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "June", "day": 22, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 65", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-22", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "June", "day": 22, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 66", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-23", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "June", "day": 23, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 67", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-23", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "June", "day": 23, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 68", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-23", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "June", "day": 23, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 69", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-24", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "June", "day": 24, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 70", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-24", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "June", "day": 24, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 71", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-24", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "June", "day": 24, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 72", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-25", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "June", "day": 25, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 73", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-25", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "June", "day": 25, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 74", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-25", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "June", "day": 25, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 75", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-26", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "June", "day": 26, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 76", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-26", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "June", "day": 26, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 77", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-26", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "June", "day": 26, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 78", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-27", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "June", "day": 27, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 79", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-27", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "June", "day": 27, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 80", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-27", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "June", "day": 27, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 81", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-28", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "June", "day": 28, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 82", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-28", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "June", "day": 28, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 83", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-28", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "June", "day": 28, "day_of_week": "Saturday", "type": "President Schedule", "details": "Sample event 84", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-29", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "June", "day": 29, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 85", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-29", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "June", "day": 29, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 86", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-29", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "June", "day": 29, "day_of_week": "Sunday", "type": "President Schedule", "details": "Sample event 87", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-30", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "June", "day": 30, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 88", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-30", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "June", "day": 30, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 89", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-06-30", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "June", "day": 30, "day_of_week": "Monday", "type": "President Schedule", "details": "Sample event 90", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-01", "time": "9:00:00", "time_formatted": "9:00 AM", "year": 2025, "month": "July", "day": 1, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 91", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-01", "time": "10:00:00", "time_formatted": "10:00 AM", "year": 2025, "month": "July", "day": 1, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 92", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-01", "time": "11:00:00", "time_formatted": "11:00 AM", "year": 2025, "month": "July", "day": 1, "day_of_week": "Tuesday", "type": "President Schedule", "details": "Sample event 93", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-02", "time": "12:00:00", "time_formatted": "12:00 AM", "year": 2025, "month": "July", "day": 2, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 94", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-02", "time": "13:00:00", "time_formatted": "13:00 AM", "year": 2025, "month": "July", "day": 2, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 95", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-02", "time": "14:00:00", "time_formatted": "14:00 AM", "year": 2025, "month": "July", "day": 2, "day_of_week": "Wednesday", "type": "President Schedule", "details": "Sample event 96", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-03", "time": "15:00:00", "time_formatted": "15:00 AM", "year": 2025, "month": "July", "day": 3, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 97", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-03", "time": "16:00:00", "time_formatted": "16:00 AM", "year": 2025, "month": "July", "day": 3, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 98", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-03", "time": "17:00:00", "time_formatted": "17:00 AM", "year": 2025, "month": "July", "day": 3, "day_of_week": "Thursday", "type": "President Schedule", "details": "Sample event 99", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}, {"date": "2025-07-04", "time": "18:00:00", "time_formatted": "18:00 AM", "year": 2025, "month": "July", "day": 4, "day_of_week": "Friday", "type": "President Schedule", "details": "Sample event 100", "location": "Oval Office", "coverage": "Closed Press", "daily_text": "", "url": null, "video_url": null, "lastdaily": false, "daycount": null, "newmonth": false}];
+    const url = 'https://media-cdn.factba.se/rss/json/trump/calendar-full.json';
+    let allEvents = [];
+    let filteredEvents = [];
     let currentPage = 1;
     const itemsPerPage = 50;
 
-    function renderTable(filtered = data) {
+    function renderTable() {
+      const tbody = document.getElementById("eventBody");
+      tbody.innerHTML = "";
+
+      let currentDay = "";
       const start = (currentPage - 1) * itemsPerPage;
       const end = start + itemsPerPage;
-      const pageItems = filtered.slice(start, end);
-      const body = document.getElementById("scheduleBody");
-      body.innerHTML = "";
+      const pageEvents = filteredEvents.slice(start, end);
 
-      let lastDate = "";
-      pageItems.forEach(item => {
-        if (item.date !== lastDate) {
+      pageEvents.forEach(event => {
+        if (event.date !== currentDay) {
           const divider = document.createElement("tr");
-          divider.innerHTML = `<td colspan="4" class="day-divider">${item.day_of_week}, ${item.month} ${item.day}, ${item.year}</td>`;
-          body.appendChild(divider);
-          lastDate = item.date;
+          divider.className = "day-divider";
+          divider.innerHTML = `<td colspan="4">${event.date}</td>`;
+          tbody.appendChild(divider);
+          currentDay = event.date;
         }
+
         const row = document.createElement("tr");
-        row.innerHTML = `<td>${item.date}</td><td>${item.time_formatted}</td><td>${item.details}</td><td>${item.location}</td>`;
-        body.appendChild(row);
+        row.innerHTML = `
+          <td>${event.date}</td>
+          <td>${event.time_formatted}</td>
+          <td>${event.details}</td>
+          <td>${event.location}</td>
+        `;
+        tbody.appendChild(row);
       });
+
+      document.getElementById("pageIndicator").innerText = `Page ${currentPage}`;
     }
 
-    function changePage(step) {
-      const maxPage = Math.ceil(data.length / itemsPerPage);
-      currentPage += step;
-      if (currentPage < 1) currentPage = 1;
-      if (currentPage > maxPage) currentPage = maxPage;
+    function changePage(offset) {
+      const newPage = currentPage + offset;
+      if (newPage < 1 || newPage > Math.ceil(filteredEvents.length / itemsPerPage)) return;
+      currentPage = newPage;
       renderTable();
     }
 
-    function filterTable() {
-      const term = document.getElementById("searchInput").value.toLowerCase();
-      const filtered = data.filter(e => e.details.toLowerCase().includes(term));
+    function filterEvents() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      filteredEvents = allEvents.filter(event =>
+        event.details.toLowerCase().includes(query) ||
+        event.date.toLowerCase().includes(query) ||
+        event.location.toLowerCase().includes(query)
+      );
       currentPage = 1;
-      renderTable(filtered);
+      renderTable();
     }
 
-    renderTable();
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        allEvents = data.filter(e => e.details).sort((a, b) => new Date(a.date) - new Date(b.date));
+        filteredEvents = [...allEvents];
+        renderTable();
+      });
+
+    document.getElementById("searchInput").addEventListener("input", filterEvents);
   </script>
 </body>
 </html>
-     scheduleBody.appendChild(row);
-          }
-        });
 
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("scheduleTable").style.display = "table";
-      } catch (err) {
-        document.getElementById("loading").textContent = "Failed to load schedule.";
-      }
-    }
-
-    fetchSchedule();
-    setInterval(fetchSchedule, 60 * 60 * 1000);
-  </script>
-</body>
-</html>
 
