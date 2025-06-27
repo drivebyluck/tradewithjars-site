@@ -1,244 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trade With Jars</title>
-  <link rel="icon" type="image/png" href="TradeWithJarslogo.png">
-  <style>
-    body {
-      background: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
-      padding: 30px;
-      margin: 0;
-      animation: fadeIn 1.2s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes flyIn {
-      0% { transform: translateY(100px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-    img.logo {
-      display: block;
-      margin: 0 auto 30px;
-      max-width: 220px;
-      animation: flyIn 2s ease-out;
-    }
-    .mode-toggle {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 30px;
-    }
-    .mode-toggle button {
-      background-color: #111;
-      border: 1px solid #444;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .mode-toggle button:hover, .mode-toggle button.active {
-      background-color: #28a745;
-      color: black;
-    }
-    .mode-section {
-      display: none;
-      max-width: 500px;
-      margin: 0 auto;
-      background-color: #1f1f1f;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #28a745;
-    }
-    .mode-section.active {
-      display: block;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: none;
-      background-color: #333;
-      color: #fff;
-    }
-    .result {
-      margin-top: 20px;
-      font-size: 1rem;
-      text-align: center;
-      color: #28a745;
-    }
-    button.calculate {
-      background-color: #28a745;
-      color: black;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    .chart-wrapper {
-      max-width: 500px;
-      margin: 60px auto 0 auto;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 10px #28a745;
-      background-color: #1f1f1f;
-    }
-    .partner-section {
-      text-align: center;
-      margin-top: 40px;
-    }
-    .partner-section p {
-      font-size: 1.2rem;
-      color: #ccc;
-      margin-bottom: 10px;
-    }
-    .partner-section img {
-      max-width: 200px;
-      height: auto;
-      border-radius: 10px;
-    }
-    .footer {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #777;
-      margin-top: 60px;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.85);
-      justify-content: center;
-      align-items: center;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-    .modal-content {
-      background-color: #222;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 0 15px #28a745;
-    }
-    .modal-content input {
-      width: 80%;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #444;
-      background-color: #111;
-      color: #fff;
-    }
-    .modal-content button {
-      background-color: #28a745;
-      border: none;
-      padding: 10px 20px;
-      margin-top: 10px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .modal-content a {
-      display: block;
-      margin-top: 10px;
-      color: #28a745;
-    }
-  </style>
-</head>
-<body>
-  <img src="TradeWithJarslogo.png" alt="Trade With Jars Logo" class="logo">
-  <div class="mode-toggle">
-    <button onclick="toggleMode('controlled')" id="btn-controlled" class="active">Precision Mode</button>
-    <button onclick="toggleMode('degen')" id="btn-degen">Degen Dive</button>
-    <button onclick="toggleMode('scalp')" id="btn-scalp">Scalp Sniper</button>
-  </div>
-  <div id="controlled" class="mode-section active">
-    <label>Investment Amount ($): <input type="number" id="c_investment"></label>
-    <label>Target Profit ($): <input type="number" id="c_profit"></label>
-    <label>Acceptable Loss ($): <input type="number" id="c_loss"></label>
-    <label>Leverage: <input type="number" id="c_leverage"></label>
-    <label>Entry Price: <input type="number" id="c_entry"></label>
-    <label>Direction:
-      <select id="c_direction">
-        <option>Long</option>
-        <option>Short</option>
-      </select>
-    </label>
-    <button class="calculate" onclick="calculateControlled()">Run Strategy</button>
-    <div class="result" id="c_result"></div>
-  </div>
-  <div class="chart-wrapper">
-    <iframe
-      src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_1&symbol=BLOFIN%3ASOLUSDT.P&interval=1&hidesidetoolbar=false&symboledit=0&saveimage=0&hidevolume=1&hidelegend=1&theme=dark&style=1&timezone=Etc%2FUTC&studies=[]&backgroundColor=%231f1f1f&gridLineColor=%232e2e2e&fontColor=%23ffffff"
-      width="100%"
-      height="400"
-      frameborder="0"
-      allowtransparency="true"
-      scrolling="no"
-      allowfullscreen=""
-      style="border: none;">
-    </iframe>
-  </div>
-  <div class="partner-section">
-    <p>PROUD PARTNER OF</p>
-    <img src="doughbois.png" alt="Doughboi's Bakery Logo">
-  </div>
-  <div class="footer">
-    © 2025 Trade With Jars. All rights reserved.
-  </div>
+<script>
+async function calculateControlled() {
+  showPasswordPrompt(async () => {
+    const investment = parseFloat(c_investment.value);
+    const profit = parseFloat(c_profit.value);
+    const loss = parseFloat(c_loss.value);
+    const leverage = parseFloat(c_leverage.value);
+    const entry = parseFloat(c_entry.value);
+    const direction = c_direction.value;
 
-  <div id="passwordModal" class="modal">
-    <div class="modal-content">
-      <p>Enter Access Code</p>
-      <input type="password" id="accessCodeInput" placeholder="Enter code...">
-      <button onclick="verifyCode()">Submit</button>
-      <a href="https://discord.gg/bbBPzjJk" target="_blank">Request code from Doughboi's Bakery Discord</a>
-    </div>
-  </div>
+    if ([investment, profit, loss, leverage, entry].some(isNaN)) {
+      c_result.textContent = "Fill all fields.";
+      return;
+    }
 
-  <script>
-    let pendingCalc = null;
-    function toggleMode(mode) {
-      document.querySelectorAll('.mode-section').forEach(el => el.classList.remove('active'));
-      document.getElementById(mode).classList.add('active');
-      document.querySelectorAll('.mode-toggle button').forEach(btn => btn.classList.remove('active'));
-      document.getElementById('btn-' + mode).classList.add('active');
-    }
-    function showPasswordPrompt(callback) {
-      pendingCalc = callback;
-      document.getElementById('passwordModal').style.display = 'flex';
-      setTimeout(() => document.getElementById('accessCodeInput').focus(), 100);
-    }
-    function verifyCode() {
-      const code = document.getElementById('accessCodeInput').value;
-      if (code === '1134') {
-        document.getElementById('passwordModal').style.display = 'none';
-        document.getElementById('accessCodeInput').value = '';
-        if (pendingCalc) pendingCalc();
+    try {
+      const response = await fetch('https://jars-backend.onrender.com/calculate/controlled', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ investment, profit, loss, leverage, entry, direction })
+      });
+
+      const data = await response.json();
+      if (data.error) {
+        c_result.textContent = data.error;
       } else {
-        alert("Please request a new code from the Doughboi's Bakery Discord.");
-        document.getElementById('accessCodeInput').value = '';
+        c_result.textContent = `TP: $${data.tp} | SL: $${data.sl}`;
       }
+    } catch (err) {
+      c_result.textContent = 'Error connecting to backend.';
     }
-    function calculateControlled() { showPasswordPrompt(() => {
-      const i = parseFloat(c_investment.value), p = parseFloat(c_profit.value), l = parseFloat(c_loss.value), lev = parseFloat(c_leverage.value), e = parseFloat(c_entry.value), d = c_direction.value;
-      if ([i, p, l, lev, e].some(isNaN)) return c_result.textContent = "Fill all fields.";
-      const move = (p / (i * lev)) * e, stop = (l / (i * lev)) * e;
-      const tp = d === 'Long' ? e + move : e - move;
-      const sl = d === 'Long' ? e - stop : e + stop;
-      const dec = e.toString().includes('.') ? e.toString().split('.')[1].length : 2;
-      c_result.textContent = `TP: $${tp.toFixed(dec)} | SL: $${sl.toFixed(dec)}`;
-    }); }
-  </script>
-</body>
-</html>
+  });
+}
+</script>
+
