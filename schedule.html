@@ -3,43 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Presidential Schedule | Trade With Jars</title>
-  <link rel="icon" type="image/png" href="TradeWithJarslogo.png"/>
+  <title>Presidential Schedule</title>
   <style>
     body {
-      background: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
-      padding: 30px;
-      margin: 0;
+      background-color: #0d0d0d;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
     }
+
     h1 {
       text-align: center;
-      color: #28a745;
-      margin-bottom: 20px;
+      color: #7CFC00;
     }
-    iframe {
-      display: block;
-      margin: 0 auto;
-      width: 95%;
-      height: 800px;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #28a745;
-    }
-    .back-link {
-      display: block;
-      text-align: center;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
       margin-top: 30px;
-      color: #28a745;
-      font-weight: bold;
-      text-decoration: none;
+    }
+
+    th, td {
+      padding: 15px;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+
+    th {
+      background-color: #1a1a1a;
+      color: #7CFC00;
+    }
+
+    tr:hover {
+      background-color: #1f1f1f;
+    }
+
+    .loading {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 1.2em;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-  <h1>U.S. Presidential Daily Schedule</h1>
-  <iframe src="https://www.rollcall.com/presidential-schedule/" title="Presidential Schedule"></iframe>
-  <a href="index.html" class="back-link">← Back to Calculator</a>
+  <h1>Presidential Schedule</h1>
+  <div class="loading">Loading events...</div>
+  <table id="eventsTable" style="display:none;">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Event</th>
+      </tr>
+    </thead>
+    <tbody id="eventBody"></tbody>
+  </table>
+
+  <script>
+    const calendarId = 'cantymedia.com_62fqfmv1eejqs9hntbr6hof5kc@group.calendar.google.com';
+    const apiKey = 'AIzaSyAfWDR3RR0zHFBWm3guryUUIn0qHSf06vc';
+    const now = new Date().toISOString();
+    const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?key=${apiKey}&timeMin=${now}&timeMax=${nextWeek}&singleEvents=true&orderBy=startTime`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const events = data.items;
+        const eventBody = document.getElementById('eventBody');
+
+        if (!events || events.length === 0) {
+          document.querySelector('.loading').textContent = 'No upcoming events found.';
+          return;
+        }
+
+        events.forEach(event => {
+          const start = event.start.dateTime || event.start.date;
+          const dateObj = new Date(start);
+          const date = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+          const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+          const title = event.summary || 'No title';
+
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${date}</td><td>${time}</td><td>${title}</td>`;
+          eventBody.appendChild(row);
+        });
+
+        document.getElementById('eventsTable').style.display = 'table';
+        document.querySelector('.loading').style.display = 'none';
+      })
+      .catch(error => {
+        console.error('Error fetching calendar events:', error);
+        document.querySelector('.loading').textContent = 'Failed to load events.';
+      });
+  </script>
 </body>
 </html>
+
