@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Presidential Schedule</title>
-  <link rel="icon" type="image/png" href="TradeWithJarslogo.png" />
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Presidential Schedule</title>
+<link href="TradeWithJarslogo.png" rel="icon" type="image/png"/>
+<style>
     body {
       background: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
       font-family: 'Segoe UI', sans-serif;
@@ -82,6 +83,11 @@
       justify-content: center;
     }
     table {
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      max-width: 900px;
+      overflow-x: auto;
       width: 90%;
       max-width: 1100px;
       margin: auto;
@@ -110,34 +116,31 @@
   </style>
 </head>
 <body>
-  <img class="logo" src="TradeWithJarslogo.png" alt="Trade With Jars Logo" />
-
-  <div class="dropdown">
-    <button class="dropbtn">☰</button>
-    <div class="dropdown-content">
-      <a href="index.html">Home</a>
-      <a href="schedule.html">Presidential Schedule</a>
-      <a href="about.html">About</a>
-    </div>
-  </div>
-
-  <h2>Presidential Schedule</h2>
-  <div class="loading" id="loading">Loading schedule...</div>
-  <div class="table-container">
-    <table id="scheduleTable" style="display:none;">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Details</th>
-          <th>Location</th>
-        </tr>
-      </thead>
-      <tbody id="scheduleBody"></tbody>
-    </table>
-  </div>
-
-  <script>
+<img alt="Trade With Jars Logo" class="logo" src="TradeWithJarslogo.png"/>
+<div class="dropdown">
+<button class="dropbtn">☰</button>
+<div class="dropdown-content">
+<a href="index.html">Home</a>
+<a href="schedule.html">Presidential Schedule</a>
+<a href="about.html">About</a>
+</div>
+</div>
+<h2>Presidential Schedule</h2>
+<div class="loading" id="loading">Loading schedule...</div>
+<div class="table-container">
+<table id="scheduleTable" style="display:none;">
+<thead>
+<tr>
+<th>Date</th>
+<th>Time</th>
+<th>Details</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody id="scheduleBody"></tbody>
+</table>
+</div>
+<script>
     async function fetchSchedule() {
       try {
         const response = await fetch("https://media-cdn.factba.se/rss/json/trump/calendar-full.json");
@@ -171,11 +174,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
