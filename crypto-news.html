@@ -1,187 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>Crypto News - TradeWithJars</title>
-  <link rel="icon" type="image/png" href="TradeWithJarslogo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crypto News</title>
   <style>
     body {
       margin: 0;
-      background-color: #0f0f0f;
-      color: #ccff99;
+      background-color: #0d0d0d;
+      color: white;
       font-family: Arial, sans-serif;
     }
-
     header {
-      background-color: #000;
+      background-color: #0d0d0d;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
-
-    header img {
-      height: 60px;
-      animation: rocket 2s infinite ease-in-out alternate;
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #7CFC00;
+      animation: flicker 1.5s infinite alternate;
     }
-
-    @keyframes rocket {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-5px); }
+    @keyframes flicker {
+      from { opacity: 1; }
+      to { opacity: 0.7; }
     }
-
-    .dropdown {
-      position: relative;
-    }
-
-    .dropdown select {
-      background: none;
-      border: 1px solid #ccff99;
-      color: #ccff99;
+    nav select {
+      background-color: #1a1a1a;
+      color: white;
       padding: 8px;
       font-size: 16px;
-      border-radius: 5px;
-    }
-
-    h1 {
-      text-align: center;
-      color: #aaff66;
-      margin-top: 30px;
-    }
-
-    .feed-section {
-      background: #1b1b1b;
-      margin: 20px auto;
-      max-width: 800px;
-      padding: 20px;
-      border-radius: 10px;
       border: 1px solid #333;
     }
-
-    .feed-section h2 {
-      margin-top: 0;
+    .container {
+      padding: 20px;
+    }
+    h2 {
+      color: #7CFC00;
       border-bottom: 1px solid #333;
       padding-bottom: 5px;
-      color: #99ffcc;
     }
-
-    .headline {
-      font-weight: bold;
-      font-size: 1.2em;
-      margin-bottom: 5px;
-      color: #ccff66;
-    }
-
     .top-article {
-      border: 2px solid #66ff66;
+      border: 1px solid #7CFC00;
       padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      background-color: #111111;
+      margin: 10px 0;
+      background-color: #111;
     }
-
-    .link {
-      color: white;
+    .sub-article {
+      margin: 5px 0;
+      color: #ffffff;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+    }
+    .sub-article a {
+      color: #ffffff;
       text-decoration: none;
     }
-
-    .link:hover {
-      text-decoration: underline;
-      color: #aaffaa;
-    }
-
-    .divider {
-      border-top: 1px solid #333;
-      margin: 10px 0;
-    }
-
     footer {
       text-align: center;
-      color: #777;
-      margin: 50px 0 20px;
-    }
-
-    .sub-article a {
-      color: #FFFFFF !important;
+      padding: 20px;
+      color: #888;
+      font-size: 14px;
+      border-top: 1px solid #333;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="TradeWithJarslogo.png" alt="Trade With Jars Logo">
-    <div class="dropdown">
+    <div class="logo">TradeWithJars.net 🚀</div>
+    <nav>
       <select onchange="location = this.value;">
-        <option value="crypto-news.html">Crypto News</option>
+        <option value="#">Navigate</option>
         <option value="index.html">Home</option>
-        <option value="schedule.html">Schedule</option>
+        <option value="schedule.html">Presidential Schedule</option>
+        <option value="crypto-news.html">Crypto News</option>
       </select>
-    </div>
+    </nav>
   </header>
 
-  <h1>Top News from the Web</h1>
-  <div id="news-container"></div>
+  <div class="container" id="news-container">
+    <h2>Loading Crypto News...</h2>
+  </div>
 
   <footer>
-    © 2025 TradeWithJars.net. All rights reserved.
+    &copy; 2025 TradeWithJars.net. All rights reserved.
   </footer>
 
   <script>
-    const feeds = {
-      "CoinDesk": "https://www.coindesk.com/arc/outboundfeeds/rss/",
-      "Wall Street Journal": "https://feeds.a.dj.com/rss/RSSMarkets.xml",
-      "CBS News": "https://www.cbsnews.com/latest/rss/main",
-      "Al Jazeera": "https://www.aljazeera.com/xml/rss/all.xml",
-      "BBC": "https://feeds.bbci.co.uk/news/world/rss.xml",
-      "RT": "https://www.rt.com/rss/news"
-    };
+    const feeds = [
+      { name: "CoinDesk", url: "https://api.allorigins.win/get?url=https://www.coindesk.com/arc/outboundfeeds/rss/" },
+      { name: "Wall Street Journal", url: "https://api.allorigins.win/get?url=https://feeds.a.dj.com/rss/RSSMarkets.xml" },
+      { name: "CBS", url: "https://api.allorigins.win/get?url=https://www.cbsnews.com/latest/rss/main" },
+      { name: "Al Jazeera", url: "https://api.allorigins.win/get?url=https://www.aljazeera.com/xml/rss/all.xml" },
+      { name: "BBC", url: "https://api.allorigins.win/get?url=https://feeds.bbci.co.uk/news/world/rss.xml" },
+      { name: "RT", url: "https://api.allorigins.win/get?url=https://www.rt.com/rss/news" }
+    ];
 
-    const container = document.getElementById('news-container');
+    async function loadFeeds() {
+      const container = document.getElementById("news-container");
+      container.innerHTML = "";
 
-    async function loadRSS(feedName, feedUrl) {
-      const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
-      try {
-        const res = await fetch(api);
-        const data = await res.json();
+      for (const feed of feeds) {
+        try {
+          const res = await fetch(feed.url);
+          const data = await res.json();
+          const parser = new DOMParser();
+          const xml = parser.parseFromString(data.contents, "text/xml");
+          const items = Array.from(xml.querySelectorAll("item")).slice(0, 6);
 
-        if (data.status !== "ok") return;
+          const section = document.createElement("section");
+          const title = document.createElement("h2");
+          title.textContent = feed.name;
+          section.appendChild(title);
 
-        const section = document.createElement("div");
-        section.className = "feed-section";
-        section.innerHTML = `<h2>${feedName}</h2>`;
+          if (items.length > 0) {
+            const top = items[0];
+            const topDiv = document.createElement("div");
+            topDiv.className = "top-article";
+            topDiv.innerHTML = `<strong><a href="${top.querySelector("link").textContent}" target="_blank" style="color:#7CFC00;text-decoration:none;">${top.querySelector("title").textContent}</a></strong>`;
+            section.appendChild(topDiv);
 
-        const items = data.items.slice(0, 5);
-        if (items.length) {
-          const main = items[0];
-          section.innerHTML += `
-            <div class="headline top-article">
-              <a class="link" href="${main.link}" target="_blank">${main.title}</a>
-            </div>
-            <div class="divider"></div>`;
+            for (let i = 1; i < items.length; i++) {
+              const item = items[i];
+              const subDiv = document.createElement("div");
+              subDiv.className = "sub-article";
+              subDiv.innerHTML = `<a href="${item.querySelector("link").textContent}" target="_blank">${item.querySelector("title").textContent}</a>`;
+              section.appendChild(subDiv);
+            }
+          }
 
-          items.slice(1).forEach(item => {
-            section.innerHTML += `
-              <div class="sub-article">
-                <a class="link" href="${item.link}" target="_blank">- ${item.title}</a>
-              </div>
-              <div class="divider"></div>`;
-          });
+          container.appendChild(section);
+        } catch (error) {
+          console.error("Error loading feed:", feed.name, error);
         }
-
-        container.appendChild(section);
-      } catch (e) {
-        console.error(`Failed to fetch ${feedName}`, e);
       }
     }
 
-    for (const [name, url] of Object.entries(feeds)) {
-      loadRSS(name, url);
-    }
+    loadFeeds();
   </script>
 </body>
 </html>
-
-
-
-
-
-
