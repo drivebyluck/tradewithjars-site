@@ -10,29 +10,24 @@
       color: white;
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      padding: 20px;
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
-      background: #0d0d0d;
     }
 
-    .logo {
-      height: 100px;
-      animation: float 3s ease-in-out infinite;
+    #logo {
+      height: 80px;
+      animation: float 2s infinite ease-in-out;
     }
 
     @keyframes float {
-      0%, 100% {
-        transform: translateY(0px);
-      }
-      50% {
-        transform: translateY(-8px);
-      }
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0); }
     }
 
     .dropdown {
@@ -41,42 +36,35 @@
     }
 
     .dropbtn {
-      background-color: #0d0d0d;
+      background-color: transparent;
       color: white;
       border: 2px solid #7CFC00;
-      padding: 12px 16px;
-      font-size: 16px;
+      padding: 10px 20px;
       cursor: pointer;
+      font-size: 16px;
       border-radius: 10px;
-      transition: all 0.3s ease;
-    }
-
-    .dropbtn:hover {
-      background-color: #1a1a1a;
     }
 
     .dropdown-content {
       display: none;
       position: absolute;
       right: 0;
-      background-color: #0d0d0d;
-      min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      background-color: #1a1a1a;
+      min-width: 180px;
       z-index: 1;
-      border: 1px solid #7CFC00;
-      border-radius: 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
     }
 
     .dropdown-content a {
-      color: white;
+      color: #7CFC00;
       padding: 12px 16px;
       text-decoration: none;
       display: block;
-      transition: background 0.3s;
     }
 
     .dropdown-content a:hover {
-      background-color: #1a1a1a;
+      background-color: #2a2a2a;
     }
 
     .dropdown:hover .dropdown-content {
@@ -86,15 +74,13 @@
     h1 {
       text-align: center;
       color: #7CFC00;
-      font-size: 2.5em;
-      margin-top: 10px;
+      margin-top: 20px;
     }
 
     table {
-      width: 90%;
-      max-width: 900px;
-      margin: 30px auto;
+      width: 100%;
       border-collapse: collapse;
+      margin-top: 30px;
     }
 
     th, td {
@@ -121,14 +107,15 @@
   </style>
 </head>
 <body>
+
   <header>
-    <img src="TradeWithJarslogo.png" class="logo" alt="Trade With Jars Logo">
+    <img src="TradeWithJarslogo.png" id="logo" alt="Trade With Jars Logo">
     <div class="dropdown">
       <button class="dropbtn">More Pages</button>
       <div class="dropdown-content">
         <a href="index.html">Home</a>
-        <a href="president-schedule.html">President Schedule</a>
-        <a href="schedule.html">Full Schedule</a>
+        <a href="schedule.html">Presidential Schedule</a>
+        <a href="president-schedule.html">Full Calendar View</a>
       </div>
     </div>
   </header>
@@ -140,49 +127,55 @@
       <tr>
         <th>Date</th>
         <th>Time</th>
-        <th>Event</th>
+        <th>Title</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody id="eventBody"></tbody>
   </table>
 
   <script>
-    const now = new Date().toISOString();
-    const in30Days = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-    const endpoint = 'https://script.google.com/macros/s/AKfycbyOqotmXSJ_SB0toqEpC8od5W_RnlKkNh26Gt38S8q_84I8u8b7Kell82g9K5pc8Uyc/exec';
+    async function fetchEvents() {
+      try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbyOqotmXSJ_SB0toqEpC8od5W_RnlKkNh26Gt38S8q_84I8u8b7Kell82g9K5pc8Uyc/exec");
+        const data = await response.json();
 
-    fetch(endpoint)
-      .then(res => res.json())
-      .then(events => {
-        const eventBody = document.getElementById('eventBody');
-
-        if (!events || events.length === 0) {
-          document.querySelector('.loading').textContent = 'No upcoming events found.';
+        const eventBody = document.getElementById("eventBody");
+        if (!data || data.length === 0) {
+          document.querySelector(".loading").textContent = "No upcoming events found.";
           return;
         }
 
-        events.forEach(event => {
-          const start = event.startTime || event.date;
-          const dateObj = new Date(start);
-          const date = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-          const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-          const title = event.title || 'No title';
+        data.forEach(event => {
+          const startDate = new Date(event.start);
+          const date = startDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+          const time = startDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
 
-          const row = document.createElement('tr');
-          row.innerHTML = `<td>${date}</td><td>${time}</td><td>${title}</td>`;
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${date}</td>
+            <td>${time}</td>
+            <td>${event.title}</td>
+            <td>${event.description}</td>
+          `;
           eventBody.appendChild(row);
         });
 
-        document.getElementById('eventsTable').style.display = 'table';
-        document.querySelector('.loading').style.display = 'none';
-      })
-      .catch(error => {
-        console.error('Error fetching events:', error);
-        document.querySelector('.loading').textContent = 'Failed to load events.';
-      });
+        document.getElementById("eventsTable").style.display = "table";
+        document.querySelector(".loading").style.display = "none";
+      } catch (err) {
+        console.error("Failed to load events", err);
+        document.querySelector(".loading").textContent = "Failed to load events.";
+      }
+    }
+
+    fetchEvents();
+    setInterval(fetchEvents, 60 * 60 * 1000); // refresh every hour
   </script>
+
 </body>
 </html>
+
 
 
 
