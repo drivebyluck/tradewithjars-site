@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crypto News</title>
+  <link rel="icon" href="TradeWithJarslogo.png" />
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #121212;
+      padding: 10px 20px;
+      border-bottom: 1px solid #333;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #1e1e1e;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      right: 0;
+    }
+
+    .dropdown-content a {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #333;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #7CFC00;
+    }
+
+    .feed {
+      background-color: #1a1a1a;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 800px;
+      animation: fadein 1s;
+    }
+
+    .feed h2 {
+      color: #7CFC00;
+    }
+
+    .feed ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .feed li {
+      margin-bottom: 15px;
+    }
+
+    .feed a {
+      color: #66d9ef;
+      text-decoration: none;
+    }
+
+    .feed a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      border-top: 1px solid #333;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="TradeWithJarslogo.png" alt="Logo" />
+      <span>TradeWithJars</span>
+    </div>
+    <div class="dropdown">
+      <span style="cursor:pointer;">Menu</span>
+      <div class="dropdown-content">
+        <a href="index.html">Home</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="crypto-news.html">Crypto News</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h1>Crypto News & Global Headlines</h1>
+    <div id="feeds"></div>
+  </main>
+
+  <footer>
+    &copy; 2025 TradeWithJars.net. All rights reserved.
+  </footer>
+
+  <script>
+    const feeds = [
+      { name: "CoinDesk", url: "https://www.coindesk.com/arc/outboundfeeds/rss/" },
+      { name: "WSJ Markets", url: "https://feeds.a.dj.com/rss/RSSMarkets.xml" },
+      { name: "CBS News", url: "https://www.cbsnews.com/latest/rss/main" },
+      { name: "Al Jazeera", url: "https://www.aljazeera.com/xml/rss/all.xml" },
+      { name: "BBC World", url: "https://feeds.bbci.co.uk/news/world/rss.xml" },
+      { name: "RT News", url: "https://www.rt.com/rss/news" }
+    ];
+
+    async function fetchRSS(url) {
+      const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
+      const res = await fetch(api);
+      const data = await res.json();
+      return data.items.slice(0, 5); // only show 5 from each
+    }
+
+    async function loadFeeds() {
+      const container = document.getElementById("feeds");
+      for (let feed of feeds) {
+        const items = await fetchRSS(feed.url);
+        const div = document.createElement("div");
+        div.className = "feed";
+        div.innerHTML = `<h2>${feed.name}</h2><ul>${
+          items.map(item => `<li><a href="${item.link}" target="_blank">${item.title}</a></li>`).join("")
+        }</ul>`;
+        container.appendChild(div);
+      }
+    }
+
+    loadFeeds();
+  </script>
+</body>
+</html>
