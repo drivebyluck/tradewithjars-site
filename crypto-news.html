@@ -1,10 +1,11 @@
 
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Crypto News - TradeWithJars</title>
-  <style>
+<meta charset="utf-8"/>
+<title>Crypto News - TradeWithJars</title>
+<style>
     body {
       margin: 0;
       background-color: #0f0f0f;
@@ -105,7 +106,6 @@
     margin: 10px 0;
 }
 </style>
-
 <style>
 .sub-article a {
     color: #FFFFFF !important;
@@ -113,26 +113,22 @@
 </style>
 </head>
 <body>
-  <header>
-    <img src="TradeWithJarslogo.png" alt="Trade With Jars Logo">
-    <div class="dropdown">
-      <select onchange="location = this.value;">
-        <option value="crypto-news.html">Crypto News</option>
-        <option value="index.html">Home</option>
-        <option value="schedule.html">Schedule</option>
-      </select>
-    </div>
-  </header>
-
-  <h1>Top News from the Web</h1>
-
-  <div id="news-container"></div>
-
-  <footer>
+<header>
+<img alt="Trade With Jars Logo" src="TradeWithJarslogo.png"/>
+<div class="dropdown">
+<select onchange="location = this.value;">
+<option value="crypto-news.html">Crypto News</option>
+<option value="index.html">Home</option>
+<option value="schedule.html">Schedule</option>
+</select>
+</div>
+</header>
+<h1>Top News from the Web</h1>
+<div id="news-container"></div>
+<footer>
     © 2025 TradeWithJars.net. All rights reserved.
   </footer>
-
-  <script>
+<script>
     const feeds = {
       "CoinDesk": "https://www.coindesk.com/arc/outboundfeeds/rss/",
       "Wall Street Journal": "https://feeds.a.dj.com/rss/RSSMarkets.xml",
@@ -177,4 +173,3 @@
   </script>
 </body>
 </html>
-
