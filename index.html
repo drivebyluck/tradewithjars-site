@@ -28,6 +28,14 @@ function verifyCode() {
 
 async function calculateControlled() {
   showPasswordPrompt(async () => {
+    const c_investment = document.getElementById('c_investment');
+    const c_profit = document.getElementById('c_profit');
+    const c_loss = document.getElementById('c_loss');
+    const c_leverage = document.getElementById('c_leverage');
+    const c_entry = document.getElementById('c_entry');
+    const c_direction = document.getElementById('c_direction');
+    const c_result = document.getElementById('c_result');
+
     const investment = parseFloat(c_investment.value);
     const profit = parseFloat(c_profit.value);
     const loss = parseFloat(c_loss.value);
@@ -59,3 +67,4 @@ async function calculateControlled() {
   });
 }
 </script>
+
