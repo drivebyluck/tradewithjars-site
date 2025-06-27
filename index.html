@@ -153,6 +153,7 @@
       margin-top: 10px;
       color: #28a745;
     }
+  
     .dropdown-container {
       position: fixed;
       top: 20px;
@@ -175,16 +176,17 @@
       background-color: #28a745;
       color: #000;
     }
-  </style>
+
+</style>
 </head>
 <body>
 
   <div class="dropdown-container">
-    <select class="dropdown" onchange="navigateToPage(this)">
-      <option selected disabled hidden>☰ More Pages</option>
-      <option value="index.html">Home (Calculator)</option>
-      <option value="president.html">Presidential Schedule</option>
-    </select>
+    
+  </div>
+
+  <div style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
+    
   </div>
 
   <img src="TradeWithJarslogo.png" alt="Trade With Jars Logo" class="logo">
@@ -201,7 +203,7 @@
     <label>Acceptable Loss ($): <input type="number" id="c_loss"></label>
     <label>Leverage: <input type="number" id="c_leverage"></label>
     <label>Entry Price: <input type="number" id="c_entry"></label>
-    <label>Direction: <select id="c_direction"><option>Long</option><option>Short</option></select></label>
+    <label>Direction: </label>
     <button class="calculate" onclick="calculate('controlled')">Run Strategy</button>
     <div class="result" id="c_result"></div>
   </div>
@@ -210,7 +212,7 @@
     <label>Entry: <input type="number" id="d_entry"></label>
     <label>Exit: <input type="number" id="d_exit"></label>
     <label>Leverage: <input type="number" id="d_leverage"></label>
-    <label>Direction: <select id="d_direction"><option>Long</option><option>Short</option></select></label>
+    <label>Direction: </label>
     <button class="calculate" onclick="calculate('degen')">Run Strategy</button>
     <div class="result" id="d_result"></div>
   </div>
@@ -220,7 +222,7 @@
     <label>Entry: <input type="number" id="s_entry"></label>
     <label>Exit: <input type="number" id="s_exit"></label>
     <label>Leverage: <input type="number" id="s_leverage"></label>
-    <label>Direction: <select id="s_direction"><option>Long</option><option>Short</option></select></label>
+    <label>Direction: </label>
     <button class="calculate" onclick="calculate('scalp')">Run Strategy</button>
     <div class="result" id="s_result"></div>
   </div>
@@ -324,11 +326,13 @@
         }
       });
     }
-
+  
     function navigateToPage(select) {
       const page = select.value;
       if (page) window.location.href = page;
     }
-  </script>
+
+</script>
 </body>
 </html>
+
