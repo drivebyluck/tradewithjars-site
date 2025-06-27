@@ -1,4 +1,31 @@
 <script>
+let pendingCalc = null;
+
+function toggleMode(mode) {
+  document.querySelectorAll('.mode-section').forEach(el => el.classList.remove('active'));
+  document.getElementById(mode).classList.add('active');
+  document.querySelectorAll('.mode-toggle button').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('btn-' + mode).classList.add('active');
+}
+
+function showPasswordPrompt(callback) {
+  pendingCalc = callback;
+  document.getElementById('passwordModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('accessCodeInput').focus(), 100);
+}
+
+function verifyCode() {
+  const code = document.getElementById('accessCodeInput').value;
+  if (code === '1134') {
+    document.getElementById('passwordModal').style.display = 'none';
+    document.getElementById('accessCodeInput').value = '';
+    if (pendingCalc) pendingCalc();
+  } else {
+    alert("Please request a new code from the Doughboi's Bakery Discord.");
+    document.getElementById('accessCodeInput').value = '';
+  }
+}
+
 async function calculateControlled() {
   showPasswordPrompt(async () => {
     const investment = parseFloat(c_investment.value);
@@ -32,4 +59,3 @@ async function calculateControlled() {
   });
 }
 </script>
-
