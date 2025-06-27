@@ -61,18 +61,11 @@
   </table>
 
   <script>
-    const calendarId = 'cantymedia.com_62fqfmv1eejqs9hntbr6hof5kc@group.calendar.google.com';
-    const apiKey = 'AIzaSyAfWDR3RR0zHFBWm3guryUUIn0qHSf06vc';
-    const now = new Date().toISOString();
-    const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
-
-    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?key=${apiKey}&timeMin=${now}&timeMax=${nextWeek}&singleEvents=true&orderBy=startTime`;
-
-    fetch(url)
-      .then(response => response.json())
+    fetch("https://script.google.com/macros/s/AKfycbyOqotmXSJ_SB0toqEpC8od5W_RnlKkNh26Gt38S8q_84I8u8b7Kell82g9K5pc8Uyc/exec")
+      .then(res => res.json())
       .then(data => {
-        const events = data.items;
-        const eventBody = document.getElementById('eventBody');
+        const events = data.events;
+        const tbody = document.getElementById("eventBody");
 
         if (!events || events.length === 0) {
           document.querySelector('.loading').textContent = 'No upcoming events found.';
@@ -80,25 +73,24 @@
         }
 
         events.forEach(event => {
-          const start = event.start.dateTime || event.start.date;
-          const dateObj = new Date(start);
-          const date = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-          const time = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-          const title = event.summary || 'No title';
-
-          const row = document.createElement('tr');
-          row.innerHTML = `<td>${date}</td><td>${time}</td><td>${title}</td>`;
-          eventBody.appendChild(row);
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${event.date || "—"}</td>
+            <td>${event.time || "—"}</td>
+            <td>${event.title || "Untitled Event"}</td>
+          `;
+          tbody.appendChild(row);
         });
 
-        document.getElementById('eventsTable').style.display = 'table';
-        document.querySelector('.loading').style.display = 'none';
+        document.getElementById("eventsTable").style.display = "table";
+        document.querySelector(".loading").style.display = "none";
       })
-      .catch(error => {
-        console.error('Error fetching calendar events:', error);
-        document.querySelector('.loading').textContent = 'Failed to load events.';
+      .catch(err => {
+        console.error("Error loading events:", err);
+        document.querySelector(".loading").textContent = "Failed to load events.";
       });
   </script>
 </body>
 </html>
+
 
