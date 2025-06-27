@@ -153,7 +153,6 @@
       margin-top: 10px;
       color: #28a745;
     }
-  
     .dropdown-container {
       position: fixed;
       top: 20px;
@@ -176,8 +175,7 @@
       background-color: #28a745;
       color: #000;
     }
-
-</style>
+  </style>
 </head>
 <body>
 
@@ -186,13 +184,6 @@
       <option selected disabled hidden>☰ More Pages</option>
       <option value="index.html">Home (Calculator)</option>
       <option value="president.html">Presidential Schedule</option>
-    </select>
-  </div>
-
-  <div style="position: absolute; top: 20px; right: 20px; z-index: 1000;">
-    <select onchange="if(this.value) window.location.href=this.value">
-      <option value="">More Pages</option>
-      <option value="president-schedule.html">Presidential Schedule</option>
     </select>
   </div>
 
@@ -333,13 +324,11 @@
         }
       });
     }
-  
+
     function navigateToPage(select) {
       const page = select.value;
       if (page) window.location.href = page;
     }
-
-</script>
+  </script>
 </body>
 </html>
-
