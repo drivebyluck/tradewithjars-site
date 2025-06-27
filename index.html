@@ -154,37 +154,38 @@
       color: #28a745;
     }
   
-    /* Dropdown Menu Styling */
-    .top-menu {
-      position: absolute;
+    .dropdown-container {
+      position: fixed;
       top: 20px;
       right: 20px;
       z-index: 1000;
-      animation: flyIn 1s ease-out;
+      animation: flyIn 1.2s ease-out;
     }
-    .top-menu select {
-      background-color: #1a1a1a;
-      color: #fff;
-      border: 1px solid #444;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      box-shadow: 0 0 6px #28a745;
-      transition: all 0.3s;
-      cursor: pointer;
+    .dropdown {
+      background-color: #1f1f1f;
+      color: #28a745;
+      border: 2px solid #28a745;
+      padding: 10px 18px;
+      font-size: 1rem;
+      border-radius: 8px;
+      font-family: 'Segoe UI', sans-serif;
+      box-shadow: 0 0 8px #28a745;
+      transition: all 0.3s ease;
     }
-    .top-menu select:hover {
-      box-shadow: 0 0 12px #28a745;
-      background-color: #222;
+    .dropdown:hover {
+      background-color: #28a745;
+      color: #000;
     }
+
 </style>
 </head>
 <body>
 
-  <div class="top-menu">
-    <select onchange="if(this.value) window.location.href=this.value">
-      <option value="">☰ More Pages</option>
-      <option value="president-schedule.html">Presidential Schedule</option>
+  <div class="dropdown-container">
+    <select class="dropdown" onchange="navigateToPage(this)">
+      <option selected disabled hidden>☰ More Pages</option>
+      <option value="index.html">Home (Calculator)</option>
+      <option value="president.html">Presidential Schedule</option>
     </select>
   </div>
 
@@ -332,6 +333,13 @@
         }
       });
     }
-  </script>
+  
+    function navigateToPage(select) {
+      const page = select.value;
+      if (page) window.location.href = page;
+    }
+
+</script>
 </body>
 </html>
+
