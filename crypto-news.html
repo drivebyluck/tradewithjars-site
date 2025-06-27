@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,27 +49,36 @@
       max-width: 800px;
       padding: 20px;
       border-radius: 10px;
+      border: 1px solid #333;
     }
 
     .feed-section h2 {
       margin-top: 0;
       border-bottom: 1px solid #333;
       padding-bottom: 5px;
+      color: #99ffcc;
     }
 
     .headline {
       font-weight: bold;
       font-size: 1.2em;
       margin-bottom: 5px;
+      color: #ccff66;
     }
 
     .link {
-      color: #99ff99;
+      color: #80ff80;
       text-decoration: none;
     }
 
     .link:hover {
       text-decoration: underline;
+      color: #aaffaa;
+    }
+
+    .divider {
+      border-top: 1px solid #333;
+      margin: 10px 0;
     }
 
     footer {
@@ -125,9 +135,9 @@
         const items = data.items.slice(0, 5);
         if (items.length) {
           const main = items[0];
-          section.innerHTML += `<div class="headline"><a class="link" href="${main.link}" target="_blank">${main.title}</a></div>`;
+          section.innerHTML += `<div class="headline"><a class="link" href="${main.link}" target="_blank">${main.title}</a></div><div class="divider"></div>`;
           items.slice(1).forEach(item => {
-            section.innerHTML += `<div><a class="link" href="${item.link}" target="_blank">- ${item.title}</a></div>`;
+            section.innerHTML += `<div><a class="link" href="${item.link}" target="_blank">- ${item.title}</a></div><div class="divider"></div>`;
           });
         }
 
@@ -143,5 +153,3 @@
   </script>
 </body>
 </html>
-
-
