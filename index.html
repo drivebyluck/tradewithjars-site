@@ -242,7 +242,8 @@
         }
       }
 
-      document.getElementById("rssFeed").innerText = headlines.join(" ⚡ ");
+      document.getElementById("rssFeed").innerHTML = `<span>${headlines.join(" ⚡ ")}</span>`;
+
     } catch {
       document.getElementById("rssFeed").innerText = "Failed to load headlines.";
     }
