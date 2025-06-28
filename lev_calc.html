@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -272,7 +273,16 @@ img.logo {
   </div>
 
 <script>
-        async function calculate(mode) {
+    let pendingCalc = null;
+    function toggleMode(mode) {
+      document.querySelectorAll('.mode-section').forEach(el => el.classList.remove('active'));
+      document.getElementById(mode).classList.add('active');
+      document.querySelectorAll('.mode-toggle button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn-' + mode).classList.add('active');
+    }
+
+    
+    async function calculate(mode) {
         let payload = {};
         if (mode === 'controlled') {
           payload = {
@@ -319,6 +329,7 @@ img.logo {
           document.getElementById(mode[0] + '_result').textContent = 'Error connecting to backend.';
         }
       }
+}
   </script>
 </body>
 </html>
