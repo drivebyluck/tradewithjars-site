@@ -13,19 +13,40 @@
       color: #c8ffc8;
     }
 
+    nav {
+      width: 100%;
+      background-color: #1a1a1a;
+      padding: 10px 0;
+      text-align: center;
+      border-bottom: 2px solid #66ff66;
+      font-weight: bold;
+    }
+
+    nav a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    nav a:hover {
+      color: #66ff66;
+    }
+
     header {
       position: relative;
+      height: 120px;
       text-align: center;
-      padding-top: 60px;
     }
 
     #logo {
-      width: 100px;
+      width: 90px;
       animation: launch 1.8s ease-out forwards;
       position: absolute;
       top: 100vh;
       left: 50%;
       transform: translateX(-50%);
+      z-index: 999;
     }
 
     @keyframes launch {
@@ -34,37 +55,40 @@
       100% { top: 10px; }
     }
 
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background-color: #1a1a1a;
+    .ticker {
+      white-space: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+      border-top: 2px solid #66ff66;
       border-bottom: 2px solid #66ff66;
-      padding: 10px;
+      padding: 10px 0;
+      background: #111;
       text-align: center;
-      z-index: 1000;
     }
 
-    nav a {
-      margin: 0 15px;
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
+    .ticker-text {
+      display: inline-block;
+      animation: scroll 60s linear infinite;
       font-size: 16px;
     }
 
-    nav a:hover {
-      text-shadow: 0 0 5px #66ff66;
+    @keyframes scroll {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
     }
 
     .section {
       max-width: 900px;
-      margin: 80px auto;
+      margin: 60px auto;
       padding: 30px;
       background-color: #1a1a1a;
       border-radius: 12px;
       box-shadow: 0 0 20px #0f0;
-      transition: all 0.3s ease-in-out;
+      text-align: center;
+    }
+
+    .section h2 {
+      margin-top: 0;
     }
 
     .fade-in {
@@ -78,27 +102,6 @@
         opacity: 1;
         transform: translateY(0);
       }
-    }
-
-    .ticker {
-      white-space: nowrap;
-      overflow: hidden;
-      box-sizing: border-box;
-      border-top: 2px solid #66ff66;
-      border-bottom: 2px solid #66ff66;
-      padding: 10px 0;
-      background: #111;
-    }
-
-    .ticker-text {
-      display: inline-block;
-      animation: scroll 60s linear infinite;
-      font-size: 16px;
-    }
-
-    @keyframes scroll {
-      from { transform: translateX(100%); }
-      to { transform: translateX(-100%); }
     }
 
     #usdcBanner {
@@ -182,9 +185,8 @@
       TradeWithJars.net is your one-stop destination for real-time Solana trading insights. 
       Featuring a cutting-edge leverage calculator, live NFT floor tracking, up-to-the-minute 
       USDC mint alerts, and curated crypto news, this site is designed for traders who 
-      value speed, accuracy, and clarity. 
-      Whether you're swing trading SOL, flipping NFTs, or scouting stablecoin movements, 
-      this dashboard keeps you ahead of the curve.
+      value speed, accuracy, and clarity. Whether you're swing trading SOL, flipping NFTs, 
+      or scouting stablecoin movements, this dashboard keeps you ahead of the curve.
     </p>
   </div>
 
@@ -204,6 +206,12 @@
   </div>
 
   <div class="section fade-in">
+    <h2>Leverage Calculator Preview</h2>
+    <p>Use our interactive calculator to manage risk when trading crypto with leverage.</p>
+    <a href="lev_calc.html"><button>Launch Calculator</button></a>
+  </div>
+
+  <div class="section fade-in">
     <h2>Crypto News Feed</h2>
     <p>Click below to read curated headlines from trusted crypto sources.</p>
     <a href="news.html"><button>Go to News</button></a>
@@ -214,12 +222,6 @@
     <p>Get a text alert when Circle mints over $100,000,000 USDC on Solana.</p>
     <input type="text" placeholder="Enter phone number" />
     <button onclick="alert('SMS signup is not active yet. Placeholder only.')">Sign Up</button>
-  </div>
-
-  <div class="section fade-in">
-    <h2>Leverage Calculator Preview</h2>
-    <p>Use our interactive calculator to manage risk when trading crypto with leverage.</p>
-    <a href="lev_calc.html"><button>Launch Calculator</button></a>
   </div>
 
   <div id="partner">
@@ -259,8 +261,8 @@
         document.getElementById("rssTicker").textContent = headlines;
       });
 
-    // Fake USDC Alert trigger
-    fetch("https://usdc-mint-bridge.onrender.com/check") // You’d replace with your own backend
+    // USDC Alert check (mock)
+    fetch("https://usdc-mint-bridge.onrender.com/check")
       .then(res => res.json())
       .then(data => {
         if (data.amount && data.amount > 100000000) {
