@@ -342,6 +342,30 @@
         }
       });
     }
-  </script>
+  
+<script>
+  window.onload = () => {
+    if (sessionStorage.getItem("accessGranted") === "true") {
+      document.getElementById("passwordModal").style.display = "none";
+    } else {
+      document.getElementById("passwordModal").style.display = "flex";
+      setTimeout(() => document.getElementById("accessCodeInput").focus(), 100);
+    }
+  };
+
+  function verifyCode() {
+    const code = document.getElementById('accessCodeInput').value;
+    if (code === '1134') {
+      document.getElementById('passwordModal').style.display = 'none';
+      sessionStorage.setItem("accessGranted", "true");
+      document.getElementById('accessCodeInput').value = '';
+      if (pendingCalc) pendingCalc();
+    } else {
+      alert("Please request a new code from the Doughboi's Bakery Discord.");
+      document.getElementById('accessCodeInput').value = '';
+    }
+  }
+</script>
+
 </body>
 </html>
