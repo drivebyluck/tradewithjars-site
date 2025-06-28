@@ -2,113 +2,97 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Solana NFT Tracker</title>
-  <link rel="icon" href="TradeWithJarslogo.png" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     body {
-      margin: 0;
+      background-color: #0d0d0d;
+      color: #bada55;
       font-family: Arial, sans-serif;
-      background-color: #0f0f0f;
-      color: #d0ff88;
+      margin: 0;
+      padding: 0;
       text-align: center;
     }
+
     header {
-      padding: 20px;
+      padding: 20px 0 10px;
     }
+
     header img {
-      width: 140px;
+      width: 120px;
     }
+
     h1 {
       font-size: 2em;
-      color: #aaff66;
+      margin-bottom: 0.2em;
     }
-    table {
-      margin: 20px auto;
-      border-collapse: collapse;
-      width: 90%;
-      max-width: 1000px;
-    }
-    th, td {
-      border: 1px solid #444;
-      padding: 12px;
-    }
-    th {
-      background-color: #222;
-      color: #b8ff70;
-    }
-    td img {
-      height: 50px;
-      border-radius: 5px;
-    }
-    .timestamp {
-      font-size: 0.9em;
+
+    #last-updated {
       color: #999;
-      margin-top: 10px;
+      font-size: 0.9em;
+      margin-bottom: 20px;
     }
+
+    table {
+      width: 95%;
+      max-width: 1000px;
+      margin: 0 auto 40px;
+      border-collapse: collapse;
+      background-color: #121212;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #222;
+      text-align: center;
+    }
+
+    th {
+      background-color: #1d1d1d;
+      color: #bada55;
+    }
+
+    td img {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+    }
+
     footer {
-      margin-top: 40px;
-      padding: 10px;
-      font-size: 0.85em;
-      color: #555;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #666;
     }
-    #menu {
+
+    /* Menu Button (from your previous page) */
+    .menu-button {
       position: absolute;
-      right: 20px;
       top: 20px;
-    }
-    #menu input {
-      display: none;
-    }
-    #menu label {
-      display: inline-block;
-      background: #4caf50;
-      color: #fff;
-      padding: 10px;
-      border-radius: 8px;
+      right: 20px;
+      background-color: #4CAF50;
+      border-radius: 10px;
+      width: 40px;
+      height: 40px;
+      color: white;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-    }
-    #menu ul {
-      display: none;
-      list-style: none;
-      background-color: #222;
-      padding: 10px;
-      position: absolute;
-      right: 0;
-      top: 50px;
-      width: 150px;
-      border: 1px solid #444;
-    }
-    #menu input:checked ~ ul {
-      display: block;
-    }
-    #menu ul li {
-      margin: 10px 0;
-    }
-    #menu ul li a {
-      color: #d0ff88;
-      text-decoration: none;
     }
   </style>
 </head>
 <body>
+
+  <!-- Header -->
   <header>
-    <img src="TradeWithJarslogo.png" alt="Logo" />
-    <div id="menu">
-      <input type="checkbox" id="toggle" />
-      <label for="toggle">☰</label>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="schedule.html">Schedule</a></li>
-        <li><a href="crypto-news.html">Crypto News</a></li>
-        <li><a href="nfts.html">NFT Tracker</a></li>
-      </ul>
-    </div>
+    <img src="TradeWithJarslogo.png" alt="Trade With Jars Logo"/>
+    <h1>Solana NFT Tracker</h1>
+    <div id="last-updated">Loading last update time...</div>
   </header>
 
-  <h1>Solana NFT Tracker</h1>
-  <div class="timestamp" id="last-updated">Loading last update time...</div>
+  <!-- Table -->
   <table>
     <thead>
       <tr>
@@ -119,12 +103,19 @@
       </tr>
     </thead>
     <tbody id="nft-table">
-      <tr><td colspan="4">Loading...</td></tr>
+      <!-- Filled via JS -->
     </tbody>
   </table>
 
-  <footer>&copy; 2025 TradeWithJars.net</footer>
+  <!-- Footer -->
+  <footer>
+    © 2025 TradeWithJars.net
+  </footer>
 
+  <!-- Menu Button -->
+  <div class="menu-button">≡</div>
+
+  <!-- Script -->
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv";
 
@@ -137,37 +128,45 @@
           complete: function(results) {
             const data = results.data;
             const tableBody = document.getElementById("nft-table");
-            const timestampRow = data[data.length - 1];
-            const nftData = data.slice(1, data.length - 1); // skip header and last
 
-            // Set timestamp if it's present
-            if (timestampRow[0]?.toLowerCase().includes("last updated")) {
+            // Extract timestamp from last row
+            const timestampRow = data[data.length - 1];
+            if (timestampRow && timestampRow[0]?.toLowerCase().includes("last updated")) {
               document.getElementById("last-updated").textContent = timestampRow[0];
+            } else {
+              document.getElementById("last-updated").textContent = "Last updated: Unknown";
             }
 
-            // Clear old content
+            // Clear table
             tableBody.innerHTML = "";
 
-            nftData.forEach(row => {
-              const [name, imgUrl, floor, volume] = row;
-              if (name && imgUrl && floor && volume) {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                  <td>${name}</td>
-                  <td><img src="${imgUrl}" alt="NFT" onerror="this.src='https://via.placeholder.com/50';"></td>
-                  <td>${floor}</td>
-                  <td>${volume}</td>
-                `;
-                tableBody.appendChild(tr);
-              }
-            });
+            // Loop through data rows (skip header and last row)
+            for (let i = 1; i < data.length - 1; i++) {
+              const [name, image, floor, volume] = data[i];
+
+              if (!name || !image || !floor || !volume) continue;
+
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td>${name.trim().replace(/^"|"$/g, '')}</td>
+                <td><img src="${image.trim()}" alt="NFT" onerror="this.src='https://via.placeholder.com/50';" /></td>
+                <td>${floor.trim().replace(/^"|"$/g, '')}</td>
+                <td>${volume.trim().replace(/^"|"$/g, '')}</td>
+              `;
+              tableBody.appendChild(tr);
+            }
+          },
+          error: function(error) {
+            console.error("CSV parsing error:", error);
+            document.getElementById("nft-table").innerHTML = '<tr><td colspan="4">Failed to parse CSV data.</td></tr>';
           }
         });
       })
       .catch(err => {
-        console.error("Failed to load CSV", err);
-        document.getElementById("nft-table").innerHTML = `<tr><td colspan="4">Failed to load data.</td></tr>`;
+        console.error("Fetch error:", err);
+        document.getElementById("nft-table").innerHTML = '<tr><td colspan="4">Failed to load data.</td></tr>';
       });
   </script>
+
 </body>
 </html>
