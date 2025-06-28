@@ -167,6 +167,10 @@
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
 
+        if (row.every(cell => !cell.trim())) {
+    continue;
+  }
+
       if (row[0] && row[0].includes("Last updated:")) {
         document.getElementById("timestamp").textContent = row[0];
         break;
