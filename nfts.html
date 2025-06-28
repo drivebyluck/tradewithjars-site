@@ -127,36 +127,62 @@
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv";
 
+    function parseCSV(str) {
+      const rows = [];
+      const lines = str.split("\n");
+      let insideQuotes = false, current = "", row = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        const chars = [...lines[i]];
+        for (let j = 0; j < chars.length; j++) {
+          const char = chars[j];
+          if (char === '"' && chars[j + 1] === '"') {
+            current += '"';
+            j++;
+          } else if (char === '"') {
+            insideQuotes = !insideQuotes;
+          } else if (char === ',' && !insideQuotes) {
+            row.push(current);
+            current = "";
+          } else {
+            current += char;
+          }
+        }
+        row.push(current);
+        rows.push(row);
+        current = "";
+        row = [];
+      }
+      return rows;
+    }
+
     fetch(CSV_URL)
       .then(res => res.text())
       .then(text => {
-        const rows = text.trim().split("\n").map(r => r.split(","));
+        const data = parseCSV(text);
         const table = document.getElementById("nft-table");
-        const timestampCell = rows.find(row => row[0].startsWith("Last updated:"));
-        if (timestampCell) {
-          document.getElementById("last-updated").textContent = timestampCell[0];
+        const lastRow = data[data.length - 1];
+        if (lastRow && lastRow[0].startsWith("Last updated:")) {
+          document.getElementById("last-updated").textContent = lastRow[0];
         }
 
-        const dataRows = rows.slice(1).filter(row => row.length >= 4 && !row[0].startsWith("Last updated:"));
+        const body = data.slice(1, -1); // skip header and timestamp
         table.innerHTML = "";
-        dataRows.forEach(row => {
-          const tr = document.createElement("tr");
-          const name = row[0];
-          const imgURL = row[1];
-          const floor = row[2];
-          const volume = row[3];
-          tr.innerHTML = `
-            <td>${name}</td>
-            <td><img src="${imgURL}" alt="nft image" onerror="this.src='https://via.placeholder.com/50';" /></td>
-            <td>${floor}</td>
-            <td>${volume}</td>
-          `;
-          table.appendChild(tr);
+        body.forEach(row => {
+          if (row.length >= 4) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${row[0]}</td>
+              <td><img src="${row[1]}" alt="NFT" onerror="this.src='https://via.placeholder.com/50';"></td>
+              <td>${row[2]}</td>
+              <td>${row[3]}</td>
+            `;
+            table.appendChild(tr);
+          }
         });
       })
-      .catch(err => {
+      .catch(() => {
         document.getElementById("nft-table").innerHTML = `<tr><td colspan="4">Failed to load data.</td></tr>`;
-        document.getElementById("last-updated").textContent = "";
       });
   </script>
 </body>
