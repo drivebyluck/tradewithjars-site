@@ -168,7 +168,8 @@
         tr.appendChild(cell3);
 
         const cell4 = document.createElement("td");
-        cell4.textContent = row[4] || "";
+        cell4.textContent = row[4] ? parseInt(row[4].replace(/"/g, "").replace(/,/g, "")).toLocaleString() + " SOL" : "-";
+
         tr.appendChild(cell4);
 
         tableBody.appendChild(tr);
