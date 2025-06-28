@@ -224,32 +224,22 @@
 </footer>
 
 <script>
-  async function loadRSS() {
-    try {
+    async function loadRSS() {
       const urls = [
-        "https://corsproxy.io/?https://www.coindesk.com/arc/outboundfeeds/rss/"
+        "https://www.coindesk.com/arc/outboundfeeds/rss/",
+        "https://cointelegraph.com/rss"
       ];
+      let allHeadlines = [];
 
-      let headlines = [];
-
-      for (let url of urls) {
-        const res = await fetch(url);
-        const text = await res.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(text, "application/xml");
-        const items = xml.querySelectorAll("item");
-
-        for (let i = 0; i < Math.min(items.length, 5); i++) {
-          const title = items[i].querySelector("title");
-          if (title) headlines.push(title.textContent);
-        }
+      for (const url of urls) {
+        const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+        const headlines = data.items.slice(0, 5).map(item => item.title);
+        allHeadlines.push(...headlines);
       }
 
-      document.getElementById("rssFeed").innerHTML = "<span>" + headlines.join(" ⚡ ") + "</span>";
-    } catch (err) {
-      document.getElementById("rssFeed").innerText = "Failed to load headlines.";
+      document.getElementById("rss-feed").textContent = allHeadlines.join(" ⚡ ");
     }
-  }
 
   async function loadNFTs() {
     const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv");
