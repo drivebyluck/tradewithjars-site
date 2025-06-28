@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -89,26 +89,20 @@
 
     #ticker {
       background-color: #0f0f0f;
-      padding: 10px 0;
+      padding: 12px;
       font-size: 16px;
-      height: 30px;
-      line-height: 30px;
+      height: 40px;
+      line-height: 40px;
       box-shadow: inset 0 0 10px #28a745;
-      overflow: hidden;
-      white-space: nowrap;
-      position: relative;
-    }
-
-    #rssFeed span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scroll-left 20s linear infinite;
-    }
-
-    @keyframes scroll-left {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
+    
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
     table {
       width: 100%;
@@ -139,7 +133,7 @@
       font-size: 14px;
       margin-top: 40px;
     }
-</style>
+  </style>
 </head>
 <body>
 <img alt="Trade With Jars Logo" class="logo" src="TradeWithJarslogo.png"/>
@@ -176,57 +170,68 @@
 </div>
 <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 <script>
-  async function loadRSS() {
-    try {
-      const urls = [
-        "https://corsproxy.io/?https://www.coindesk.com/arc/outboundfeeds/rss/",
-        "https://corsproxy.io/?https://feeds.content.dowjones.io/public/rss/socialeconomyfeed"
-      ];
-      const headlines = [];
-      for (const url of urls) {
-        const res = await fetch(url);
-        const text = await res.text();
-        const xml = new DOMParser().parseFromString(text, "application/xml");
-        const items = xml.querySelectorAll("item");
-        for (let i = 0; i < Math.min(5, items.length); i++) {
-          headlines.push(items[i].querySelector("title").textContent);
-        }
+let currentHeadline = 0;
+let allHeadlines = [];
+
+async function loadRSS() {
+  try {
+    const urls = [
+      "https://corsproxy.io/?https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "https://corsproxy.io/?https://feeds.content.dowjones.io/public/rss/socialeconomyfeed"
+    ];
+
+    for (const url of urls) {
+      const res = await fetch(url);
+      const text = await res.text();
+      const xml = new DOMParser().parseFromString(text, "application/xml");
+      const items = xml.querySelectorAll("item");
+      for (let i = 0; i < Math.min(5, items.length); i++) {
+        allHeadlines.push(items[i].querySelector("title").textContent);
       }
-      document.getElementById("rssFeed").innerHTML = `<span>${headlines.join(" ⚡ ")}</span>`;
-    } catch (e) {
-      document.getElementById("rssFeed").innerText = "Failed to load headlines.";
     }
-  }
 
-  async function loadNFTs() {
-    const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv");
-    const text = await res.text();
-    const rows = text.split("
-").map(row => row.split(","));
-    let output = '<table><thead><tr><th>Name</th><th>Image</th><th>Floor</th><th>Volume</th></tr></thead><tbody>';
-    for (let i = 1; i <= 5 && i < rows.length; i++) {
-      const row = rows[i];
-      if (row.length < 5) continue;
-      output += `<tr><td>${row[0]}</td><td><img src="${row[2]}" width="30"/></td><td>${row[3]}</td><td>${row[4]?.replace(/"/g, "").replace(/\s*SOL$/, "") + " SOL"}</td></tr>`;
-    }
-    output += '</tbody></table>';
-    document.getElementById("nftPreview").innerHTML = output;
+    updateTicker();
+    setInterval(updateTicker, 4000);
+  } catch (e) {
+    document.getElementById("rssFeed").innerText = "Failed to load headlines.";
   }
+}
 
-  async function loadSchedule() {
-    const res = await fetch("https://media-cdn.factba.se/rss/json/trump/calendar-full.json");
-    const data = await res.json();
-    const tbody = document.getElementById("scheduleBody");
-    data.slice(0, 5).forEach(event => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${event.date}</td><td>${event.time_formatted || "-"}</td><td>${event.details}</td><td>${event.location || "-"}</td>`;
-      tbody.appendChild(tr);
-    });
+function updateTicker() {
+  if (allHeadlines.length > 0) {
+    document.getElementById("rssFeed").innerText = allHeadlines[currentHeadline];
+    currentHeadline = (currentHeadline + 1) % allHeadlines.length;
   }
+}
 
-  loadRSS();
-  loadNFTs();
-  loadSchedule();
+async function loadNFTs() {
+  const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv");
+  const text = await res.text();
+  const rows = text.split("\n").map(row => row.split(","));
+  let output = '<table><thead><tr><th>Name</th><th>Image</th><th>Floor</th><th>Volume</th></tr></thead><tbody>';
+  for (let i = 1; i <= 5 && i < rows.length; i++) {
+    const row = rows[i];
+    if (row.length < 5) continue;
+    output += `<tr><td>${row[0]}</td><td><img src="${row[2]}" width="30"/></td><td>${row[3]}</td><td>${row[4]?.replace(/"/g, "").replace(/\s*SOL$/, "") + " SOL"}</td></tr>`;
+  }
+  output += '</tbody></table>';
+  document.getElementById("nftPreview").innerHTML = output;
+}
+
+async function loadSchedule() {
+  const res = await fetch("https://media-cdn.factba.se/rss/json/trump/calendar-full.json");
+  const data = await res.json();
+  const tbody = document.getElementById("scheduleBody");
+  data.slice(0, 5).forEach(event => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${event.date}</td><td>${event.time_formatted || "-"}</td><td>${event.details}</td><td>${event.location || "-"}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+loadRSS();
+loadNFTs();
+loadSchedule();
 </script>
 </body>
 </html>
