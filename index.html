@@ -2,263 +2,271 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TradeWithJars.net</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="TradeWithJarslogo.png" type="image/png" />
+  <link rel="icon" type="image/png" href="TradeWithJarslogo.png" />
   <style>
     body {
       margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background-color: #0c0c0c;
-      color: #e0f0ff;
-      overflow-x: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0d0d0d;
+      color: #c8ffc8;
     }
 
     header {
-      background: #000;
-      padding: 30px 0 10px;
-      text-align: center;
       position: relative;
-      box-shadow: 0 0 20px #00e0ff;
+      text-align: center;
+      padding-top: 60px;
     }
 
-    header img {
-      width: 120px;
-      animation: launch 1s ease-out forwards;
+    #logo {
+      width: 100px;
+      animation: launch 1.8s ease-out forwards;
+      position: absolute;
+      top: 100vh;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     @keyframes launch {
-      0% { transform: translateY(100px) scale(0.5); opacity: 0; }
-      100% { transform: translateY(0) scale(1); opacity: 1; }
+      0% { top: 100vh; opacity: 0; }
+      50% { top: 40vh; opacity: 1; }
+      100% { top: 10px; }
     }
 
     nav {
       position: fixed;
-      top: 10px;
-      right: 20px;
+      top: 0;
+      width: 100%;
+      background-color: #1a1a1a;
+      border-bottom: 2px solid #66ff66;
+      padding: 10px;
+      text-align: center;
       z-index: 1000;
     }
 
     nav a {
-      background: #00e0ff;
-      color: #000;
-      padding: 10px 14px;
-      margin-left: 10px;
+      margin: 0 15px;
+      color: #fff;
       text-decoration: none;
-      border-radius: 6px;
       font-weight: bold;
-      transition: 0.3s;
+      font-size: 16px;
     }
 
     nav a:hover {
-      background: #009ac2;
+      text-shadow: 0 0 5px #66ff66;
     }
 
     .section {
-      margin: 60px auto;
-      padding: 40px 20px;
-      max-width: 1000px;
-      background: #111;
-      border-radius: 15px;
-      box-shadow: 0 0 20px #00e0ff;
-      transition: all 0.3s ease;
+      max-width: 900px;
+      margin: 80px auto;
+      padding: 30px;
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #0f0;
+      transition: all 0.3s ease-in-out;
     }
 
-    h1, h2 {
-      text-align: center;
-      color: #00e0ff;
+    .fade-in {
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeInMove 1.2s forwards;
     }
 
-    .rss-ticker {
-      background: #000;
-      color: #00e0ff;
+    @keyframes fadeInMove {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .ticker {
       white-space: nowrap;
       overflow: hidden;
-      border-top: 2px solid #00e0ff;
-      border-bottom: 2px solid #00e0ff;
+      box-sizing: border-box;
+      border-top: 2px solid #66ff66;
+      border-bottom: 2px solid #66ff66;
+      padding: 10px 0;
+      background: #111;
     }
 
-    .rss-ticker div {
+    .ticker-text {
       display: inline-block;
-      padding-left: 100%;
-      animation: ticker 60s linear infinite;
+      animation: scroll 60s linear infinite;
+      font-size: 16px;
     }
 
-    @keyframes ticker {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+    @keyframes scroll {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    #usdcBanner {
+      background-color: red;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
     }
 
     table {
       width: 100%;
-      margin-top: 20px;
       border-collapse: collapse;
+      color: #c8ffc8;
     }
 
     th, td {
-      border: 1px solid #444;
-      padding: 10px;
+      border: 1px solid #333;
+      padding: 8px;
       text-align: center;
     }
 
     th {
-      background: #1c1c1c;
-      color: #00e0ff;
+      background-color: #111;
     }
 
-    td img {
-      width: 40px;
-      border-radius: 4px;
-    }
-
-    #alert-banner {
-      background: red;
-      color: #fff;
+    #partner {
       text-align: center;
-      padding: 10px;
-      font-weight: bold;
-      display: none;
+      margin-top: 40px;
+    }
+
+    #partner img {
+      width: 120px;
     }
 
     footer {
       text-align: center;
-      color: #888;
-      margin: 60px 0 20px;
-    }
-
-    .partner {
-      margin-top: 40px;
-    }
-
-    .partner img {
-      width: 140px;
-    }
-
-    input, button {
-      font-family: inherit;
-      font-size: 16px;
-      padding: 8px;
-      border-radius: 6px;
-      border: none;
-      margin-top: 10px;
+      color: #666;
+      margin: 20px 0;
     }
 
     button {
-      background: #00e0ff;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #66ff66;
       color: #000;
-      font-weight: bold;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #8aff8a;
     }
   </style>
 </head>
 <body>
+
   <nav>
     <a href="index.html">Home</a>
     <a href="schedule.html">Schedule</a>
     <a href="news.html">Crypto News</a>
-    <a href="nfts.html">NFTs</a>
+    <a href="nfts.html">NFT Tracker</a>
     <a href="lev_calc.html">Leverage Calc</a>
   </nav>
 
   <header>
-    <img src="TradeWithJarslogo.png" alt="TradeWithJars Logo" />
+    <img id="logo" src="TradeWithJarslogo.png" alt="Logo" />
   </header>
 
-  <div id="alert-banner">⚠️ USDC MINT ALERT: Over $100M minted on Solana!</div>
+  <div id="usdcBanner">🚨 Large USDC Mint Detected on Solana!</div>
 
-  <div class="rss-ticker"><div id="rss-feed">Loading headlines...</div></div>
-
-  <div class="section">
-    <h2>What is TradeWithJars.net?</h2>
-    <p>This site provides a one-stop hub for traders seeking live Solana NFT data, breaking news, market alerts, and powerful leverage tools—all in one place. Our tools are simple, clean, and designed for speed.</p>
+  <div class="ticker">
+    <div class="ticker-text" id="rssTicker">Loading crypto news...</div>
   </div>
 
-  <div class="section" id="nft-section">
-    <h2>Top 5 Solana NFTs</h2>
-    <table>
-      <thead><tr><th>Name</th><th>Image</th><th>Floor Price</th><th>Volume</th></tr></thead>
-      <tbody id="nftTableBody"></tbody>
+  <div class="section fade-in">
+    <h2>What is TradeWithJars?</h2>
+    <p>
+      TradeWithJars.net is your one-stop destination for real-time Solana trading insights. 
+      Featuring a cutting-edge leverage calculator, live NFT floor tracking, up-to-the-minute 
+      USDC mint alerts, and curated crypto news, this site is designed for traders who 
+      value speed, accuracy, and clarity. 
+      Whether you're swing trading SOL, flipping NFTs, or scouting stablecoin movements, 
+      this dashboard keeps you ahead of the curve.
+    </p>
+  </div>
+
+  <div class="section fade-in">
+    <h2>Top 5 Solana NFT Collections</h2>
+    <table id="nftTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Image</th>
+          <th>Floor</th>
+          <th>Volume</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
     </table>
   </div>
 
-  <div class="section">
-    <h2>Leverage Calculator</h2>
-    <p>Get fast insights on your trade setups. Our calculator handles entry, liquidation, leverage, and profit/loss instantly. <a href="lev_calc.html">Try it here</a>.</p>
+  <div class="section fade-in">
+    <h2>Crypto News Feed</h2>
+    <p>Click below to read curated headlines from trusted crypto sources.</p>
+    <a href="news.html"><button>Go to News</button></a>
   </div>
 
-  <div class="section">
-    <h2>Sign Up for USDC Mint Alerts</h2>
-    <input type="text" id="phone" placeholder="Enter phone number" />
-    <button onclick="signup()">Notify Me if $100M+ is Minted</button>
-    <div id="signupMsg"></div>
+  <div class="section fade-in">
+    <h2>USDC Mint Alert Signup</h2>
+    <p>Get a text alert when Circle mints over $100,000,000 USDC on Solana.</p>
+    <input type="text" placeholder="Enter phone number" />
+    <button onclick="alert('SMS signup is not active yet. Placeholder only.')">Sign Up</button>
   </div>
 
-  <div class="section partner">
-    <h2>Proud Partner</h2>
-    <img src="Doughbois_Bakery_Logo.png" alt="Doughboi’s Bakery" />
+  <div class="section fade-in">
+    <h2>Leverage Calculator Preview</h2>
+    <p>Use our interactive calculator to manage risk when trading crypto with leverage.</p>
+    <a href="lev_calc.html"><button>Launch Calculator</button></a>
   </div>
 
-  <footer>© 2025 TradeWithJars.net</footer>
+  <div id="partner">
+    <p><strong>Proud Partner:</strong></p>
+    <img src="DoughboisBakery.png" alt="Doughboi's Bakery" />
+  </div>
+
+  <footer>
+    © 2025 TradeWithJars.net
+  </footer>
 
   <script>
-    const nftCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv";
+    // NFT Top 5 Loader
+    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv")
+      .then(res => res.text())
+      .then(text => {
+        const rows = text.trim().split("\n").map(r => r.split(","));
+        const table = document.querySelector("#nftTable tbody");
+        for (let i = 1; i <= 5; i++) {
+          const row = rows[i];
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row[1]}</td>
+            <td><img src="${row[2]}" style="max-width:40px"/></td>
+            <td>${row[3]}</td>
+            <td>${row[4]}</td>
+          `;
+          table.appendChild(tr);
+        }
+      });
 
-    async function loadNFTs() {
-      const res = await fetch(nftCSV);
-      const text = await res.text();
-      const rows = text.split("\n").map(r => r.split(",")).filter(r => r[0] && !r[0].includes("Last updated:"));
+    // RSS Feed
+    fetch("https://api.rss2json.com/v1/api.json?rss_url=https://cointelegraph.com/rss")
+      .then(res => res.json())
+      .then(data => {
+        const headlines = data.items.map(item => item.title).join(" • ");
+        document.getElementById("rssTicker").textContent = headlines;
+      });
 
-      const tbody = document.getElementById("nftTableBody");
-      for (let i = 0; i < Math.min(5, rows.length); i++) {
-        const row = rows[i];
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${row[1]}</td>
-          <td><img src="${row[2]}" /></td>
-          <td>${row[3]}</td>
-          <td>${row[4]}</td>`;
-        tbody.appendChild(tr);
-      }
-    }
-
-    async function loadRSS() {
-      const urls = [
-        "https://www.coindesk.com/arc/outboundfeeds/rss/",
-        "https://cointelegraph.com/rss"
-      ];
-      let allHeadlines = [];
-
-      for (const url of urls) {
-        const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-        const data = await res.json();
-        const headlines = data.items.slice(0, 5).map(item => item.title);
-        allHeadlines.push(...headlines);
-      }
-
-      document.getElementById("rss-feed").textContent = allHeadlines.join(" ⚡ ");
-    }
-
-    async function checkUSDC() {
-      const res = await fetch("https://public-api.solscan.io/token/USDC/mint", { headers: { accept: "application/json" } });
-      const data = await res.json();
-      const amount = parseFloat(data?.data?.mintAmount || 0);
-      if (amount >= 100000000) {
-        document.getElementById("alert-banner").style.display = "block";
-      }
-    }
-
-    function signup() {
-      const phone = document.getElementById("phone").value;
-      if (phone.length < 8) return alert("Enter a valid number");
-      document.getElementById("signupMsg").textContent = "✅ You’ll be alerted if $100M+ USDC is minted.";
-      // You can integrate Twilio, Zapier, or Google Form webhook here
-    }
-
-    loadNFTs();
-    loadRSS();
-    checkUSDC();
-    setInterval(checkUSDC, 300000); // every 5 min
+    // Fake USDC Alert trigger
+    fetch("https://usdc-mint-bridge.onrender.com/check") // You’d replace with your own backend
+      .then(res => res.json())
+      .then(data => {
+        if (data.amount && data.amount > 100000000) {
+          document.getElementById("usdcBanner").style.display = "block";
+        }
+      });
   </script>
 </body>
 </html>
