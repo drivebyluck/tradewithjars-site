@@ -15,17 +15,25 @@
       text-align: center;
     }
 
-    @keyframes flyIn {
-      0% { transform: translateY(100px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
+@keyframes flyIn {
+  0% { transform: translateY(100px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
 
-    img.logo {
-      display: block;
-      margin: 0 auto 30px;
-      max-width: 220px;
-      animation: flyIn 2s ease-out;
-    }
+@keyframes pulseUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+img.logo {
+  display: block;
+  margin: 0 auto 30px;
+  max-width: 220px;
+  animation:
+    flyIn 2s ease-out forwards,
+    pulseUpDown 3s ease-in-out infinite 2s;
+}
+
 
 
     .dropdown {
