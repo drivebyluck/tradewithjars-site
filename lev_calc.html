@@ -6,18 +6,19 @@
   <title>Leverage Strategy Calculator</title>
   <link rel="icon" type="image/png" href="TradeWithJarslogo.png" />
   <style>
-    /* Your original styles are preserved */
     body {
       background: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
-      font-family: 'Trebuchet MS', sans-serif;
       color: white;
+      font-family: 'Trebuchet MS', sans-serif;
+      text-align: center;
       margin: 0;
-      padding: 20px;
-      animation: fadeIn 1.2s ease;
+      padding: 0;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .logo {
+      max-width: 220px;
+      display: block;
+      margin: 30px auto 10px;
+      animation: flyIn 2s ease-out forwards, pulseUpDown 3s ease-in-out infinite 2s;
     }
     @keyframes flyIn {
       0% { transform: translateY(100px); opacity: 0; }
@@ -27,199 +28,133 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-8px); }
     }
-    img.logo {
-      display: block;
-      margin: 30px auto 20px;
-      max-width: 220px;
-      animation: flyIn 2s ease-out, pulseUpDown 3s ease-in-out infinite 2s;
-    }
-    .dropdown {
-      position: fixed;
-      top: 30px;
-      right: 30px;
-      z-index: 1000;
-    }
-    .dropbtn {
-      background-color: #017a36;
-      color: black;
-      padding: 12px 16px;
-      font-size: 18px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #e02c2c;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      background-color: #1a1a1a;
-      min-width: 180px;
-      border-radius: 6px;
-      box-shadow: 0 0 10px #e02c2c;
-    }
-    .dropdown-content a {
-      color: white;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-    h2 {
-      text-align: center;
-      color: #28a745;
-    }
-    .mode-buttons {
-      text-align: center;
-      margin-bottom: 20px;
+    h1 {
+      color: #e02c2c;
     }
     .mode-buttons button {
       background-color: #017a36;
       border: none;
-      padding: 10px 20px;
-      margin: 0 10px;
-      font-size: 16px;
-      border-radius: 6px;
       color: white;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 6px;
       cursor: pointer;
+      box-shadow: 0 0 10px #e02c2c;
+      transition: background 0.3s;
     }
-    .mode-buttons button.active {
-      background-color: #e02c2c;
+    .mode-buttons button:hover {
+      background-color: #1c7c35;
     }
-    .form-section {
-      display: none;
-      max-width: 600px;
-      margin: 0 auto 30px;
-      padding: 20px;
-      background-color: #1a1a1a;
-      border-radius: 10px;
-      box-shadow: 0 0 20px #e02c2c;
-    }
-    .form-section.active {
-      display: block;
-    }
-    label, input, select {
-      display: block;
-      width: 100%;
-      margin-bottom: 12px;
-      font-size: 16px;
+    .form-group {
+      margin: 10px 0;
     }
     input, select {
-      padding: 10px;
+      padding: 8px;
       border-radius: 6px;
-      border: none;
-    }
-    button.calculate-btn {
-      background-color: #e02c2c;
+      border: 1px solid #444;
+      background-color: #1a1a1a;
       color: white;
-      padding: 14px 20px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-      width: 100%;
     }
-    #result {
-      text-align: center;
-      font-size: 20px;
+    #output {
       margin-top: 20px;
+      color: #00ff99;
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <img src="TradeWithJarslogo.png" class="logo" alt="Trade With Jars Logo" />
-
-  <div class="dropdown">
-    <button class="dropbtn">☰</button>
-    <div class="dropdown-content">
-      <a href="index.html">Home</a>
-      <a href="lev_calc.html">Leverage Calculator</a>
-      <a href="crypto-news.html">Top News</a>
-      <a href="schedule.html">Presidential Schedule</a>
-      <a href="nfts.html">NFT Tracker</a>
-    </div>
-  </div>
-
-  <h2>Select Strategy Mode</h2>
-
+  <img src="TradeWithJarslogo.png" alt="Trade With Jars Logo" class="logo"/>
+  <h1>Leverage Strategy Calculator</h1>
   <div class="mode-buttons">
-    <button onclick="showMode('precision')" class="active">Precision Mode</button>
-    <button onclick="showMode('degen')">Degen Dive</button>
-    <button onclick="showMode('scalp')">Scalp Sniper</button>
+    <button onclick="switchMode('mode1')">Long Entry</button>
+    <button onclick="switchMode('mode2')">Short Entry</button>
+    <button onclick="switchMode('mode3')">Risk Calculator</button>
   </div>
 
-  <!-- Mode: Precision -->
-  <div id="precision" class="form-section active">
-    <label>Entry Price: <input type="number" id="entryP" /></label>
-    <label>Exit Price: <input type="number" id="exitP" /></label>
-    <label>Leverage: <input type="number" id="lev" /></label>
-    <label>Amount: <input type="number" id="amt" /></label>
-    <button class="calculate-btn" onclick="calculate('precision')">Run Strategy</button>
-  </div>
+  <form id="calcForm">
+    <div id="mode1" class="mode-section">
+      <div class="form-group">
+        <input type="number" name="entry" placeholder="Entry Price" required />
+      </div>
+      <div class="form-group">
+        <input type="number" name="leverage" placeholder="Leverage" required />
+      </div>
+      <div class="form-group">
+        <input type="number" name="stop" placeholder="Stop Loss" required />
+      </div>
+      <div class="form-group">
+        <input type="number" name="size" placeholder="Trade Size ($)" required />
+      </div>
+    </div>
 
-  <!-- Mode: Degen -->
-  <div id="degen" class="form-section">
-    <label>Entry Price: <input type="number" id="entryD" /></label>
-    <label>Liquidation Price: <input type="number" id="liqD" /></label>
-    <label>Leverage: <input type="number" id="levD" /></label>
-    <label>Amount: <input type="number" id="amtD" /></label>
-    <button class="calculate-btn" onclick="calculate('degen')">Run Strategy</button>
-  </div>
+    <div id="mode2" class="mode-section" style="display:none;">
+      <div class="form-group">
+        <input type="number" name="entry" placeholder="Entry Price" required />
+      </div>
+      <div class="form-group">
+        <input type="number" name="leverage" placeholder="Leverage" required />
+      </div>
+      <div class="form-group">
+        <input type="number" name="stop" placeholder="Stop Loss" required />
+      </div>
+      <div class="form-group">
+        <input type="number" name="size" placeholder="Trade Size ($)" required />
+      </div>
+    </div>
 
-  <!-- Mode: Scalp -->
-  <div id="scalp" class="form-section">
-    <label>Entry Price: <input type="number" id="entryS" /></label>
-    <label>Target % Gain: <input type="number" id="percentS" /></label>
-    <label>Leverage: <input type="number" id="levS" /></label>
-    <label>Amount: <input type="number" id="amtS" /></label>
-    <button class="calculate-btn" onclick="calculate('scalp')">Run Strategy</button>
-  </div>
+    <div id="mode3" class="mode-section" style="display:none;">
+      <div class="form-group">
+        <input type="number" name="balance" placeholder="Account Balance ($)" required />
+      </div>
+      <div class="form-group">
+        <input type="number" name="risk" placeholder="Risk (%)" required />
+      </div>
+      <div class="form-group">
+        <input type="number" name="entry" placeholder="Entry Price" required />
+      </div>
+      <div class="form-group">
+        <input type="number" name="stop" placeholder="Stop Loss" required />
+      </div>
+    </div>
 
-  <div id="result"></div>
+    <button type="submit" style="margin-top: 15px; padding: 10px 20px; background-color:#e02c2c; border:none; border-radius:6px; color:white;">Run Strategy</button>
+  </form>
+
+  <div id="output"></div>
+
+  <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
   <script>
-    function showMode(mode) {
-      document.querySelectorAll('.form-section').forEach(div => div.classList.remove('active'));
-      document.getElementById(mode).classList.add('active');
-      document.querySelectorAll('.mode-buttons button').forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`.mode-buttons button[onclick*="${mode}"]`).classList.add('active');
+    function switchMode(modeId) {
+      document.querySelectorAll(".mode-section").forEach(el => {
+        el.style.display = "none";
+      });
+      document.getElementById(modeId).style.display = "block";
     }
 
-    function calculate(mode) {
-      let result = "";
-      if (mode === "precision") {
-        const entry = parseFloat(document.getElementById("entryP").value);
-        const exit = parseFloat(document.getElementById("exitP").value);
-        const lev = parseFloat(document.getElementById("lev").value);
-        const amt = parseFloat(document.getElementById("amt").value);
-        if (entry && exit && lev && amt) {
-          const profit = ((exit - entry) / entry) * lev * amt;
-          result = `Estimated Return: ${profit.toFixed(2)} USDT`;
-        }
-      } else if (mode === "degen") {
-        const entry = parseFloat(document.getElementById("entryD").value);
-        const liq = parseFloat(document.getElementById("liqD").value);
-        const lev = parseFloat(document.getElementById("levD").value);
-        const amt = parseFloat(document.getElementById("amtD").value);
-        if (entry && liq && lev && amt) {
-          const loss = ((entry - liq) / entry) * lev * amt;
-          result = `Risk Estimate: -${Math.abs(loss).toFixed(2)} USDT`;
-        }
-      } else if (mode === "scalp") {
-        const entry = parseFloat(document.getElementById("entryS").value);
-        const percent = parseFloat(document.getElementById("percentS").value);
-        const lev = parseFloat(document.getElementById("levS").value);
-        const amt = parseFloat(document.getElementById("amtS").value);
-        if (entry && percent && lev && amt) {
-          const gain = ((percent / 100) * lev * amt);
-          result = `Target Gain: ${gain.toFixed(2)} USDT`;
-        }
+    document.getElementById("calcForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = new FormData(this);
+      const payload = {};
+      form.forEach((value, key) => payload[key] = value);
+
+      try {
+        const res = await fetch("https://tradewithjars.onrender.com/calculate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        document.getElementById("output").textContent = data.result || "No result returned";
+      } catch (err) {
+        document.getElementById("output").textContent = "Error calculating. Please try again.";
       }
-      document.getElementById("result").textContent = result || "Please fill out all fields correctly.";
-    }
+    });
   </script>
 </body>
 </html>
