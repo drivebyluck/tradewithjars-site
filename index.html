@@ -224,13 +224,33 @@
 </footer>
 
 <script>
-    fetch("https://api.rss2json.com/v1/api.json?rss_url=https://cointelegraph.com/rss")
-      .then(res => res.json())
-      .then(data => {
-        const headlines = data.items.map(item => item.title).join(" • ");
-        document.getElementById("rssTicker").textContent = headlines;
+async function loadRSS() {
+    try {
+      const feeds = [
+        "https://www.coindesk.com/arc/outboundfeeds/rss/",
+        "https://feeds.content.dowjones.io/public/rss/socialeconomyfeed"
+      ];
+      const proxy = "https://api.allorigins.win/get?url=";
+      const headlines = [];
 
+      for (const url of feeds) {
+        const res = await fetch(proxy + encodeURIComponent(url));
+        const data = await res.json();
+        const xml = new DOMParser().parseFromString(data.contents, "text/xml");
+        const items = xml.querySelectorAll("item");
+
+        for (let i = 0; i < Math.min(5, items.length); i++) {
+          const title = items[i].querySelector("title")?.textContent;
+          if (title) headlines.push(title);
         }
+      }
+
+      const ticker = document.getElementById("rssFeed");
+      ticker.innerHTML = `<span>${headlines.join(" ⚡ ")}</span>`;
+    } catch (e) {
+      document.getElementById("rssFeed").innerHTML = `<span>Failed to load headlines.</span>`;
+    }
+  }
 
   async function loadNFTs() {
     const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv");
