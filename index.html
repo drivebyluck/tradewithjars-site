@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TradeWithJars.net</title>
-  <link rel="icon" type="image/png" href="TradeWithJarslogo.png"/>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TradeWithJars.net</title>
+<link href="TradeWithJarslogo.png" rel="icon" type="image/png"/>
+<style>
     body {
       background-color: #0d0d0d;
       color: #e6ffe6;
@@ -93,7 +94,15 @@
       height: 40px;
       line-height: 40px;
       box-shadow: inset 0 0 10px #28a745;
-    }
+    
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
     table {
       width: 100%;
@@ -127,48 +136,39 @@
   </style>
 </head>
 <body>
-
-<img src="TradeWithJarslogo.png" alt="Trade With Jars Logo" class="logo"/>
-
+<img alt="Trade With Jars Logo" class="logo" src="TradeWithJarslogo.png"/>
 <div class="dropdown">
-  <button class="dropbtn">☰</button>
-  <div class="dropdown-content">
-    <a href="index.html">Home</a>
-    <a href="lev_calc.html">Leverage Calculator</a>
-    <a href="crypto-news.html">Top News</a>
-    <a href="schedule.html">Presidential Schedule</a>
-    <a href="nfts.html">NFT Tracker</a>
-  </div>
+<button class="dropbtn">☰</button>
+<div class="dropdown-content">
+<a href="index.html">Home</a>
+<a href="lev_calc.html">Leverage Calculator</a>
+<a href="crypto-news.html">Top News</a>
+<a href="schedule.html">Presidential Schedule</a>
+<a href="nfts.html">NFT Tracker</a>
 </div>
-
+</div>
 <div class="section">
-  <h2>Welcome to Trade With Jars</h2>
-  <p>Welcome to your all-in-one hub for crypto tools, data, and real-time insights. Whether you're tracking Solana NFT trends, calculating leverage, skimming breaking news, or getting instant alerts when fresh USDC hits the blockchain, you'll find everything you need right here.</p>
-  <p>I'm Jars. I’ve been investing and trading in crypto since 2010, and after years of switching between apps, trackers, and terminals, I built the tool I always wanted: one simple site with everything I use daily. As a veteran, I bring the same discipline and clarity from my service into the way I trade—and now, into this platform.</p>
-  <p>Track smarter. Trade sharper. Win more.</p>
+<h2>Welcome to Trade With Jars</h2>
+<p>Welcome to your all-in-one hub for crypto tools, data, and real-time insights. Whether you're tracking Solana NFT trends, calculating leverage, skimming breaking news, or getting instant alerts when fresh USDC hits the blockchain, you'll find everything you need right here.</p>
+<p>I'm Jars. I’ve been investing and trading in crypto since 2010, and after years of switching between apps, trackers, and terminals, I built the tool I always wanted: one simple site with everything I use daily. As a veteran, I bring the same discipline and clarity from my service into the way I trade—and now, into this platform.</p>
+<p>Track smarter. Trade sharper. Win more.</p>
 </div>
-
 <div id="ticker"><span id="rssFeed">Loading headlines...</span></div>
-
 <div class="section">
-  <h2>Top Solana NFTs</h2>
-  <div id="nftPreview">Loading top NFTs...</div>
+<h2>Top Solana NFTs</h2>
+<div id="nftPreview">Loading top NFTs...</div>
 </div>
-
 <div class="section">
-  <h2>Presidential Schedule Preview</h2>
-  <table id="scheduleTable">
-    <thead><tr><th>Date</th><th>Time</th><th>Details</th><th>Location</th></tr></thead>
-    <tbody id="scheduleBody"></tbody>
-  </table>
+<h2>Presidential Schedule Preview</h2>
+<table id="scheduleTable">
+<thead><tr><th>Date</th><th>Time</th><th>Details</th><th>Location</th></tr></thead>
+<tbody id="scheduleBody"></tbody>
+</table>
 </div>
-
 <div class="section partner-logo">
-  <img src="doughbois.png" alt="Doughboi’s Bakery Logo" width="160"/>
+<img alt="Doughboi’s Bakery Logo" src="doughbois.png" width="160"/>
 </div>
-
 <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
-
 <script>
 let currentHeadline = 0;
 let allHeadlines = [];
