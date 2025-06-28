@@ -221,31 +221,33 @@
   Proud Partner | © 2025 TradeWithJars.net. All rights reserved.
 </footer>
 
-<script src="https://feednami.com/js/feednami-client.js"></script>
 <script>
-  const feeds = [
-    "https://www.coindesk.com/arc/outboundfeeds/rss/",
-    "https://feeds.content.dowjones.io/public/rss/socialeconomyfeed"
-  ];
+  async function loadRSS() {
+    try {
+      const feeds = [
+        "https://www.coindesk.com/arc/outboundfeeds/rss/",
+        "https://feeds.content.dowjones.io/public/rss/socialeconomyfeed"
+      ];
+      const proxy = "https://api.allorigins.win/get?url=";
+      const headlines = [];
 
-  const headlines = [];
+      for (const url of feeds) {
+        const res = await fetch(proxy + encodeURIComponent(url));
+        const data = await res.json();
+        const xml = new DOMParser().parseFromString(data.contents, "text/xml");
+        const items = xml.querySelectorAll("item");
 
-  Promise.all(
-    feeds.map(url => new Promise((resolve) => {
-      feednami.load(url, (result) => {
-        if (result.error) return resolve([]);
-        const titles = result.feed.entries.slice(0, 5).map(entry => entry.title);
-        resolve(titles);
-      });
-    }))
-  ).then(results => {
-    results.forEach(feedTitles => headlines.push(...feedTitles));
-    document.getElementById("rssFeed").innerHTML = `<span>${headlines.join(" ⚡ ")}</span>`;
-  }).catch(() => {
-    document.getElementById("rssFeed").innerHTML = "<span>Failed to load headlines.</span>";
-  });
-</script>
-<script>
+        for (let i = 0; i < Math.min(5, items.length); i++) {
+          headlines.push(items[i].querySelector("title").textContent);
+        }
+      }
+
+      document.getElementById("rssFeed").innerHTML = `<span>${headlines.join(" ⚡ ")}</span>`;
+
+    } catch {
+      document.getElementById("rssFeed").innerText = "Failed to load headlines.";
+    }
+  }
 
   async function loadNFTs() {
     const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv");
