@@ -226,35 +226,26 @@
 <script>
   async function loadRSS() {
     try {
-      const feeds = [
-        "https://www.coindesk.com/arc/outboundfeeds/rss/",
-        "https://feeds.content.dowjones.io/public/rss/socialeconomyfeed"
+      const urls = [
+        "https://corsproxy.io/?https://www.coindesk.com/arc/outboundfeeds/rss/",
+        "https://corsproxy.io/?https://feeds.content.dowjones.io/public/rss/socialeconomyfeed"
       ];
-      const proxy = "https://api.allorigins.win/raw?url=";
-      const headlines = [];
 
-      for (const url of feeds) {
-        const res = await fetch(proxy + encodeURIComponent(url));
-        const xmlText = await res.text();
-        const xml = new DOMParser().parseFromString(xmlText, "text/xml");
+      let headlines = [];
+
+      for (let url of urls) {
+        const res = await fetch(url);
+        const text = await res.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, "application/xml");
         const items = xml.querySelectorAll("item");
 
-        for (let i = 0; i < Math.min(5, items.length); i++) {
-          headlines.push(items[i].querySelector("title").textContent);
+        for (let i = 0; i < Math.min(items.length, 5); i++) {
+          const title = items[i].querySelector("title");
+          if (title) headlines.push(title.textContent);
         }
       }
 
-      document.getElementById("rssFeed").innerHTML =
-        `<span>${headlines.join(" ⚡ ")}</span>`;
-    } catch (err) {
-      console.error(err);
-      document.getElementById("rssFeed").innerText = "Failed to load headlines.";
-    }
-  }
-
-  loadRSS();
-  setInterval(loadRSS, 10 * 60 * 1000); // refresh every 10 minutes
-  
       document.getElementById("rssFeed").innerHTML = "<span>" + headlines.join(" ⚡ ") + "</span>";
     } catch (err) {
       document.getElementById("rssFeed").innerText = "Failed to load headlines.";
