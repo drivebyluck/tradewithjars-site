@@ -1,20 +1,19 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Trade With Jars</title>
-<link href="TradeWithJarslogo.png" rel="icon" type="image/png"/>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solana NFT Tracker</title>
+  <link rel="icon" type="image/png" href="TradeWithJarslogo.png"/>
+  <style>
     body {
-      background: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
-      font-family: 'Trebuchet MS', sans-serif;
-      color: #fff;
-      padding: 30px;
       margin: 0;
-      animation: fadeIn 1.2s ease;
+      padding: 30px 10px 30px 10px;
+      background-color: #0d0d0d;
+      color: #e6ffe6;
+      font-family: 'Trebuchet MS', sans-serif;
+      text-align: center;
+      padding-bottom: 30px;
     }
 
 @keyframes flyIn {
@@ -35,133 +34,7 @@ img.logo {
     flyIn 2s ease-out forwards,
     pulseUpDown 3s ease-in-out infinite 2s;
 }
-    .mode-toggle {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 30px;
-    }
-    .mode-toggle button {
-      background-color: #111;
-      border: 1px solid #444;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .mode-toggle button:hover,
-    .mode-toggle button.active {
-      background-color: #017a36;
-      color: black;
-    }
-    .mode-section {
-      display: none;
-      max-width: 500px;
-      margin: 0 auto;
-      background-color: #1f1f1f;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #017a36;
-    }
-    .mode-section.active {
-      display: block;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: none;
-      background-color: #333;
-      color: #fff;
-    }
-    .result {
-      margin-top: 20px;
-      font-size: 1rem;
-      text-align: center;
-      color: #017a36;
-    }
-    button.calculate {
-      background-color: #017a36;
-      color: black;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    .chart-wrapper {
-      max-width: 500px;
-      margin: 60px auto;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 10px #e02c2c;
-      background-color: #1f1f1f;
-    }
-    .partner-section {
-      text-align: center;
-      margin-top: 40px;
-    }
-    .partner-section p {
-      font-size: 1.2rem;
-      color: #ccc;
-      margin-bottom: 10px;
-    }
-    .partner-section img {
-      max-width: 200px;
-      height: auto;
-      border-radius: 10px;
-    }
-    .footer {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #777;
-      margin-top: 60px;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.85);
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background-color: #222;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 0 15px #017a36;
-    }
-    .modal-content input {
-      width: 80%;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #444;
-      background-color: #111;
-      color: #fff;
-    }
-    .modal-content button {
-      background-color: #017a36;
-      border: none;
-      padding: 10px 20px;
-      margin-top: 10px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .modal-content a {
-      display: block;
-      margin-top: 10px;
-      color: #017a36;
-    }
-  
-/* Themed Dropdown Menu Styles */
+
     .dropdown {
       position: fixed;
       top: 30px;
@@ -211,10 +84,54 @@ img.logo {
     .dropdown:hover .dropdown-content {
       display: block;
     }
-</style>
+
+    h1 {
+      color: #017a36;
+      margin-top: 10px;
+    }
+
+    #timestamp {
+      margin: 10px 0 30px;
+      font-size: 16px;
+      color: #aaa;
+    }
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 800px;
+  border-collapse: collapse;
+}
+
+    th, td {
+      border: 1px solid #333;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #111;
+      color: #e02c2c;
+      font-size: 18px;
+    }
+
+    td img {
+      max-width: 40px;
+      border-radius: 4px;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      margin-top: 50px;
+    }
+  </style>
 </head>
 <body>
+
 <img alt="Trade With Jars Logo" class="logo" src="TradeWithJarslogo.png"/>
+
 <div class="dropdown">
   <button class="dropbtn">☰</button>
   <div class="dropdown-content">
@@ -226,136 +143,75 @@ img.logo {
   </div>
 </div>
 
-<div class="mode-toggle">
-<button class="active" id="btn-controlled" onclick="toggleMode('controlled')">Precision Mode</button>
-<button id="btn-degen" onclick="toggleMode('degen')">Degen Dive</button>
-<button id="btn-scalp" onclick="toggleMode('scalp')">Scalp Sniper</button>
-</div>
-<div class="mode-section active" id="controlled">
-<label>Investment Amount ($): <input id="c_investment" type="number"/></label>
-<label>Target Profit ($): <input id="c_profit" type="number"/></label>
-<label>Acceptable Loss ($): <input id="c_loss" type="number"/></label>
-<label>Leverage: <input id="c_leverage" type="number"/></label>
-<label>Entry Price: <input id="c_entry" type="number"/></label>
-<label>Direction: <select id="c_direction"><option>Long</option><option>Short</option></select></label>
-<button class="calculate" onclick="calculate('controlled')">Run Strategy</button>
-<div class="result" id="c_result"></div>
-</div>
-<div class="mode-section" id="degen">
-<label>Entry: <input id="d_entry" type="number"/></label>
-<label>Exit: <input id="d_exit" type="number"/></label>
-<label>Leverage: <input id="d_leverage" type="number"/></label>
-<label>Direction: <select id="d_direction"><option>Long</option><option>Short</option></select></label>
-<button class="calculate" onclick="calculate('degen')">Run Strategy</button>
-<div class="result" id="d_result"></div>
-</div>
-<div class="mode-section" id="scalp">
-<label>Size ($): <input id="s_size" type="number"/></label>
-<label>Entry: <input id="s_entry" type="number"/></label>
-<label>Exit: <input id="s_exit" type="number"/></label>
-<label>Leverage: <input id="s_leverage" type="number"/></label>
-<label>Direction: <select id="s_direction"><option>Long</option><option>Short</option></select></label>
-<button class="calculate" onclick="calculate('scalp')">Run Strategy</button>
-<div class="result" id="s_result"></div>
-</div>
-<div class="chart-wrapper">
-<iframe allowfullscreen="" frameborder="0" height="400" src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_1&amp;symbol=BLOFIN%3ASOLUSDT.P&amp;interval=1&amp;theme=dark&amp;style=1" width="100%"></iframe>
-</div>
-<div class="partner-section">
-<p>PROUD PARTNER OF</p>
-<a href="https://discord.gg/bbBPzjJk" target="_blank">
-  <img alt="Doughboi's Bakery Logo" src="doughbois.png"/>
-</a>
-</div>
-<div class="footer">
-    © 2025 Trade With Jars. All rights reserved.
-  </div>
-<div class="modal" id="passwordModal">
-<div class="modal-content">
-<p>Enter Access Code</p>
-<input id="accessCodeInput" placeholder="Enter code..." type="password"/>
-<button type="button" >Submit</button>
- <a href="https://discord.gg/bbBPzjJk" target="_blank" id="requestCodeLink">
-     Request code from Doughboi's Bakery Discord
- </a>
-</div>
-</div>
+<h1>Solana NFT Tracker</h1>
+<div id="timestamp">Loading last update time...</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Image</th>
+      <th>Floor Price</th>
+      <th>Volume</th>
+    </tr>
+  </thead>
+  <tbody id="nftTableBody"></tbody>
+</table>
+
+<footer>
+  © 2025 TradeWithJars.net. All rights reserved.
+</footer>
+
 <script>
-    let pendingCalc = null;
-    function toggleMode(mode) {
-      document.querySelectorAll('.mode-section').forEach(el => el.classList.remove('active'));
-      document.getElementById(mode).classList.add('active');
-      document.querySelectorAll('.mode-toggle button').forEach(btn => btn.classList.remove('active'));
-      document.getElementById('btn-' + mode).classList.add('active');
-    }
+  const sheetCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv";
 
-    function showPasswordPrompt(callback) {
-      pendingCalc = callback;
-      document.getElementById('passwordModal').style.display = 'flex';
-      setTimeout(() => document.getElementById('accessCodeInput').focus(), 100);
-    }
+  async function loadNFTs() {
+    const res = await fetch(sheetCSV);
+    const text = await res.text();
+    const rows = text.split("\n").map(row => row.split(","));
 
-    function verifyCode() {
-      const code = document.getElementById('accessCodeInput').value;
-      if (code === '1134') {
-        document.getElementById('passwordModal').style.display = 'none';
-        document.getElementById('accessCodeInput').value = '';
-        if (pendingCalc) pendingCalc();
-      } else {
-        alert("Please request a new code from the Doughboi's Bakery Discord.");
-        document.getElementById('accessCodeInput').value = '';
+    const tableBody = document.getElementById("nftTableBody");
+    tableBody.innerHTML = "";
+
+    for (let i = 1; i < rows.length; i++) {
+      const row = rows[i];
+
+        if (row.every(cell => !cell.trim())) {
+    continue;
+  }
+
+      if (row[0] && row[0].includes("Last updated:")) {
+        document.getElementById("timestamp").textContent = row[0];
+        break;
       }
+
+      const tr = document.createElement("tr");
+
+      const cell1 = document.createElement("td");
+      cell1.textContent = row[1] || "";
+      tr.appendChild(cell1);
+
+      const cell2 = document.createElement("td");
+      const img = document.createElement("img");
+      img.src = row[2] || "";
+      img.alt = "NFT";
+      cell2.appendChild(img);
+      tr.appendChild(cell2);
+
+      const cell3 = document.createElement("td");
+      cell3.textContent = row[3] || "";
+      tr.appendChild(cell3);
+
+      const cell4 = document.createElement("td");
+      cell4.textContent = row[4] ? row[4].replace(/"/g, "").trim().replace(/\s*SOL$/, "") + " SOL" : "-";
+      tr.appendChild(cell4);
+
+      tableBody.appendChild(tr);
     }
+  }
 
-    function calculate(mode) {
-      showPasswordPrompt(async () => {
-        let payload = {};
-        if (mode === 'controlled') {
-          payload = {
-            investment: parseFloat(c_investment.value),
-            profit: parseFloat(c_profit.value),
-            loss: parseFloat(c_loss.value),
-            leverage: parseFloat(c_leverage.value),
-            entry: parseFloat(c_entry.value),
-            direction: c_direction.value
-          };
-        } else if (mode === 'degen') {
-          payload = {
-            entry: parseFloat(d_entry.value),
-            exit: parseFloat(d_exit.value),
-            leverage: parseFloat(d_leverage.value),
-            direction: d_direction.value
-          };
-        } else if (mode === 'scalp') {
-          payload = {
-            size: parseFloat(s_size.value),
-            entry: parseFloat(s_entry.value),
-            exit: parseFloat(s_exit.value),
-            leverage: parseFloat(s_leverage.value),
-            direction: s_direction.value
-          };
-        }
+  loadNFTs();
+</script>
 
-        const isInvalid = Object.values(payload).some(v => typeof v === 'number' && isNaN(v));
-        if (isInvalid) {
-          document.getElementById(mode[0] + '_result').textContent = "Fill all fields.";
-          return;
-        }
-
-        try {
-          const response = await fetch(`https://jars-backend.onrender.com/calculate/${mode}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          const data = await response.json();
-          const resultDiv = document.getElementById(mode[0] + '_result');
-          resultDiv.textContent = data.error ? data.error : data.result || 'Success.';
-        } catch (err) {
-          document.getElementById(mode[0] + '_result').textContent = 'Error connecting to backend.';
-        }
-      });
-    }
-  </script>
 </body>
 </html>
