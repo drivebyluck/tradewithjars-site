@@ -224,22 +224,13 @@
 </footer>
 
 <script>
-    async function loadRSS() {
-      const urls = [
-        "https://www.coindesk.com/arc/outboundfeeds/rss/",
-        "https://cointelegraph.com/rss"
-      ];
-      let allHeadlines = [];
+    fetch("https://api.rss2json.com/v1/api.json?rss_url=https://cointelegraph.com/rss")
+      .then(res => res.json())
+      .then(data => {
+        const headlines = data.items.map(item => item.title).join(" • ");
+        document.getElementById("rssTicker").textContent = headlines;
 
-      for (const url of urls) {
-        const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-        const data = await res.json();
-        const headlines = data.items.slice(0, 5).map(item => item.title);
-        allHeadlines.push(...headlines);
-      }
-
-      document.getElementById("rss-feed").textContent = allHeadlines.join(" ⚡ ");
-    }
+        }
 
   async function loadNFTs() {
     const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv");
