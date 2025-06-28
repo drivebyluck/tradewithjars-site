@@ -62,7 +62,7 @@ img.logo {
       background-color: #1f1f1f;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 10px #e02c2c;
+      box-shadow: 0 0 10px #017a36;
     }
     .mode-section.active {
       display: block;
@@ -270,16 +270,7 @@ img.logo {
 <div class="footer">
     © 2025 Trade With Jars. All rights reserved.
   </div>
-<div class="modal" id="passwordModal">
-<div class="modal-content">
-<p>Enter Access Code</p>
-<input id="accessCodeInput" placeholder="Enter code..." type="password"/>
-<button type="button" onclick="verifyCode()">Submit</button>
- <a href="https://discord.gg/bbBPzjJk" target="_blank" id="requestCodeLink">
-     Request code from Doughboi's Bakery Discord
- </a>
-</div>
-</div>
+
 <script>
     let pendingCalc = null;
     function toggleMode(mode) {
@@ -289,26 +280,8 @@ img.logo {
       document.getElementById('btn-' + mode).classList.add('active');
     }
 
-    function showPasswordPrompt(callback) {
-      pendingCalc = callback;
-      document.getElementById('passwordModal').style.display = 'flex';
-      setTimeout(() => document.getElementById('accessCodeInput').focus(), 100);
-    }
-
-    function verifyCode() {
-      const code = document.getElementById('accessCodeInput').value;
-      if (code === '1134') {
-        document.getElementById('passwordModal').style.display = 'none';
-        document.getElementById('accessCodeInput').value = '';
-        if (pendingCalc) pendingCalc();
-      } else {
-        alert("Please request a new code from the Doughboi's Bakery Discord.");
-        document.getElementById('accessCodeInput').value = '';
-      }
-    }
-
-    function calculate(mode) {
-      showPasswordPrompt(async () => {
+    
+    async function calculate(mode) {
         let payload = {};
         if (mode === 'controlled') {
           payload = {
@@ -354,8 +327,9 @@ img.logo {
         } catch (err) {
           document.getElementById(mode[0] + '_result').textContent = 'Error connecting to backend.';
         }
-      });
-    }
+      }
+}
   </script>
 </body>
 </html>
+
