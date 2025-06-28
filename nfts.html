@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Solana NFT Tracker</title>
   <link rel="icon" href="TradeWithJarslogo.png" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -127,61 +128,44 @@
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSYazPCLVVoKoP_vwg7xH_CO39OrWTooH1zE9SQClP5q-NTs5v0pddJf8b5SqiiYjlRpvHaG228HRX4/pub?output=csv";
 
-    function parseCSV(str) {
-      const rows = [];
-      const lines = str.split("\n");
-      let insideQuotes = false, current = "", row = [];
-
-      for (let i = 0; i < lines.length; i++) {
-        const chars = [...lines[i]];
-        for (let j = 0; j < chars.length; j++) {
-          const char = chars[j];
-          if (char === '"' && chars[j + 1] === '"') {
-            current += '"';
-            j++;
-          } else if (char === '"') {
-            insideQuotes = !insideQuotes;
-          } else if (char === ',' && !insideQuotes) {
-            row.push(current);
-            current = "";
-          } else {
-            current += char;
-          }
-        }
-        row.push(current);
-        rows.push(row);
-        current = "";
-        row = [];
-      }
-      return rows;
-    }
-
     fetch(CSV_URL)
-      .then(res => res.text())
-      .then(text => {
-        const data = parseCSV(text);
-        const table = document.getElementById("nft-table");
-        const lastRow = data[data.length - 1];
-        if (lastRow && lastRow[0].startsWith("Last updated:")) {
-          document.getElementById("last-updated").textContent = lastRow[0];
-        }
+      .then(response => response.text())
+      .then(csvText => {
+        Papa.parse(csvText, {
+          header: false,
+          skipEmptyLines: true,
+          complete: function(results) {
+            const data = results.data;
+            const tableBody = document.getElementById("nft-table");
+            const timestampRow = data[data.length - 1];
+            const nftData = data.slice(1, data.length - 1); // skip header and last
 
-        const body = data.slice(1, -1); // skip header and timestamp
-        table.innerHTML = "";
-        body.forEach(row => {
-          if (row.length >= 4) {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${row[0]}</td>
-              <td><img src="${row[1]}" alt="NFT" onerror="this.src='https://via.placeholder.com/50';"></td>
-              <td>${row[2]}</td>
-              <td>${row[3]}</td>
-            `;
-            table.appendChild(tr);
+            // Set timestamp if it's present
+            if (timestampRow[0]?.toLowerCase().includes("last updated")) {
+              document.getElementById("last-updated").textContent = timestampRow[0];
+            }
+
+            // Clear old content
+            tableBody.innerHTML = "";
+
+            nftData.forEach(row => {
+              const [name, imgUrl, floor, volume] = row;
+              if (name && imgUrl && floor && volume) {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                  <td>${name}</td>
+                  <td><img src="${imgUrl}" alt="NFT" onerror="this.src='https://via.placeholder.com/50';"></td>
+                  <td>${floor}</td>
+                  <td>${volume}</td>
+                `;
+                tableBody.appendChild(tr);
+              }
+            });
           }
         });
       })
-      .catch(() => {
+      .catch(err => {
+        console.error("Failed to load CSV", err);
         document.getElementById("nft-table").innerHTML = `<tr><td colspan="4">Failed to load data.</td></tr>`;
       });
   </script>
