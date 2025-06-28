@@ -13,31 +13,26 @@
       color: white;
       animation: fadeIn 1.2s ease;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     @keyframes flyIn {
       0% { transform: translateY(-200px); opacity: 0; }
       100% { transform: translateY(0); opacity: 1; }
     }
-
     .logo {
       display: block;
       margin: 0 auto;
       max-width: 160px;
       animation: flyIn 1.8s ease-out;
     }
-
     .dropdown {
       position: fixed;
       top: 30px;
       right: 30px;
       z-index: 1000;
     }
-
     .dropbtn {
       background-color: #28a745;
       color: black;
@@ -49,11 +44,9 @@
       box-shadow: 0 0 10px #28a745;
       transition: background 0.3s;
     }
-
     .dropbtn:hover {
       background-color: #1c7c35;
     }
-
     .dropdown-content {
       display: none;
       position: absolute;
@@ -64,7 +57,6 @@
       box-shadow: 0 0 10px #28a745;
       z-index: 1001;
     }
-
     .dropdown-content a {
       color: white;
       padding: 12px 16px;
@@ -72,67 +64,12 @@
       display: block;
       transition: background 0.3s;
     }
-
     .dropdown-content a:hover {
       background-color: #333;
     }
-
     .dropdown:hover .dropdown-content {
       display: block;
     }
-
-    section {
-      background-color: #1f1f1f;
-      margin: 40px auto;
-      padding: 30px;
-      max-width: 1000px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #28a745;
-      transition: all 0.3s ease;
-    }
-
-    h2 {
-      color: #72ff6c;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      padding: 12px 16px;
-      border: 1px solid #444;
-      text-align: left;
-    }
-
-    th {
-      background-color: #222;
-      color: #72ff6c;
-    }
-
-    tr:nth-child(even) {
-      background-color: #111;
-    }
-
-    .footer {
-      text-align: center;
-      margin: 40px auto 20px;
-      color: #aaa;
-      font-size: 14px;
-    }
-
-    .partner {
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    .partner img {
-      max-width: 180px;
-      display: inline-block;
-    }
-
     .rss {
       white-space: nowrap;
       overflow: hidden;
@@ -142,24 +79,64 @@
       border-top: 2px solid #28a745;
       border-bottom: 2px solid #28a745;
     }
-
     .rss span {
       display: inline-block;
       padding-left: 100%;
       animation: scrollTicker 80s linear infinite;
     }
-
     @keyframes scrollTicker {
       0% { transform: translateX(0); }
       100% { transform: translateX(-100%); }
     }
-
+    section {
+      background-color: #1f1f1f;
+      margin: 40px auto;
+      padding: 30px;
+      max-width: 1000px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #28a745;
+      transition: all 0.3s ease;
+    }
+    h2 {
+      color: #72ff6c;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px 16px;
+      border: 1px solid #444;
+      text-align: left;
+    }
+    th {
+      background-color: #222;
+      color: #72ff6c;
+    }
+    tr:nth-child(even) {
+      background-color: #111;
+    }
+    .footer {
+      text-align: center;
+      margin: 40px auto 20px;
+      color: #aaa;
+      font-size: 14px;
+    }
+    .partner {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .partner img {
+      max-width: 180px;
+      display: inline-block;
+    }
     .fade-on-scroll {
       opacity: 0;
       transform: translateY(30px);
       transition: all 1s ease;
     }
-
     .fade-on-scroll.visible {
       opacity: 1;
       transform: translateY(0);
@@ -185,7 +162,9 @@
 
 <section class="fade-on-scroll">
   <h2>What is TradeWithJars?</h2>
-  <p>TradeWithJars.net is your one-stop destination for real-time Solana trading insights. Featuring a cutting-edge leverage calculator, live NFT floor tracking, up-to-the-minute USDC mint alerts, curated crypto news, and a live schedule of the U.S. President's activities, this site is designed for traders who value speed, accuracy, and clarity.</p>
+  <p style="text-align: center;">
+    TradeWithJars.net is your one-stop destination for real-time Solana trading insights. Featuring a cutting-edge leverage calculator, live NFT floor tracking, up-to-the-minute USDC mint alerts, curated crypto news, and a live schedule of the U.S. President's activities, this site is designed for traders who value speed, accuracy, and clarity.
+  </p>
 </section>
 
 <section class="fade-on-scroll" id="nftSection">
@@ -198,12 +177,16 @@
 
 <section class="fade-on-scroll">
   <h2>Leverage Calculator Preview</h2>
-  <p>Our calculator simplifies leveraged trading by letting you quickly determine profit/loss based on price movements. Try it on the <a href="lev_calc.html">Leverage Calc Page</a>.</p>
+  <p style="text-align: center;">
+    Our calculator simplifies leveraged trading by letting you quickly determine profit/loss based on price movements. Try it on the <a href="lev_calc.html">Leverage Calc Page</a>.
+  </p>
 </section>
 
 <section class="fade-on-scroll">
   <h2>Crypto News Feed</h2>
-  <p>Read the latest curated crypto news and stay informed. Visit the <a href="crypto-news.html">Top News Page</a> for full articles.</p>
+  <p style="text-align: center;">
+    Read the latest curated crypto news and stay informed. Visit the <a href="crypto-news.html">Top News Page</a> for full articles.
+  </p>
 </section>
 
 <section class="fade-on-scroll">
@@ -216,8 +199,10 @@
 
 <section class="fade-on-scroll">
   <h2>Sign Up for USDC Mint Alerts</h2>
-  <p>Receive a text when Circle mints over $100,000,000 USDC on Solana.</p>
-  <form>
+  <p style="text-align: center;">
+    Receive a text when Circle mints over $100,000,000 USDC on Solana.
+  </p>
+  <form style="text-align: center;">
     <input type="tel" placeholder="Enter phone number" required />
     <button type="submit">Sign Up</button>
   </form>
@@ -231,7 +216,7 @@
 <div class="footer">© 2025 TradeWithJars.net. All rights reserved.</div>
 
 <script>
-  // Fade-on-scroll effect
+  // Fade on scroll
   const faders = document.querySelectorAll('.fade-on-scroll');
   window.addEventListener('scroll', () => {
     faders.forEach(el => {
@@ -242,16 +227,20 @@
     });
   });
 
-  // RSS Feed
+  // RSS feed
   async function loadRSS() {
-    const res = await fetch('https://cryptopanic.com/api/v1/posts/?auth_token=demo&public=true');
-    const json = await res.json();
-    const items = json.results.map(r => r.title).slice(0, 20);
-    document.getElementById('rssFeed').textContent = items.join(' • ');
+    try {
+      const res = await fetch('https://cryptopanic.com/api/v1/posts/?auth_token=demo&public=true');
+      const json = await res.json();
+      const items = json.results.map(r => r.title).slice(0, 20);
+      document.getElementById('rssFeed').textContent = items.join(' • ');
+    } catch {
+      document.getElementById('rssFeed').textContent = "Error loading crypto headlines.";
+    }
   }
   loadRSS();
 
-  // NFT Preview (load from CSV)
+  // NFT Table
   async function loadNFTs() {
     const res = await fetch('https://tradewithjars.net/nft.csv');
     const text = await res.text();
@@ -273,7 +262,7 @@
   }
   loadNFTs();
 
-  // Presidential Preview
+  // Schedule
   async function loadSchedule() {
     const res = await fetch('https://media-cdn.factba.se/rss/json/trump/calendar-full.json');
     const data = await res.json();
@@ -291,5 +280,6 @@
   }
   loadSchedule();
 </script>
+
 </body>
 </html>
