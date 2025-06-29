@@ -1,129 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>if (!localStorage.getItem("token")) window.location.href = "gate.html";</script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Leverage Calculator</title>
-  <link rel="icon" href="TradeWithJarslogo.png" />
+  <link rel="icon" type="image/png" href="TradeWithJarslogo.png">
   <style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #000000, #0f0f0f);
-      color: #ffffff;
-      padding: 20px;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background-color: #1a1a1a;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0, 255, 128, 0.3);
-    }
-    h1 {
+      background-color: #000;
+      color: #0f0;
+      font-family: monospace;
       text-align: center;
-      color: #00ffcc;
-      font-size: 28px;
+      padding: 30px;
     }
-    label {
+    .mode {
+      margin: 10px;
+      cursor: pointer;
+      display: inline-block;
+      padding: 10px 20px;
+      border: 1px solid #0f0;
+      border-radius: 5px;
+    }
+    .active {
+      background-color: #0f0;
+      color: #000;
+    }
+    input {
       display: block;
-      margin-top: 15px;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 6px;
-      border: 1px solid #333;
-      background-color: #0f0f0f;
-      color: #fff;
+      margin: 10px auto;
+      padding: 8px;
+      width: 80%;
+      max-width: 300px;
     }
     button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background-color: #00cc99;
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-weight: bold;
+      background-color: #0f0;
       border: none;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 16px;
       cursor: pointer;
     }
     .result {
       margin-top: 20px;
-      padding: 10px;
-      border-radius: 6px;
-      background-color: #222;
-    }
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 12px;
-      color: #666;
+      font-size: 1.2em;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Leverage Calculator</h1>
-    <label for="entry">Entry Price:</label>
-    <input type="number" id="entry" />
+  <h1>Leverage Calculator</h1>
 
-    <label for="stop">Stop Loss Price:</label>
-    <input type="number" id="stop" />
-
-    <label for="leverage">Leverage:</label>
-    <input type="number" id="leverage" />
-
-    <label for="risk">Risk % of Account:</label>
-    <input type="number" id="risk" />
-
-    <label for="account">Account Size ($):</label>
-    <input type="number" id="account" />
-
-    <label for="direction">Trade Direction:</label>
-    <select id="direction">
-      <option value="long">Long</option>
-      <option value="short">Short</option>
-    </select>
-
-    <button onclick="calculate()">Calculate Position Size</button>
-
-    <div id="result" class="result"></div>
+  <div id="modeSelector">
+    <span class="mode active" onclick="selectMode('cross')">Cross</span>
+    <span class="mode" onclick="selectMode('isolated')">Isolated</span>
+    <span class="mode" onclick="selectMode('rr')">R/R</span>
   </div>
 
-  <div class="footer">Built by Jars @ TradeWithJars.net</div>
+  <div id="inputs">
+    <input id="entryPrice" type="number" placeholder="Entry Price">
+    <input id="exitPrice" type="number" placeholder="Exit Price">
+    <input id="accountBalance" type="number" placeholder="Account Balance">
+    <input id="leverage" type="number" placeholder="Leverage" style="display:none;">
+    <input id="riskAmount" type="number" placeholder="Risk Amount" style="display:none;">
+    <input id="rewardAmount" type="number" placeholder="Reward Amount" style="display:none;">
+    <button onclick="calculate()">Calculate</button>
+  </div>
+
+  <div class="result" id="result"></div>
 
   <script>
-    function calculate() {
-      const entry = parseFloat(document.getElementById("entry").value);
-      const stop = parseFloat(document.getElementById("stop").value);
-      const leverage = parseFloat(document.getElementById("leverage").value);
-      const risk = parseFloat(document.getElementById("risk").value);
-      const account = parseFloat(document.getElementById("account").value);
-      const direction = document.getElementById("direction").value;
+    let currentMode = 'cross';
 
-      if (isNaN(entry) || isNaN(stop) || isNaN(leverage) || isNaN(risk) || isNaN(account)) {
-        document.getElementById("result").innerHTML = "Please fill in all fields correctly.";
-        return;
-      }
+    function selectMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
+      document.querySelector(`.mode[onclick="selectMode('${mode}')"]`).classList.add('active');
 
-      let stopLossDiff = Math.abs(entry - stop);
-      let riskAmount = account * (risk / 100);
-      let positionSize = riskAmount / stopLossDiff;
-      let adjustedPosition = positionSize * leverage;
-
-      document.getElementById("result").innerHTML =
-        `<strong>Position Size (with Leverage):</strong> $${adjustedPosition.toFixed(2)}<br>` +
-        `<strong>Risk Amount:</strong> $${riskAmount.toFixed(2)}<br>` +
-        `<strong>Stop Loss Difference:</strong> $${stopLossDiff.toFixed(2)}`;
+      document.getElementById('leverage').style.display = mode === 'isolated' ? 'block' : 'none';
+      document.getElementById('riskAmount').style.display = mode === 'rr' ? 'block' : 'none';
+      document.getElementById('rewardAmount').style.display = mode === 'rr' ? 'block' : 'none';
     }
 
-    // Preserve this redirect to ensure auth before access
-    if (!localStorage.getItem("token")) {
-      window.location.href = "gate.html";
+    function calculate() {
+      const entry = parseFloat(document.getElementById('entryPrice').value);
+      const exit = parseFloat(document.getElementById('exitPrice').value);
+      const balance = parseFloat(document.getElementById('accountBalance').value);
+      const leverage = parseFloat(document.getElementById('leverage').value);
+      const risk = parseFloat(document.getElementById('riskAmount').value);
+      const reward = parseFloat(document.getElementById('rewardAmount').value);
+
+      let resultText = '';
+
+      if (isNaN(entry) || isNaN(exit) || isNaN(balance)) {
+        resultText = 'Please fill out all required fields.';
+      } else if (currentMode === 'cross') {
+        const pnl = ((exit - entry) / entry) * balance;
+        resultText = `P&L: $${pnl.toFixed(2)}`;
+      } else if (currentMode === 'isolated') {
+        if (isNaN(leverage)) {
+          resultText = 'Enter leverage for Isolated mode.';
+        } else {
+          const pnl = ((exit - entry) / entry) * balance * leverage;
+          resultText = `P&L: $${pnl.toFixed(2)}`;
+        }
+      } else if (currentMode === 'rr') {
+        if (isNaN(risk) || isNaN(reward)) {
+          resultText = 'Enter both risk and reward for R/R mode.';
+        } else {
+          const rr = reward / risk;
+          resultText = `Risk/Reward Ratio: ${rr.toFixed(2)}`;
+        }
+      }
+
+      document.getElementById('result').innerText = resultText;
     }
   </script>
 </body>
