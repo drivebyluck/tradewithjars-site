@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Leverage Calculator</title>
+  <link rel="icon" type="image/png" href="TradeWithJarslogo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #000000, #0c0c0c);
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 30px;
+      font-size: 40px;
+      color: #00ffae;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00ffae;
+    }
+
+    label, select, input {
+      display: block;
+      width: 90%;
+      margin: 15px auto;
+      padding: 10px;
+      border: 2px solid #00ffae;
+      border-radius: 10px;
+      background-color: #1a1a1a;
+      color: white;
+      font-size: 16px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #00ffae;
+      box-shadow: 0 0 10px #00ffae;
+    }
+
+    button {
+      background-color: #00ffae;
+      color: black;
+      padding: 10px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #00d29b;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 20px;
+    }
+
+    .mode-options {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mode-options button {
+      background-color: #1a1a1a;
+      border: 2px solid #00ffae;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .mode-options button.active {
+      background-color: #00ffae;
+      color: black;
+    }
+
+    .fields {
+      display: none;
+    }
+
+    .fields.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trade With Jars Leverage Calculator</h1>
+  <div class="container">
+    <div class="mode-options">
+      <button onclick="showMode('entry')" id="entryModeBtn">Entry Mode</button>
+      <button onclick="showMode('stop')" id="stopModeBtn">Stop Mode</button>
+      <button onclick="showMode('target')" id="targetModeBtn">Target Mode</button>
+    </div>
+
+    <!-- Entry Mode -->
+    <div class="fields" id="entryMode">
+      <input type="number" id="accountSizeEntry" placeholder="Account Size (USDC)">
+      <input type="number" id="entryEntry" placeholder="Entry Price">
+      <input type="number" id="stopEntry" placeholder="Stop Price">
+      <input type="number" id="targetEntry" placeholder="Target Price">
+      <input type="number" id="riskPercentEntry" placeholder="Risk %">
+      <button onclick="calculateEntryMode()">Run Strategy</button>
+    </div>
+
+    <!-- Stop Mode -->
+    <div class="fields" id="stopMode">
+      <input type="number" id="accountSizeStop" placeholder="Account Size (USDC)">
+      <input type="number" id="entryStop" placeholder="Entry Price">
+      <input type="number" id="targetStop" placeholder="Target Price">
+      <input type="number" id="riskPercentStop" placeholder="Risk %">
+      <input type="number" id="riskAmountStop" placeholder="Risk Amount ($)">
+      <button onclick="calculateStopMode()">Run Strategy</button>
+    </div>
+
+    <!-- Target Mode -->
+    <div class="fields" id="targetMode">
+      <input type="number" id="accountSizeTarget" placeholder="Account Size (USDC)">
+      <input type="number" id="entryTarget" placeholder="Entry Price">
+      <input type="number" id="stopTarget" placeholder="Stop Price">
+      <input type="number" id="riskPercentTarget" placeholder="Risk %">
+      <input type="number" id="rewardTarget" placeholder="Reward ($)">
+      <button onclick="calculateTargetMode()">Run Strategy</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    let currentMode = "";
+
+    function showMode(mode) {
+      document.querySelectorAll('.fields').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.mode-options button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(mode + "Mode").classList.add('active');
+      document.getElementById(mode + "ModeBtn").classList.add('active');
+      currentMode = mode;
+    }
+
+    function calculateEntryMode() {
+      const size = parseFloat(document.getElementById("accountSizeEntry").value);
+      const entry = parseFloat(document.getElementById("entryEntry").value);
+      const stop = parseFloat(document.getElementById("stopEntry").value);
+      const target = parseFloat(document.getElementById("targetEntry").value);
+      const riskPercent = parseFloat(document.getElementById("riskPercentEntry").value) / 100;
+
+      const riskAmount = size * riskPercent;
+      const stopLossDistance = Math.abs(entry - stop);
+      const positionSize = riskAmount / stopLossDistance;
+      const profit = (target - entry) * positionSize;
+
+      document.getElementById("result").innerHTML = `
+        <strong>Entry Mode Results:</strong><br>
+        Position Size: ${positionSize.toFixed(2)} tokens<br>
+        Potential Profit: $${profit.toFixed(2)}<br>
+        Risk Amount: $${riskAmount.toFixed(2)}
+      `;
+    }
+
+    function calculateStopMode() {
+      const size = parseFloat(document.getElementById("accountSizeStop").value);
+      const entry = parseFloat(document.getElementById("entryStop").value);
+      const target = parseFloat(document.getElementById("targetStop").value);
+      const riskPercent = parseFloat(document.getElementById("riskPercentStop").value) / 100;
+      const riskAmount = parseFloat(document.getElementById("riskAmountStop").value);
+
+      const stopLossDistance = riskAmount / (size * riskPercent);
+      const stop = entry - stopLossDistance;
+      const profit = (target - entry) * (riskAmount / stopLossDistance);
+
+      document.getElementById("result").innerHTML = `
+        <strong>Stop Mode Results:</strong><br>
+        Suggested Stop: ${stop.toFixed(2)}<br>
+        Potential Profit: $${profit.toFixed(2)}
+      `;
+    }
+
+    function calculateTargetMode() {
+      const size = parseFloat(document.getElementById("accountSizeTarget").value);
+      const entry = parseFloat(document.getElementById("entryTarget").value);
+      const stop = parseFloat(document.getElementById("stopTarget").value);
+      const riskPercent = parseFloat(document.getElementById("riskPercentTarget").value) / 100;
+      const reward = parseFloat(document.getElementById("rewardTarget").value);
+
+      const riskAmount = size * riskPercent;
+      const stopLossDistance = Math.abs(entry - stop);
+      const positionSize = riskAmount / stopLossDistance;
+      const target = entry + (reward / positionSize);
+
+      document.getElementById("result").innerHTML = `
+        <strong>Target Mode Results:</strong><br>
+        Suggested Target: ${target.toFixed(2)}<br>
+        Position Size: ${positionSize.toFixed(2)} tokens
+      `;
+    }
+
+    // Default mode
+    showMode('entry');
+  </script>
+
+  <!-- Only addition below: Discord role check redirect -->
+  <script>
+    fetch('/check-role')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.authorized) {
+          window.location.href = '/auth/discord';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        window.location.href = '/auth/discord';
+      });
+  </script>
+</body>
+</html>
