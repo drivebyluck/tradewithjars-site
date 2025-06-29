@@ -40,31 +40,26 @@
   </div>
 
   <script>
-    // If a valid token exists, send a ping to the server to check role
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetch("https://discord-auth-server-ajjz.onrender.com/check-role", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => {
-          if (res.status === 200) {
-            window.location.href = "leverage_calculator.html";
-          } else {
-            localStorage.removeItem("token");
-          }
-        })
-        .catch(() => {
-          localStorage.removeItem("token");
-        });
-    }
-
     function redirectToDiscord() {
       window.location.href =
         "https://discord.com/oauth2/authorize?client_id=1388619216953020456&permissions=268436480&response_type=code&redirect_uri=https%3A%2F%2Fdiscord-auth-server-ajjz.onrender.com%2Fauth%2Fdiscord%2Fcallback&scope=identify%20guilds%20guilds.members.read";
     }
+
+    // Check token validity via backend before trusting localStorage
+    fetch("https://discord-auth-server-ajjz.onrender.com/check-auth", {
+      credentials: "include"
+    })
+      .then((res) => {
+        if (res.ok) {
+          window.location.href = "leverage_calculator.html";
+        }
+      })
+      .catch(() => {
+        // fallback to localStorage check (not recommended, but kept for legacy)
+        if (localStorage.getItem("token")) {
+          window.location.href = "leverage_calculator.html";
+        }
+      });
   </script>
 </body>
 </html>
