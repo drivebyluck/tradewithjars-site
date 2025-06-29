@@ -4,114 +4,211 @@
   <meta charset="UTF-8">
   <title>Leverage Calculator</title>
   <link rel="icon" type="image/png" href="TradeWithJarslogo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #000;
-      color: #0f0;
-      font-family: monospace;
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #000000, #0c0c0c);
+      color: white;
       text-align: center;
+    }
+
+    h1 {
+      margin-top: 30px;
+      font-size: 40px;
+      color: #00ffae;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
       padding: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00ffae;
     }
-    .mode {
-      margin: 10px;
-      cursor: pointer;
-      display: inline-block;
-      padding: 10px 20px;
-      border: 1px solid #0f0;
-      border-radius: 5px;
-    }
-    .active {
-      background-color: #0f0;
-      color: #000;
-    }
-    input {
+
+    label, select, input {
       display: block;
-      margin: 10px auto;
-      padding: 8px;
-      width: 80%;
-      max-width: 300px;
+      width: 90%;
+      margin: 15px auto;
+      padding: 10px;
+      border: 2px solid #00ffae;
+      border-radius: 10px;
+      background-color: #1a1a1a;
+      color: white;
+      font-size: 16px;
     }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #00ffae;
+      box-shadow: 0 0 10px #00ffae;
+    }
+
     button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      font-weight: bold;
-      background-color: #0f0;
+      background-color: #00ffae;
+      color: black;
+      padding: 10px 30px;
       border: none;
+      border-radius: 10px;
+      font-size: 18px;
       cursor: pointer;
-    }
-    .result {
       margin-top: 20px;
-      font-size: 1.2em;
+    }
+
+    button:hover {
+      background-color: #00d29b;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 20px;
+    }
+
+    .mode-options {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mode-options button {
+      background-color: #1a1a1a;
+      border: 2px solid #00ffae;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .mode-options button.active {
+      background-color: #00ffae;
+      color: black;
+    }
+
+    .fields {
+      display: none;
+    }
+
+    .fields.active {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <h1>Leverage Calculator</h1>
+  <h1>Trade With Jars Leverage Calculator</h1>
+  <div class="container">
+    <div class="mode-options">
+      <button onclick="showMode('entry')" id="entryModeBtn">Entry Mode</button>
+      <button onclick="showMode('stop')" id="stopModeBtn">Stop Mode</button>
+      <button onclick="showMode('target')" id="targetModeBtn">Target Mode</button>
+    </div>
 
-  <div id="modeSelector">
-    <span class="mode active" onclick="selectMode('cross')">Cross</span>
-    <span class="mode" onclick="selectMode('isolated')">Isolated</span>
-    <span class="mode" onclick="selectMode('rr')">R/R</span>
+    <!-- Entry Mode -->
+    <div class="fields" id="entryMode">
+      <input type="number" id="accountSizeEntry" placeholder="Account Size (USDC)">
+      <input type="number" id="entryEntry" placeholder="Entry Price">
+      <input type="number" id="stopEntry" placeholder="Stop Price">
+      <input type="number" id="targetEntry" placeholder="Target Price">
+      <input type="number" id="riskPercentEntry" placeholder="Risk %">
+      <button onclick="calculateEntryMode()">Run Strategy</button>
+    </div>
+
+    <!-- Stop Mode -->
+    <div class="fields" id="stopMode">
+      <input type="number" id="accountSizeStop" placeholder="Account Size (USDC)">
+      <input type="number" id="entryStop" placeholder="Entry Price">
+      <input type="number" id="targetStop" placeholder="Target Price">
+      <input type="number" id="riskPercentStop" placeholder="Risk %">
+      <input type="number" id="riskAmountStop" placeholder="Risk Amount ($)">
+      <button onclick="calculateStopMode()">Run Strategy</button>
+    </div>
+
+    <!-- Target Mode -->
+    <div class="fields" id="targetMode">
+      <input type="number" id="accountSizeTarget" placeholder="Account Size (USDC)">
+      <input type="number" id="entryTarget" placeholder="Entry Price">
+      <input type="number" id="stopTarget" placeholder="Stop Price">
+      <input type="number" id="riskPercentTarget" placeholder="Risk %">
+      <input type="number" id="rewardTarget" placeholder="Reward ($)">
+      <button onclick="calculateTargetMode()">Run Strategy</button>
+    </div>
+
+    <div id="result"></div>
   </div>
-
-  <div id="inputs">
-    <input id="entryPrice" type="number" placeholder="Entry Price">
-    <input id="exitPrice" type="number" placeholder="Exit Price">
-    <input id="accountBalance" type="number" placeholder="Account Balance">
-    <input id="leverage" type="number" placeholder="Leverage" style="display:none;">
-    <input id="riskAmount" type="number" placeholder="Risk Amount" style="display:none;">
-    <input id="rewardAmount" type="number" placeholder="Reward Amount" style="display:none;">
-    <button onclick="calculate()">Calculate</button>
-  </div>
-
-  <div class="result" id="result"></div>
 
   <script>
-    let currentMode = 'cross';
+    let currentMode = "";
 
-    function selectMode(mode) {
+    function showMode(mode) {
+      document.querySelectorAll('.fields').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.mode-options button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(mode + "Mode").classList.add('active');
+      document.getElementById(mode + "ModeBtn").classList.add('active');
       currentMode = mode;
-      document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
-      document.querySelector(`.mode[onclick="selectMode('${mode}')"]`).classList.add('active');
-
-      document.getElementById('leverage').style.display = mode === 'isolated' ? 'block' : 'none';
-      document.getElementById('riskAmount').style.display = mode === 'rr' ? 'block' : 'none';
-      document.getElementById('rewardAmount').style.display = mode === 'rr' ? 'block' : 'none';
     }
 
-    function calculate() {
-      const entry = parseFloat(document.getElementById('entryPrice').value);
-      const exit = parseFloat(document.getElementById('exitPrice').value);
-      const balance = parseFloat(document.getElementById('accountBalance').value);
-      const leverage = parseFloat(document.getElementById('leverage').value);
-      const risk = parseFloat(document.getElementById('riskAmount').value);
-      const reward = parseFloat(document.getElementById('rewardAmount').value);
+    function calculateEntryMode() {
+      const size = parseFloat(document.getElementById("accountSizeEntry").value);
+      const entry = parseFloat(document.getElementById("entryEntry").value);
+      const stop = parseFloat(document.getElementById("stopEntry").value);
+      const target = parseFloat(document.getElementById("targetEntry").value);
+      const riskPercent = parseFloat(document.getElementById("riskPercentEntry").value) / 100;
 
-      let resultText = '';
+      const riskAmount = size * riskPercent;
+      const stopLossDistance = Math.abs(entry - stop);
+      const positionSize = riskAmount / stopLossDistance;
+      const profit = (target - entry) * positionSize;
 
-      if (isNaN(entry) || isNaN(exit) || isNaN(balance)) {
-        resultText = 'Please fill out all required fields.';
-      } else if (currentMode === 'cross') {
-        const pnl = ((exit - entry) / entry) * balance;
-        resultText = `P&L: $${pnl.toFixed(2)}`;
-      } else if (currentMode === 'isolated') {
-        if (isNaN(leverage)) {
-          resultText = 'Enter leverage for Isolated mode.';
-        } else {
-          const pnl = ((exit - entry) / entry) * balance * leverage;
-          resultText = `P&L: $${pnl.toFixed(2)}`;
-        }
-      } else if (currentMode === 'rr') {
-        if (isNaN(risk) || isNaN(reward)) {
-          resultText = 'Enter both risk and reward for R/R mode.';
-        } else {
-          const rr = reward / risk;
-          resultText = `Risk/Reward Ratio: ${rr.toFixed(2)}`;
-        }
-      }
-
-      document.getElementById('result').innerText = resultText;
+      document.getElementById("result").innerHTML = `
+        <strong>Entry Mode Results:</strong><br>
+        Position Size: ${positionSize.toFixed(2)} tokens<br>
+        Potential Profit: $${profit.toFixed(2)}<br>
+        Risk Amount: $${riskAmount.toFixed(2)}
+      `;
     }
+
+    function calculateStopMode() {
+      const size = parseFloat(document.getElementById("accountSizeStop").value);
+      const entry = parseFloat(document.getElementById("entryStop").value);
+      const target = parseFloat(document.getElementById("targetStop").value);
+      const riskPercent = parseFloat(document.getElementById("riskPercentStop").value) / 100;
+      const riskAmount = parseFloat(document.getElementById("riskAmountStop").value);
+
+      const stopLossDistance = riskAmount / (size * riskPercent);
+      const stop = entry - stopLossDistance;
+      const profit = (target - entry) * (riskAmount / stopLossDistance);
+
+      document.getElementById("result").innerHTML = `
+        <strong>Stop Mode Results:</strong><br>
+        Suggested Stop: ${stop.toFixed(2)}<br>
+        Potential Profit: $${profit.toFixed(2)}
+      `;
+    }
+
+    function calculateTargetMode() {
+      const size = parseFloat(document.getElementById("accountSizeTarget").value);
+      const entry = parseFloat(document.getElementById("entryTarget").value);
+      const stop = parseFloat(document.getElementById("stopTarget").value);
+      const riskPercent = parseFloat(document.getElementById("riskPercentTarget").value) / 100;
+      const reward = parseFloat(document.getElementById("rewardTarget").value);
+
+      const riskAmount = size * riskPercent;
+      const stopLossDistance = Math.abs(entry - stop);
+      const positionSize = riskAmount / stopLossDistance;
+      const target = entry + (reward / positionSize);
+
+      document.getElementById("result").innerHTML = `
+        <strong>Target Mode Results:</strong><br>
+        Suggested Target: ${target.toFixed(2)}<br>
+        Position Size: ${positionSize.toFixed(2)} tokens
+      `;
+    }
+
+    // Default mode
+    showMode('entry');
   </script>
 </body>
 </html>
