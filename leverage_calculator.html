@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>TradeWithJars.net - Calculator</title>
+  <title>TradeWithJars.net - Leverage</title>
   <link href="TradeWithJarslogo.png" rel="icon" type="image/png"/>
   <style>
     body {
@@ -128,7 +128,7 @@
   <button class="dropbtn">☰</button>
   <div class="dropdown-content">
     <a href="index.html">Home</a>
-    <a href="lev_calc.html">Leverage Calculator</a>
+    <a href="gate.html">Leverage Calculator</a>
     <a href="crypto-news.html">Top News</a>
     <a href="schedule.html">Presidential Schedule</a>
     <a href="nfts.html">NFT Tracker</a>
@@ -136,18 +136,19 @@
 </div>
 
 <div class="section">
-  <h2>Can't Resist Gains</h2>
+  <h2>Leverage Calculator</h2>
+  <p style="font-size: 16px; color: #cccccc; margin-top: -10px; margin-bottom: 25px;">Choose Your Mode Below to Begin</p>
 
-  <button class="btn" onclick="toggleMode('controlled')">Controlled Mode</button>
-  <button class="btn" onclick="toggleMode('degen')">Degen Mode</button>
-  <button class="btn" onclick="toggleMode('scalp')">Scalp Mode</button>
+  <button class="btn" onclick="toggleMode('controlled')">Reduced Risk</button>
+  <button class="btn" onclick="toggleMode('degen')">Degenerate</button>
+  <button class="btn" onclick="toggleMode('scalp')">Quick Scalp</button>
 
   <div id="controlledMode" style="display:none;">
-    <h3>Controlled Mode</h3>
-    <label>Investment ($):</label><input id="c_investment" type="number">
+    <h3>Reduced Risk</h3>
+    <label>Investment Amount ($):</label><input id="c_investment" type="number">
     <label>Target Profit ($):</label><input id="c_profit" type="number">
     <label>Max Loss ($):</label><input id="c_loss" type="number">
-    <label>Leverage:</label><input id="c_leverage" type="number">
+    <label>Leverage (X):</label><input id="c_leverage" type="number">
     <label>Entry Price:</label><input id="c_entry" type="number">
     <label>Direction:</label>
     <select id="c_direction"><option>Long</option><option>Short</option></select>
@@ -156,8 +157,8 @@
   </div>
 
   <div id="degenMode" style="display:none;">
-    <h3>Degen Mode</h3>
-    <label>Investment ($):</label><input id="d_investment" type="number">
+    <h3>Degenerate</h3>
+    <label>Investment Amount ($):</label><input id="d_investment" type="number">
     <label>Target Profit ($):</label><input id="d_profit" type="number">
     <label>Max Loss ($):</label><input id="d_loss" type="number">
     <label>Entry Price:</label><input id="d_entry" type="number">
@@ -169,7 +170,7 @@
   </div>
 
   <div id="scalpMode" style="display:none;">
-    <h3>Scalp Mode</h3>
+    <h3>Quick Scalp</h3>
     <label>Entry Price:</label><input id="entryPriceScalp" type="number">
     <label>Investment Amount ($):</label><input id="investmentScalp" type="number">
     <label>Target Gain (%):</label>
@@ -186,11 +187,11 @@
   </div>
 </div>
 <div class="section">
-  <h2>Solana Live Chart</h2>
+  <h2>Solana Live</h2>
   <div class="tradingview-widget-container">
     <div class="tradingview-widget-container__widget"></div>
     <div class="tradingview-widget-copyright">
-      <a href="https://www.tradingview.com/" target="_blank">Track all markets on TradingView</a>
+      <a href="https://www.tradingview.com/" target="_blank">Click Here For Full The Version on TradingView</a>
     </div>
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
     {
@@ -218,7 +219,7 @@
 </div>
 
 <div class="section">
-  <h2>Can’t Resist Generator</h2>
+  <h2>Trade Like Jars</h2>
   <p>This strategy engine analyzes SOL's live price and suggests smart trade setups.</p>
   <label>Investment ($):</label><input id="gen-investment" type="number">
   <label>Target Profit ($):</label><input id="gen-profit" type="number">
