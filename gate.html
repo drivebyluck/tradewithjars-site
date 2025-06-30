@@ -3,44 +3,174 @@
 <head>
   <meta charset="UTF-8">
   <title>Gate Access</title>
+  <link rel="icon" type="image/png" href="TradeWithJarslogo.png"/>
   <style>
     body {
-      background-color: #0f0f0f;
-      color: white;
-      font-family: Arial, sans-serif;
+      background-color: #0d0d0d;
+      color: #e6ffe6;
+      font-family: 'Trebuchet MS', sans-serif;
       text-align: center;
-      padding-top: 50px;
+      margin: 0;
+      padding: 60px 20px;
+      overflow-x: hidden;
+      position: relative;
     }
-    a.button {
-      display: inline-block;
-      padding: 12px 25px;
-      background-color: #5865F2;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 18px;
-      margin-top: 20px;
+    .section {
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin: 60px auto;
+      width: 100%;
+      max-width: 95%;
+      box-shadow: 0 0 6px #e02c2c;
+      box-sizing: border-box;
     }
-    #error-message {
-      color: red;
-      margin-top: 25px;
+    .section h2.smoking {
+      color: #017a36;
+      margin: 10px 0;
+      animation: smokeGlow 1.8s infinite alternate, vibrate 0.3s infinite;
+    }
+    .text-medium {
       font-size: 16px;
+      color: #e02c2c;
+    }
+    .text-small-green {
+      font-size: 14px;
+      color: white;
+    }
+    .logo-wrapper {
+      margin: 100px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+    }
+    .logo {
+      max-width: 135px;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+      pointer-events: auto;
+      position: relative;
+    }
+    footer {
+      color: #888;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    @keyframes orbitPath {
+      0%   { transform: rotate(0deg) translateY(-0px); opacity: 1; }
+      10%  { transform: rotate(36deg) translateY(-80px); }
+      20%  { transform: rotate(72deg) translateY(-120px); }
+      30%  { transform: rotate(108deg) translateY(-160px); }
+      40%  { transform: rotate(144deg) translateY(-200px); }
+      50%  { transform: rotate(180deg) translateY(-240px); }
+      60%  { transform: rotate(216deg) translateY(-280px); }
+      70%  { transform: rotate(252deg) translateY(-320px); }
+      80%  { transform: rotate(288deg) translateY(-360px); }
+      90%  { transform: rotate(324deg) translateY(-400px); }
+      100% { transform: rotate(360deg) translateY(-440px); opacity: 0; }
+    }
+    .launching {
+      animation: orbitPath 4s forwards ease-in-out;
+      transform-origin: center center;
+      position: fixed !important;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+    }
+    .smoke {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle, #999, transparent);
+      border-radius: 50%;
+      animation: puff 4s linear forwards;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    @keyframes puff {
+      0% { transform: scale(0.3); opacity: 1; }
+      100% { transform: scale(4); opacity: 0; }
+    }
+    @keyframes smokeGlow {
+      from { text-shadow: 0 0 3px #017a36, 0 0 6px #e02c2c; }
+      to { text-shadow: 0 0 7px #017a36, 0 0 14px #e02c2c; }
+    }
+    @keyframes vibrate {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-1px); }
+      50% { transform: translateX(1px); }
+      75% { transform: translateX(-1px); }
+      100% { transform: translateX(1px); }
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to the Access Gate</h1>
-  <a class="button" href="https://discord-auth-server-ajjz.onrender.com/auth/discord">Login with Discord</a>
-  <div id="error-message"></div>
+  <div class="section">
+    <h2 class="smoking">CLICK THE LOGO TO BLAST OFF!</h2>
+  </div>
+
+  <div class="logo-wrapper">
+    <img src="TradeWithJarslogo.png" alt="Launch Logo" id="rocketLogo" class="logo">
+  </div>
+
+  <div class="section">
+    <p class="text-medium">
+      The TradeWithJars Discord Role will be required to use this tool.<br>
+      If you do not have this role, please visit <a href="https://discord.gg/bbBPzjJk" target="_blank" style="color:#e02c2c;">Doughboi's Bakery</a> and submit a ticket.
+    </p>
+    <p class="text-small-green">
+      The TradeWithJars.net Leverage Calculator is a subscription based tool.<br>
+      Upon Request a one time 1 week free trial will be given.
+    </p>
+  </div>
+
+  <footer>
+    © 2025 TradeWithJars.net. All rights reserved.
+  </footer>
 
   <script>
-    // Check URL for error param
+    const rocket = document.getElementById('rocketLogo');
+    rocket.addEventListener('click', () => {
+      const clone = rocket.cloneNode(true);
+      clone.classList.add('launching');
+      document.body.appendChild(clone);
+
+      const smokeInterval = setInterval(() => {
+        const puff = document.createElement('div');
+        puff.className = 'smoke';
+        const rect = clone.getBoundingClientRect();
+        puff.style.left = `${rect.left + rect.width / 2}px`;
+        puff.style.top = `${rect.top + rect.height}px`;
+        document.body.appendChild(puff);
+        setTimeout(() => puff.remove(), 4000);
+      }, 30);
+
+      setTimeout(() => {
+        clearInterval(smokeInterval);
+        window.location.href = "https://discord-auth-server-ajjz.onrender.com/auth/discord";
+      }, 4000);
+    });
+
     const params = new URLSearchParams(window.location.search);
     if (params.get("error") === "access_denied") {
-      document.getElementById("error-message").innerHTML = `
-        You do not have the required role. <br>
-        Please visit <a href="https://discord.gg/bbBPzjJk" target="_blank" style="color:#00bfff;">Doughboi's Bakery Discord</a> to request access.
-      `;
+      const errorDiv = document.createElement('div');
+      errorDiv.innerHTML = `
+        <div class="section">
+          <p class="text-medium">
+            You do not have the required role. <br>
+            Please visit <a href="https://discord.gg/bbBPzjJk" target="_blank" style="color:#e02c2c;">Doughboi's Bakery</a> to request access.
+          </p>
+        </div>`;
+      document.body.appendChild(errorDiv);
     }
   </script>
 </body>
