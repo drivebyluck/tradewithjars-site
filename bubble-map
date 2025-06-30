@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wallet Bundle Bubble Map</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0d0d0d;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    #app {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+    #sidebar {
+      width: 250px;
+      background: #1a1a1a;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    #main {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+    .tooltip {
+      position: absolute;
+      padding: 5px 10px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #888;
+      border-radius: 5px;
+      pointer-events: none;
+      font-size: 14px;
+      z-index: 10;
+    }
+    #search {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="sidebar">
+      <input id="tokenInput" placeholder="Enter Token CA" />
+      <button onclick="loadData()">Load Map</button>
+      <div id="tokenList">
+        <h3>Top Bundled Coins</h3>
+        <ul id="topCoins"></ul>
+      </div>
+    </div>
+    <div id="main">
+      <svg></svg>
+      <div class="tooltip" id="tooltip" style="display:none;"></div>
+    </div>
+  </div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script>
+    async function loadData() {
+      const contractAddress = document.getElementById('tokenInput').value.trim();
+      if (!contractAddress) return;
+
+      const holders = await fetchHolders(contractAddress);
+      const bundles = clusterWallets(holders);
+      renderMap(bundles);
+    }
+
+    async function fetchHolders(ca) {
+      const url = `https://public-api.solscan.io/token/holders?tokenAddress=${ca}&limit=20`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.data.map(h => ({
+        address: h.owner,
+        amount: h.tokenAmount.uiAmount
+      }));
+    }
+
+    function clusterWallets(wallets) {
+      const clusters = [];
+      while (wallets.length > 0) {
+        const base = wallets.shift();
+        const bundle = [base];
+        for (let i = wallets.length - 1; i >= 0; i--) {
+          if (Math.abs(wallets[i].amount - base.amount) < 0.001) {
+            bundle.push(wallets[i]);
+            wallets.splice(i, 1);
+          }
+        }
+        clusters.push(bundle);
+      }
+      return clusters;
+    }
+
+    function renderMap(bundles) {
+      const svg = d3.select("svg");
+      svg.selectAll("*").remove();
+
+      const tooltip = document.getElementById("tooltip");
+      const width = window.innerWidth - 250;
+      const height = window.innerHeight;
+
+      const root = d3.pack()
+        .size([width, height])
+        .padding(10)(
+        d3.hierarchy({ children: bundles.map(b => ({ children: b })) })
+          .sum(d => d.amount)
+      );
+
+      const node = svg.selectAll("g")
+        .data(root.descendants().slice(1))
+        .join("g")
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+
+      node.append("circle")
+        .attr("r", d => d.r)
+        .attr("fill", d => d.children ? "#28a745" : "#1e3a8a")
+        .attr("stroke", "white")
+        .attr("stroke-width", 1.5)
+        .on("mouseover", function (e, d) {
+          tooltip.style.display = "block";
+          tooltip.style.left = (e.pageX + 5) + "px";
+          tooltip.style.top = (e.pageY - 30) + "px";
+          tooltip.innerHTML = d.children
+            ? `Bundle: ${d.data.children.length} wallets`  
+            : `Wallet: ${d.data.address}<br>Holdings: ${d.data.amount}`;
+        })
+        .on("mouseout", () => tooltip.style.display = "none")
+        .on("click", (e, d) => {
+          if (!d.children) {
+            alert(`Wallet: ${d.data.address}\nAmount Held: ${d.data.amount}`);
+          }
+        });
+    }
+
+    // Preload top token contracts
+    const topTokens = [
+      { name: "BONK", ca: "DezX9FZWqKMBQSyGvFg9xvNCQgnd9t2yQ9b8zrw5iFZz" },
+      { name: "WIF", ca: "Es9vMFrzaCER2H9GszjRMjAXUdbDVP9ABGn7MevWg7pd" },
+      { name: "MEOW", ca: "5hN6ZxSHsoUmmvKXXqNj9PoX9J6qEUzjUM7dbAf3F3YX" }
+    ];
+
+    const list = document.getElementById("topCoins");
+    topTokens.forEach(token => {
+      const li = document.createElement("li");
+      li.textContent = token.name;
+      li.style.cursor = "pointer";
+      li.onclick = () => {
+        document.getElementById('tokenInput').value = token.ca;
+        loadData();
+      };
+      list.appendChild(li);
+    });
+  </script>
+</body>
+</html>
