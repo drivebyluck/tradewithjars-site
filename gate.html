@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Access Gateway</title>
+  <title>Gate Access</title>
   <link rel="icon" type="image/png" href="TradeWithJarslogo.png"/>
   <style>
     body {
@@ -48,11 +48,30 @@
       z-index: 10;
     }
     .logo {
-      max-width: 135px;
+      width: 170px;
       cursor: pointer;
       animation: pulse 2s infinite;
       pointer-events: auto;
       position: relative;
+      z-index: 5;
+    }
+    .launching {
+      position: absolute;
+      animation: rocketArc 4s forwards ease-in-out;
+      transform-origin: center center;
+      z-index: 1000;
+    }
+    .smoke {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: radial-gradient(circle, rgba(255,255,255,0.2), rgba(255,255,255,0));
+      border-radius: 50%;
+      animation: puff 3s ease-out forwards;
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 1;
+      filter: blur(2px);
     }
     footer {
       color: #888;
@@ -64,40 +83,15 @@
       50% { transform: scale(1.08); }
       100% { transform: scale(1); }
     }
-    @keyframes orbitPath {
-      0%   { transform: rotate(0deg) translateY(-0px); opacity: 1; }
-      10%  { transform: rotate(36deg) translateY(-80px); }
-      20%  { transform: rotate(72deg) translateY(-120px); }
-      30%  { transform: rotate(108deg) translateY(-160px); }
-      40%  { transform: rotate(144deg) translateY(-200px); }
-      50%  { transform: rotate(180deg) translateY(-240px); }
-      60%  { transform: rotate(216deg) translateY(-280px); }
-      70%  { transform: rotate(252deg) translateY(-320px); }
-      80%  { transform: rotate(288deg) translateY(-360px); }
-      90%  { transform: rotate(324deg) translateY(-400px); }
-      100% { transform: rotate(360deg) translateY(-440px); opacity: 0; }
-    }
-    .launching {
-      animation: orbitPath 4s forwards ease-in-out;
-      transform-origin: center center;
-      position: fixed !important;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1000;
-    }
-    .smoke {
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      background: radial-gradient(circle, #999, transparent);
-      border-radius: 50%;
-      animation: puff 4s linear forwards;
-      opacity: 0.6;
-      pointer-events: none;
+    @keyframes rocketArc {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+      25% { transform: translate(0px, -60px) rotate(10deg) scale(0.95); }
+      50% { transform: translate(40px, -140px) rotate(20deg) scale(0.75); }
+      75% { transform: translate(100px, -240px) rotate(30deg) scale(0.55); }
+      100% { transform: translate(200px, -360px) rotate(40deg) scale(0.4); opacity: 0; }
     }
     @keyframes puff {
-      0% { transform: scale(0.3); opacity: 1; }
+      0% { transform: scale(0.8); opacity: 0.6; }
       100% { transform: scale(4); opacity: 0; }
     }
     @keyframes smokeGlow {
@@ -115,11 +109,11 @@
 </head>
 <body>
   <div class="section">
-    <h2 class="smoking">CLICK THE LOGO TO BLAST OFF!</h2>
+    <h2 class="smoking">CLICK THE ROCKET TO PROCEED</h2>
   </div>
 
   <div class="logo-wrapper">
-    <img src="TradeWithJarslogo.png" alt="Launch Logo" id="rocketLogo" class="logo">
+    <img src="TradeWithJarslogo.png" alt="Launch Logo" id="rocketLogoStatic" class="logo">
   </div>
 
   <div class="section">
@@ -138,21 +132,31 @@
   </footer>
 
   <script>
-    const rocket = document.getElementById('rocketLogo');
-    rocket.addEventListener('click', () => {
-      const clone = rocket.cloneNode(true);
-      clone.classList.add('launching');
-      document.body.appendChild(clone);
+    const rocketStatic = document.getElementById('rocketLogoStatic');
+    rocketStatic.addEventListener('click', () => {
+      const rect = rocketStatic.getBoundingClientRect();
+      const rocket = rocketStatic.cloneNode(true);
+      rocket.id = 'rocketLogo';
+      rocket.classList.add('launching');
+      rocket.style.top = `${rect.top + window.scrollY}px`;
+      rocket.style.left = `${rect.left + window.scrollX}px`;
+      rocket.style.position = 'absolute';
+      document.body.appendChild(rocket);
+      rocketStatic.style.visibility = 'hidden';
 
+      let puffCount = 0;
       const smokeInterval = setInterval(() => {
-        const puff = document.createElement('div');
-        puff.className = 'smoke';
-        const rect = clone.getBoundingClientRect();
-        puff.style.left = `${rect.left + rect.width / 2}px`;
-        puff.style.top = `${rect.top + rect.height}px`;
-        document.body.appendChild(puff);
-        setTimeout(() => puff.remove(), 4000);
-      }, 30);
+        for (let i = 0; i < 3; i++) {
+          const puff = document.createElement('div');
+          puff.className = 'smoke';
+          const rRect = rocket.getBoundingClientRect();
+          puff.style.left = `${rRect.left + rRect.width / 2}px`;
+          puff.style.top = `${rRect.top + rRect.height}px`;
+          document.body.appendChild(puff);
+          setTimeout(() => puff.remove(), 3000);
+        }
+        if (++puffCount > 200) clearInterval(smokeInterval);
+      }, 16);
 
       setTimeout(() => {
         clearInterval(smokeInterval);
