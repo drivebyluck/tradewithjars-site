@@ -1,25 +1,205 @@
-<!-- Add this inside your OVERVIEW section after the CoinGecko data and before other content -->
-
-<div style="margin-top: 30px; box-shadow: 0 0 12px #e02c2c; border-radius: 12px; padding: 10px; background-color: #1a1a1a;">
-  <div class="tradingview-widget-container">
-    <div id="tradingview_0d0c5" style="height: 550px;"></div>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script type="text/javascript">
-      new TradingView.widget({
-        "autosize": true,
-        "symbol": "BINANCE:SOLUSD",
-        "interval": "30",
-        "timezone": "Etc/UTC",
-        "theme": "dark",
-        "style": "1",
-        "locale": "en",
-        "toolbar_bg": "#1a1a1a",
-        "enable_publishing": false,
-        "hide_top_toolbar": false,
-        "allow_symbol_change": false,
-        "save_image": false,
-        "container_id": "tradingview_0d0c5"
-      });
-    </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>SOL / TetherUS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="TradeWithJarslogo.png" type="image/png" />
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #e6ffe6;
+      font-family: 'Trebuchet MS', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    img.logo {
+      display: block;
+      margin: 30px auto 10px;
+      max-width: 220px;
+      animation: flyIn 2s ease-out forwards, pulseUpDown 3s ease-in-out infinite 2s;
+    }
+    @keyframes flyIn {
+      0% { transform: translateY(100px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes pulseUpDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .dropdown {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      z-index: 1000;
+    }
+    .dropbtn {
+      background-color: #017a36;
+      color: black;
+      padding: 12px 16px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #e02c2c;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #1a1a1a;
+      min-width: 180px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px #e02c2c;
+    }
+    .dropdown-content a {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .ticker {
+      position: sticky;
+      top: 0;
+      background: #0d0d0d;
+      padding: 10px 0;
+      font-size: 22px;
+      font-weight: bold;
+      box-shadow: 0 0 12px #e02c2c;
+      z-index: 999;
+    }
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      gap: 12px;
+    }
+    .tab-buttons button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #1a1a1a;
+      color: #e6ffe6;
+      box-shadow: 0 0 10px #e02c2c;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .tab-buttons button.active {
+      background: #017a36;
+      color: white;
+    }
+    .section {
+      display: none;
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 95%;
+      box-shadow: 0 0 12px #e02c2c;
+      box-sizing: border-box;
+    }
+    .section.active {
+      display: block;
+    }
+    .chart-container {
+      margin: 30px auto;
+      width: 95%;
+      height: 500px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px #e02c2c;
+      overflow: hidden;
+    }
+    footer {
+      color: #888;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <img alt="Trade With Jars Logo" class="logo" src="TradeWithJarslogo.png" />
+  <div class="dropdown">
+    <button class="dropbtn">☰</button>
+    <div class="dropdown-content">
+      <a href="index.html">Home</a>
+      <a href="gate.html">Leverage Calculator</a>
+      <a href="crypto-news.html">Top News</a>
+      <a href="schedule.html">Presidential Schedule</a>
+      <a href="nfts.html">NFT Tracker</a>
+    </div>
   </div>
-</div>
+
+  <div class="ticker" id="liveTicker">Loading price...</div>
+
+  <div class="tab-buttons">
+    <button onclick="switchTab('overview')" class="active">Overview</button>
+    <button onclick="switchTab('technicals')">Technicals</button>
+    <button onclick="switchTab('news')">News</button>
+    <button onclick="switchTab('seasonality')">Seasonals</button>
+    <button onclick="switchTab('markets')">Markets</button>
+    <button onclick="switchTab('discussions')">Discussions</button>
+    <button onclick="switchTab('ideas')">Ideas</button>
+  </div>
+
+  <div id="overview" class="section active">
+    <h2>Overview</h2>
+    <div id="overviewContent">
+      <p>Loading live stats...</p>
+    </div>
+    <div class="chart-container">
+      <iframe src="https://www.tradingview.com/chart/?symbol=BINANCE:SOLUSDT" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <div id="technicals" class="section">
+    <h2>Technicals</h2>
+    <p>Coming soon.</p>
+  </div>
+  <div id="news" class="section"><h2>News</h2><p>Coming soon.</p></div>
+  <div id="seasonality" class="section"><h2>Seasonals</h2><p>Coming soon.</p></div>
+  <div id="markets" class="section"><h2>Markets</h2><p>Coming soon.</p></div>
+  <div id="discussions" class="section"><h2>Discussions</h2><p>Coming soon.</p></div>
+  <div id="ideas" class="section"><h2>Ideas</h2><p>Coming soon.</p></div>
+
+  <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-buttons button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    async function loadOverview() {
+      const res = await fetch('https://api.coingecko.com/api/v3/coins/solana?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false');
+      const data = await res.json();
+      const m = data.market_data;
+      const now = luxon.DateTime.now().setZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+      const html = `
+        <table style="width: 100%; font-size: 18px;">
+          <tr><td><strong>Current Price:</strong></td><td>$${m.current_price.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Change:</strong></td><td style="color: ${m.price_change_percentage_24h > 0 ? 'lime' : 'red'}">${m.price_change_percentage_24h.toFixed(2)}%</td></tr>
+          <tr><td><strong>Market Cap:</strong></td><td>$${m.market_cap.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Volume:</strong></td><td>$${m.total_volume.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h High:</strong></td><td>$${m.high_24h.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Low:</strong></td><td>$${m.low_24h.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>Circulating Supply:</strong></td><td>${m.circulating_supply.toLocaleString()} SOL</td></tr>
+          <tr><td><strong>CoinGecko Rank:</strong></td><td>${data.market_cap_rank}</td></tr>
+        </table>
+      `;
+      document.getElementById('overviewContent').innerHTML = html;
+
+      document.getElementById('liveTicker').innerHTML = `SOL: $${m.current_price.usd.toFixed(2)} — ${m.price_change_24h.toFixed(2)} (${m.price_change_percentage_24h.toFixed(2)}%) — As of today at ${now.toFormat('HH:mm')} ${now.offsetNameShort}`;
+    }
+
+    loadOverview();
+  </script>
+</body>
+</html>
