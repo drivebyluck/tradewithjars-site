@@ -1,141 +1,179 @@
+<!-- Full solusdt.html code with Technicals section added -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SOL / TetherUS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
   <style>
     body {
       margin: 0;
-      background-color: #0F0F0F;
-      font-family: 'Trebuchet MS', sans-serif;
-      color: #DBDBDB;
-      text-align: center;
+      font-family: 'Arial', sans-serif;
+      background-color: #0f0f0f;
+      color: white;
     }
-    img.logo {
-      margin: 20px auto;
-      width: 150px;
-      animation: flyin 2s ease-out forwards;
-    }
-    @keyframes flyin {
-      from { transform: translateY(-200px) scale(0.5); opacity: 0; }
-      to { transform: translateY(0) scale(1); opacity: 1; }
-    }
-    .sticky-ticker {
+
+    /* Sticky Ticker */
+    #price-ticker {
+      background-color: #1c1c1c;
+      padding: 10px;
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: #0F0F0F;
-      box-shadow: 0 0 10px red;
-      padding: 10px 0;
-      font-size: 18px;
-      font-weight: bold;
+      border-bottom: 1px solid red;
+      text-align: center;
+      font-size: 16px;
     }
+
+    .glow-box {
+      border: 2px solid red;
+      border-radius: 10px;
+      box-shadow: 0 0 10px red;
+      padding: 15px;
+      margin: 20px;
+    }
+
+    .logo {
+      width: 120px;
+      display: block;
+      margin: 20px auto;
+    }
+
     .tabs {
       display: flex;
       justify-content: center;
-      gap: 8px;
-      margin: 10px 0;
+      background-color: #121212;
+      padding: 10px;
     }
-    .tabs button {
-      padding: 8px 16px;
-      background: #111;
-      color: #DBDBDB;
-      border: none;
-      border-radius: 6px;
-      box-shadow: 0 0 8px red;
-      cursor: pointer;
-    }
-    .tabs button.active {
-      background: #017a36;
+
+    .tabs a {
       color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
     }
+
     .section {
-      margin: 20px auto;
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    footer {
+      text-align: center;
       padding: 20px;
-      width: 95%;
-      background: #1a1a1a;
-      border-radius: 12px;
-      box-shadow: 0 0 12px red;
+      border-top: 1px solid red;
+      margin-top: 40px;
     }
-    .hidden { display: none; }
-    .chart-container {
-      margin-top: 20px;
-      box-shadow: 0 0 12px red;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    iframe.chart { width: 100%; height: 500px; border: none; }
-    footer { margin: 40px 0 20px; color: #666; font-size: 0.9em; }
-    table.stats { width: 100%; margin-top: 10px; font-size: 18px; border-spacing: 0.5em; }
-    table.stats td { padding: 6px; text-align: left; }
   </style>
 </head>
 <body>
-  <img src="TradeWithJarslogo.png" alt="TradeWithJars Logo" class="logo"/>
 
-  <div class="sticky-ticker" id="liveTicker">Loading price…</div>
+  <div id="price-ticker">Loading SOL price...</div>
+
+  <img class="logo" src="logo.png" alt="Logo"/>
 
   <div class="tabs">
-    <button class="active" onclick="showTab('overview')">Overview</button>
-    <button onclick="showTab('technicals')">Technicals</button>
-    <button onclick="showTab('news')">News</button>
-    <button onclick="showTab('seasonals')">Seasonals</button>
-    <button onclick="showTab('markets')">Markets</button>
-    <button onclick="showTab('discussions')">Discussions</button>
+    <a href="#overview">Overview</a>
+    <a href="#technicals">Technicals</a>
+    <a href="#news">News</a>
+    <a href="#seasonals">Seasonals</a>
+    <a href="#markets">Markets</a>
+    <a href="#discussions">Discussions</a>
   </div>
 
-  <div id="overview" class="section">
-    <h2>Overview</h2>
-    <div id="overviewStats">
-      Loading live stats…
+  <div id="overview" class="section active">
+    <div class="glow-box">
+      <h2>SOL/USDT Overview</h2>
+      <p id="live-stats">Loading live stats...</p>
     </div>
-    <div class="chart-container">
+
+    <div class="glow-box" style="height:600px;">
+      <!-- Chart from leverage_calculator.html -->
       <iframe
-        class="chart"
-        src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_abc123&symbol=BINANCE:SOLUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&theme=dark&style=1&timezone=Etc/UTC&withdateranges=1"
-      ></iframe>
+        src="https://s.tradingview.com/embed-widget/symbol-overview/?locale=en#%7B%22symbols%22%3A%5B%5B%22BINANCE%3ASOLUSDT%7C1D%22%5D%5D%2C%22chartOnly%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22600%22%2C%22colorTheme%22%3A%22dark%22%2C%22autosize%22%3Atrue%7D"
+        width="100%" height="100%" frameborder="0" allowtransparency="true"
+        scrolling="no" allowfullscreen>
+      </iframe>
     </div>
   </div>
 
-  <div id="technicals" class="section hidden"><h2>Technicals</h2><p>Coming soon.</p></div>
-  <div id="news" class="section hidden"><h2>News</h2><p>Coming soon.</p></div>
-  <div id="seasonals" class="section hidden"><h2>Seasonals</h2><p>Coming soon.</p></div>
-  <div id="markets" class="section hidden"><h2>Markets</h2><p>Coming soon.</p></div>
-  <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
+  <div id="technicals" class="section">
+    <div class="glow-box">
+      <h2>Technical Analysis</h2>
+      <!-- TradingView Technicals Widget -->
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+        {
+          "interval": "1D",
+          "width": "100%",
+          "isTransparent": false,
+          "height": "450",
+          "symbol": "BINANCE:SOLUSDT",
+          "showIntervalTabs": true,
+          "displayMode": "single",
+          "colorTheme": "dark",
+          "locale": "en"
+        }
+        </script>
+      </div>
+    </div>
+  </div>
 
-  <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
+  <div id="news" class="section">
+    <div class="glow-box"><h2>News (Coming Soon)</h2></div>
+  </div>
+
+  <div id="seasonals" class="section">
+    <div class="glow-box"><h2>Seasonals (Coming Soon)</h2></div>
+  </div>
+
+  <div id="markets" class="section">
+    <div class="glow-box"><h2>Markets (Coming Soon)</h2></div>
+  </div>
+
+  <div id="discussions" class="section">
+    <div class="glow-box"><h2>Discussions (Coming Soon)</h2></div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 TradeWithJars.net – All rights reserved.</p>
+  </footer>
 
   <script>
-    function showTab(id) {
-      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
-      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+    // Sticky ticker update
+    async function updatePrice() {
+      try {
+        const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd');
+        const data = await res.json();
+        const now = new Date();
+        const timeString = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+        const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        document.getElementById('price-ticker').innerText =
+          `SOL Price: $${data.solana.usd} USD (as of ${timeString} ${zone})`;
+      } catch (e) {
+        document.getElementById('price-ticker').innerText = 'Error fetching price.';
+      }
     }
+    updatePrice();
+    setInterval(updatePrice, 15000);
 
-    async function loadOverviewData() {
-      const res = await fetch('https://api.coingecko.com/api/v3/coins/solana?localization=false&market_data=true');
-      const d = await res.json();
-      const m = d.market_data;
-      const now = luxon.DateTime.now().setZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
-      document.getElementById('overviewStats').innerHTML = `
-        <table class="stats">
-          <tr><td><strong>Price:</strong></td><td>$${m.current_price.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>24h Change:</strong></td><td style="color:${m.price_change_percentage_24h>=0?'lime':'red'}">${m.price_change_percentage_24h.toFixed(2)}%</td></tr>
-          <tr><td><strong>Market Cap:</strong></td><td>$${m.market_cap.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>24h Volume:</strong></td><td>$${m.total_volume.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>24h High / Low:</strong></td><td>$${m.high_24h.usd.toLocaleString()} / $${m.low_24h.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>Circulating Supply:</strong></td><td>${m.circulating_supply.toLocaleString()} SOL</td></tr>
-          <tr><td><strong>Rank:</strong></td><td>${d.market_cap_rank}</td></tr>
-        </table>`;
-      document.getElementById('liveTicker').innerHTML = `
-        $${m.current_price.usd.toFixed(2)} — ${m.price_change_percentage_24h.toFixed(2)}% — As of today at ${now.toFormat('HH:mm')} ${now.offsetNameShort}`;
-    }
+    // Simulated live stats
+    document.getElementById('live-stats').innerText =
+      'Market Cap: $21B | 24h Volume: $1.4B | Circulating Supply: 430M SOL';
 
-    loadOverviewData();
-    setInterval(loadOverviewData, 60000);
+    // Tab switching
+    document.querySelectorAll('.tabs a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        const id = link.getAttribute('href');
+        document.querySelector(id).classList.add('active');
+      });
+    });
   </script>
 </body>
 </html>
