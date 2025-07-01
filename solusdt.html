@@ -143,7 +143,9 @@
 
   <div id="overview" class="section active">
     <h2>Overview</h2>
-    <p>Live stats coming next step.</p>
+    <div id="overviewContent">
+      <p>Loading live stats...</p>
+    </div>
   </div>
 
   <div id="technicals" class="section">
@@ -151,5 +153,58 @@
     <p>Indicator logic starts here next step.</p>
   </div>
 
-  <div id="id
+  <div id="ideas" class="section">
+    <h2>Ideas</h2>
+    <p>TradingView idea stream or links.</p>
+  </div>
 
+  <div id="news" class="section">
+    <h2>News</h2>
+    <p>Latest SOL-related headlines.</p>
+  </div>
+
+  <div id="seasonality" class="section">
+    <h2>Seasonality</h2>
+    <p>Monthly/quarterly trend charts.</p>
+  </div>
+
+  <div id="markets" class="section">
+    <h2>Markets</h2>
+    <p>Exchange listings and liquidity.</p>
+  </div>
+
+  <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-buttons button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    async function loadOverview() {
+      const res = await fetch('https://api.coingecko.com/api/v3/coins/solana?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false');
+      const data = await res.json();
+      const m = data.market_data;
+
+      const html = `
+        <table style="width: 100%; font-size: 18px;">
+          <tr><td><strong>Current Price:</strong></td><td>$${m.current_price.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Change:</strong></td><td style="color: ${m.price_change_percentage_24h > 0 ? 'lime' : 'red'}">${m.price_change_percentage_24h.toFixed(2)}%</td></tr>
+          <tr><td><strong>Market Cap:</strong></td><td>$${m.market_cap.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Volume:</strong></td><td>$${m.total_volume.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h High:</strong></td><td>$${m.high_24h.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Low:</strong></td><td>$${m.low_24h.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>Circulating Supply:</strong></td><td>${m.circulating_supply.toLocaleString()} SOL</td></tr>
+          <tr><td><strong>CoinGecko Rank:</strong></td><td>${data.market_cap_rank}</td></tr>
+        </table>
+      `;
+
+      document.getElementById('overviewContent').innerHTML = html;
+    }
+
+    loadOverview();
+  </script>
+</body>
+</html>
