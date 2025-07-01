@@ -1,135 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
   <title>SOL / TetherUS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
   <style>
     body {
       margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background-color: #0d0d0d;
-      color: white;
-    }
-
-    header {
+      background-color: #0F0F0F;
+      font-family: 'Trebuchet MS', sans-serif;
+      color: #DBDBDB;
       text-align: center;
-      padding: 10px;
     }
-
-    .logo {
-      width: 100px;
-      animation: rocketLaunch 2s ease-out forwards;
+    img.logo {
+      margin: 20px auto;
+      width: 150px;
+      animation: flyin 2s ease-out forwards;
     }
-
-    @keyframes rocketLaunch {
-      0% { transform: translateY(100px) scale(1.5); opacity: 0; }
-      100% { transform: translateY(0) scale(1); opacity: 1; }
+    @keyframes flyin {
+      from { transform: translateY(-200px) scale(0.5); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
     }
-
-    nav {
-      background-color: #111;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 10px;
-      border-top: 1px solid red;
-      border-bottom: 1px solid red;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      color: red;
-    }
-
-    .ticker {
+    .sticky-ticker {
       position: sticky;
       top: 0;
-      background-color: #121212;
-      padding: 10px;
-      text-align: center;
-      font-size: 14px;
-      border-bottom: 1px solid red;
       z-index: 1000;
+      background: #0F0F0F;
+      box-shadow: 0 0 10px red;
+      padding: 10px 0;
+      font-size: 18px;
+      font-weight: bold;
     }
-
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .tabs button {
+      padding: 8px 16px;
+      background: #111;
+      color: #DBDBDB;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 8px red;
+      cursor: pointer;
+    }
+    .tabs button.active {
+      background: #017a36;
+      color: white;
+    }
     .section {
-      background-color: #1a1a1a;
       margin: 20px auto;
       padding: 20px;
-      width: 90%;
-      max-width: 1200px;
-      border: 1px solid red;
-      box-shadow: 0 0 10px red;
+      width: 95%;
+      background: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 12px red;
     }
-
-    .chart-box {
-      border: 2px solid red;
-      box-shadow: 0 0 10px red;
-      padding: 0;
+    .hidden { display: none; }
+    .chart-container {
       margin-top: 20px;
-      height: 500px;
+      box-shadow: 0 0 12px red;
+      border-radius: 10px;
+      overflow: hidden;
     }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    footer {
-      text-align: center;
-      color: #888;
-      font-size: 14px;
-      padding: 20px;
-      border-top: 1px solid red;
-    }
+    iframe.chart { width: 100%; height: 500px; border: none; }
+    footer { margin: 40px 0 20px; color: #666; font-size: 0.9em; }
+    table.stats { width: 100%; margin-top: 10px; font-size: 18px; border-spacing: 0.5em; }
+    table.stats td { padding: 6px; text-align: left; }
   </style>
-  <script>
-    function updateTicker() {
-      const ticker = document.getElementById("ticker");
-      const now = new Date();
-      const options = { timeZoneName: 'short' };
-      const timeString = now.toLocaleTimeString([], options);
-      const price = (Math.random() * (160 - 150) + 150).toFixed(2);
-      const change = (Math.random() * 4 - 2).toFixed(2);
-      const changePercent = ((change / price) * 100).toFixed(2);
-      const direction = change >= 0 ? '+' : '';
-      ticker.innerHTML = `SOL / TetherUS: $${price} (${direction}${change}, ${direction}${changePercent}%) as of ${timeString}`;
-    }
-    setInterval(updateTicker, 5000);
-    window.onload = updateTicker;
-  </script>
 </head>
 <body>
+  <img src="TradeWithJarslogo.png" alt="TradeWithJars Logo" class="logo"/>
 
-  <header>
-    <img src="rocket-logo.png" alt="Logo" class="logo" />
-  </header>
+  <div class="sticky-ticker" id="liveTicker">Loading price…</div>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="leverage_calculator.html">Leverage Calculator</a>
-    <a href="solusdt.html">SOL / TetherUS</a>
-    <a href="#">NFT Tracker</a>
-    <a href="#">News</a>
-    <a href="#">Schedule</a>
-  </nav>
-
-  <div id="ticker" class="ticker"></div>
+  <div class="tabs">
+    <button class="active" onclick="showTab('overview')">Overview</button>
+    <button onclick="showTab('technicals')">Technicals</button>
+    <button onclick="showTab('news')">News</button>
+    <button onclick="showTab('seasonals')">Seasonals</button>
+    <button onclick="showTab('markets')">Markets</button>
+    <button onclick="showTab('discussions')">Discussions</button>
+  </div>
 
   <div id="overview" class="section">
     <h2>Overview</h2>
-    <p>Live market data for Solana (SOL) vs TetherUS (USDT)</p>
-
-    <div class="chart-box">
+    <div id="overviewStats">
+      Loading live stats…
+    </div>
+    <div class="chart-container">
       <iframe
+        class="chart"
+        src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_abc123&symbol=BINANCE:SOLUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&theme=dark&style=1&timezone=Etc/UTC&withdateranges=1"
+      ></iframe>
+    </div>
+  </div>
+
+  <div id="technicals" class="section hidden"><h2>Technicals</h2><p>Coming soon.</p></div>
+  <div id="news" class="section hidden"><h2>News</h2><p>Coming soon.</p></div>
+  <div id="seasonals" class="section hidden"><h2>Seasonals</h2><p>Coming soon.</p></div>
+  <div id="markets" class="section hidden"><h2>Markets</h2><p>Coming soon.</p></div>
+  <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
+
+  <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
+
+  <script>
+    function showTab(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    async function loadOverviewData() {
+      const res = await fetch('https://api.coingecko.com/api/v3/coins/solana?localization=false&market_data=true');
+      const d = await res.json();
+      const m = d.market_data;
+      const now = luxon.DateTime.now().setZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+      document.getElementById('overviewStats').innerHTML = `
+        <table class="stats">
+          <tr><td><strong>Price:</strong></td><td>$${m.current_price.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Change:</strong></td><td style="color:${m.price_change_percentage_24h>=0?'lime':'red'}">${m.price_change_percentage_24h.toFixed(2)}%</td></tr>
+          <tr><td><strong>Market Cap:</strong></td><td>$${m.market_cap.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Volume:</strong></td><td>$${m.total_volume.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h High / Low:</strong></td><td>$${m.high_24h.usd.toLocaleString()} / $${m.low_24h.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>Circulating Supply:</strong></td><td>${m.circulating_supply.toLocaleString()} SOL</td></tr>
+          <tr><td><strong>Rank:</strong></td><td>${d.market_cap_rank}</td></tr>
+        </table>`;
+      document.getElementById('liveTicker').innerHTML = `
+        $${m.current_price.usd.toFixed(2)} — ${m.price_change_percentage_24h.toFixed(2)}% — As of today at ${now.toFormat('HH:mm')} ${now.offsetNameShort}`;
+    }
+
+    loadOverviewData();
+    setInterval(loadOverviewData, 60000);
+  </script>
+</body>
+</html>
+iframe
         src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_c7648&symbol=BINANCE:SOLUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&theme=dark&style=1&timezone=Etc/UTC&withdateranges=1&hideideas=1&studies_overrides={}&overrides={}&enabled_features=[]&disabled_features=[]&locale=en&utm_source="
         allowtransparency="true" scrolling="no">
       </iframe>
