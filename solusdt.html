@@ -1,210 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SOL / TetherUS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="TradeWithJarslogo.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css"/>
   <style>
     body {
-      background-color: #0d0d0d;
-      color: #e6ffe6;
-      font-family: 'Trebuchet MS', sans-serif;
       margin: 0;
-      padding: 0;
+      font-family: 'Trebuchet MS', sans-serif;
+      background-color: #0F0F0F;
+      color: #DBDBDB;
+    }
+
+    .section {
+      margin: 20px;
+      padding: 20px;
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 12px #e02c2c;
+    }
+
+    .logo {
+      display: block;
+      margin: 20px auto;
+      width: 100px;
+      animation: flyin 2s ease-out forwards;
+    }
+
+    @keyframes flyin {
+      0% {
+        transform: translateY(-200px) scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    nav {
+      background-color: #111;
+      padding: 10px 20px;
       text-align: center;
     }
 
-    img.logo {
-      display: block;
-      margin: 30px auto 10px;
-      max-width: 220px;
-      animation: flyIn 2s ease-out forwards, pulseUpDown 3s ease-in-out infinite 2s;
+    nav a {
+      color: #28a745;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
     }
 
-    @keyframes flyIn {
-      0% { transform: translateY(100px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
+    footer {
+      text-align: center;
+      color: #777;
+      margin: 30px 0 10px;
+      font-size: 0.9em;
     }
 
-    @keyframes pulseUpDown {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .dropdown {
-      position: fixed;
-      top: 30px;
-      right: 30px;
+    .tabs {
+      display: flex;
+      justify-content: center;
+      background-color: #111;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
       z-index: 1000;
     }
 
-    .dropbtn {
-      background-color: #017a36;
-      color: black;
-      padding: 12px 16px;
-      font-size: 18px;
+    .tabs button {
+      background: none;
       border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #e02c2c;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      background-color: #1a1a1a;
-      min-width: 180px;
-      border-radius: 6px;
-      box-shadow: 0 0 10px #e02c2c;
-    }
-
-    .dropdown-content a {
-      color: white;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-    .tab-buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 20px;
-      gap: 12px;
-    }
-
-    .tab-buttons button {
-      padding: 10px 18px;
-      border: none;
-      border-radius: 8px;
-      background: #1a1a1a;
-      color: #e6ffe6;
-      box-shadow: 0 0 10px #e02c2c;
+      color: #DBDBDB;
+      padding: 10px 20px;
       cursor: pointer;
       font-size: 16px;
     }
 
-    .tab-buttons button.active {
-      background: #017a36;
-      color: white;
+    .tabs button.active {
+      color: #28a745;
+      border-bottom: 2px solid #e02c2c;
     }
 
-    .section {
+    .tab-content {
       display: none;
-      background-color: #1a1a1a;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px auto;
-      width: 100%;
-      max-width: 95%;
-      box-shadow: 0 0 12px #e02c2c;
-      box-sizing: border-box;
     }
 
-    .section.active {
+    .tab-content.active {
       display: block;
-    }
-
-    footer {
-      color: #888;
-      font-size: 14px;
-      margin-top: 40px;
     }
   </style>
 </head>
 <body>
-  <img alt="Trade With Jars Logo" class="logo" src="TradeWithJarslogo.png" />
+  <img src="logo.png" alt="Logo" class="logo"/>
 
-  <div class="dropdown">
-    <button class="dropbtn">☰</button>
-    <div class="dropdown-content">
-      <a href="index.html">Home</a>
-      <a href="gate.html">Leverage Calculator</a>
-      <a href="crypto-news.html">Top News</a>
-      <a href="schedule.html">Presidential Schedule</a>
-      <a href="nfts.html">NFT Tracker</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="leverage_calculator.html">Calculator</a>
+    <a href="schedule.html">Schedule</a>
+    <a href="solusdt.html">SOL/USDT</a>
+  </nav>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="technicals">Technicals</button>
+    <button class="tab-btn" data-tab="news">News</button>
+    <button class="tab-btn" data-tab="seasonals">Seasonals</button>
+    <button class="tab-btn" data-tab="markets">Markets</button>
+    <button class="tab-btn" data-tab="discussions">Discussions</button>
+    <button class="tab-btn" data-tab="ideas">Ideas</button>
+  </div>
+
+  <div id="overview" class="tab-content active">
+    <div class="section">
+      <h2>Live SOL Price</h2>
+      <div id="price-box">Loading...</div>
+    </div>
+
+    <div class="section">
+      <h2>SOL / USDT Chart</h2>
+      <div class="tradingview-widget-container" id="tv-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <div class="tradingview-widget-copyright">
+          <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+            <span class="blue-text">Track all markets on TradingView</span>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="tab-buttons">
-    <button onclick="switchTab('overview')" class="active">Overview</button>
-    <button onclick="switchTab('technicals')">Technicals</button>
-    <button onclick="switchTab('ideas')">Ideas</button>
-    <button onclick="switchTab('news')">News</button>
-    <button onclick="switchTab('seasonality')">Seasonality</button>
-    <button onclick="switchTab('markets')">Markets</button>
-  </div>
-
-  <div id="overview" class="section active">
-    <h2>Overview</h2>
-    <div id="overviewContent">
-      <p>Loading live stats...</p>
+  <div id="technicals" class="tab-content">
+    <div class="section">
+      <h2>Technicals coming soon</h2>
     </div>
   </div>
 
-  <div id="technicals" class="section">
-    <h2>Technicals</h2>
-    <p>Indicator logic starts here next step.</p>
+  <div id="news" class="tab-content">
+    <div class="section">
+      <h2>News coming soon</h2>
+    </div>
   </div>
 
-  <div id="ideas" class="section">
-    <h2>Ideas</h2>
-    <p>TradingView idea stream or links.</p>
+  <div id="seasonals" class="tab-content">
+    <div class="section">
+      <h2>Seasonals coming soon</h2>
+    </div>
   </div>
 
-  <div id="news" class="section">
-    <h2>News</h2>
-    <p>Latest SOL-related headlines.</p>
+  <div id="markets" class="tab-content">
+    <div class="section">
+      <h2>Markets coming soon</h2>
+    </div>
   </div>
 
-  <div id="seasonality" class="section">
-    <h2>Seasonality</h2>
-    <p>Monthly/quarterly trend charts.</p>
+  <div id="discussions" class="tab-content">
+    <div class="section">
+      <h2>Discussions coming soon</h2>
+    </div>
   </div>
 
-  <div id="markets" class="section">
-    <h2>Markets</h2>
-    <p>Exchange listings and liquidity.</p>
-  </div>
-
-  <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
-
-  <script>
-    function switchTab(tabId) {
-      document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.tab-buttons button').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      event.target.classList.add('active');
-    }
-
-    async function loadOverview() {
-      const res = await fetch('https://api.coingecko.com/api/v3/coins/solana?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false');
-      const data = await res.json();
-      const m = data.market_data;
-
-      const html = `
-        <table style="width: 100%; font-size: 18px;">
-          <tr><td><strong>Current Price:</strong></td><td>$${m.current_price.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>24h Change:</strong></td><td style="color: ${m.price_change_percentage_24h > 0 ? 'lime' : 'red'}">${m.price_change_percentage_24h.toFixed(2)}%</td></tr>
-          <tr><td><strong>Market Cap:</strong></td><td>$${m.market_cap.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>24h Volume:</strong></td><td>$${m.total_volume.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>24h High:</strong></td><td>$${m.high_24h.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>24h Low:</strong></td><td>$${m.low_24h.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>Circulating Supply:</strong></td><td>${m.circulating_supply.toLocaleString()} SOL</td></tr>
-          <tr><td><strong>CoinGecko Rank:</strong></td><td>${data.market_cap_rank}</td></tr>
-        </table>
-      `;
-
-      document.getElementById('overviewContent').innerHTML = html;
-    }
-
-    loadOverview();
-  </script>
-</body>
-</html>
+  <div id="ideas" class="tab-content">
+    <div class="section">
