@@ -1,172 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
   <title>SOL / TetherUS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
   <style>
     body {
       margin: 0;
-      background-color: #0b0b0b;
-      color: #e0e0e0;
-      font-family: "Trebuchet MS", sans-serif;
+      background-color: #0F0F0F;
+      font-family: 'Trebuchet MS', sans-serif;
+      color: #DBDBDB;
+      text-align: center;
+@keyframes flyIn {
+  0% { transform: translateY(100px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulseUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+img.logo {
+  display: block;
+  margin: 30px auto 10px;
+  max-width: 220px;
+  animation:
+    flyIn 2s ease-out forwards,
+    pulseUpDown 3s ease-in-out infinite 2s;
+}
+
+       .dropdown {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      z-index: 1000;
     }
 
-    .logo-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      animation: logoEntry 2s ease-out;
-    }
-
-    .logo-container img {
-      width: 120px;
-      height: auto;
-      animation: rocketFloat 4s ease-in-out infinite;
-    }
-
-    @keyframes rocketFloat {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
-    }
-
-    @keyframes logoEntry {
-      from { opacity: 0; transform: scale(0.5); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .glow-box {
-      border: 2px solid rgba(255, 0, 0, 0.5);
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-      margin: 20px;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      padding: 10px 0;
-    }
-
-    .tabs button {
-      background-color: #111;
-      color: white;
-      border: 2px solid #900;
-      border-radius: 8px;
-      padding: 8px 16px;
+    .dropbtn {
+      background-color: #017a36;
+      color: black;
+      padding: 12px 16px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
+      box-shadow: 0 0 10px #e02c2c;
+      transition: background 0.3s;
     }
 
-    .tabs button.active {
-      background-color: #2c2c2c;
-      color: #0f0;
+    .dropbtn:hover {
+      background-color: #1c7c35;
     }
 
-    .section {
+    .dropdown-content {
       display: none;
-      padding: 20px;
+      position: absolute;
+      right: 0;
+      background-color: #1a1a1a;
+      min-width: 180px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px #e02c2c;
+      z-index: 1001;
     }
 
-    .section.active {
+    .dropdown-content a {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #333;
+    }
+
+    .dropdown:hover .dropdown-content {
       display: block;
     }
 
-    #liveTicker {
+      
+    .sticky-ticker {
       position: sticky;
       top: 0;
-      background-color: #111;
-      padding: 10px;
-      text-align: center;
-      font-size: 1.2em;
-      border-bottom: 2px solid red;
       z-index: 1000;
+      background: #0F0F0F;
+      box-shadow: 0 0 10px red;
+      padding: 10px 0;
+      font-size: 18px;
+      font-weight: bold;
     }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .tabs button {
+      padding: 8px 16px;
+      background: #111;
+      color: #DBDBDB;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 8px red;
+      cursor: pointer;
+    }
+    .tabs button.active {
+      background: #017a36;
+      color: white;
+    }
+    .section {
+      margin: 20px auto;
+      padding: 20px;
+      width: 95%;
+      background: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 12px red;
+    }
+    .hidden { display: none; }
+    .chart-container {
+      margin-top: 20px;
+      box-shadow: 0 0 12px red;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    iframe.chart { width: 100%; height: 500px; border: none; }
+    footer { margin: 40px 0 20px; color: #666; font-size: 0.9em; }
+    table.stats { width: 100%; margin-top: 10px; font-size: 18px; border-spacing: 0.5em; }
+    table.stats td { padding: 6px; text-align: left; }
   </style>
 </head>
 <body>
-  <div class="logo-container">
-    <img src="rocketlogo.png" alt="Trade With Jars Logo" />
+  <img src="TradeWithJarslogo.png" alt="TradeWithJars Logo" class="logo"/>
+
+  <div class="sticky-ticker" id="liveTicker">Loading price…</div>
+
+  <div class="tabs">
+    <button class="active" onclick="showTab('overview')">Overview</button>
+    <button onclick="showTab('technicals')">Technicals</button>
+    <button onclick="showTab('news')">News</button>
+    <button onclick="showTab('seasonals')">Seasonals</button>
+    <button onclick="showTab('markets')">Markets</button>
+    <button onclick="showTab('discussions')">Discussions</button>
   </div>
 
-  <div id="liveTicker">Loading price…</div>
-
-  <div class="tabs glow-box">
-    <button class="active" onclick="showSection('overview')">Overview</button>
-    <button onclick="showSection('technicals')">Technicals</button>
-    <button onclick="showSection('news')">News</button>
-    <button onclick="showSection('seasonals')">Seasonals</button>
-    <button onclick="showSection('markets')">Markets</button>
-    <button onclick="showSection('discussions')">Discussions</button>
-  </div>
-
-  <div id="overview" class="section active glow-box">
+  <div id="overview" class="section">
     <h2>Overview</h2>
-    <p>Loading live stats…</p>
-    <div id="overviewStats"></div>
-    <div class="glow-box">
-      <iframe src="https://www.tradingview.com/chart/?symbol=BINANCE:SOLUSDT"
-              width="100%" height="500" frameborder="0" allowtransparency="true"
-              style="border: none;"></iframe>
+    <div id="overviewStats">
+      Loading live stats…
+    </div>
+    <div class="chart-container">
+      <iframe
+        class="chart"
+        src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_abc123&symbol=BINANCE:SOLUSDT&interval=60&hidesidetoolbar=1&symboledit=1&saveimage=1&theme=dark&style=1&timezone=Etc/UTC&withdateranges=1"
+      ></iframe>
     </div>
   </div>
 
-  <div id="technicals" class="section glow-box">
-    <h2>Technicals</h2>
-    <p>Coming soon…</p>
-  </div>
+  <div id="technicals" class="section hidden"><h2>Technicals</h2><p>Coming soon.</p></div>
+  <div id="news" class="section hidden"><h2>News</h2><p>Coming soon.</p></div>
+  <div id="seasonals" class="section hidden"><h2>Seasonals</h2><p>Coming soon.</p></div>
+  <div id="markets" class="section hidden"><h2>Markets</h2><p>Coming soon.</p></div>
+  <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
-  <div id="news" class="section glow-box">
-    <h2>News</h2>
-    <p>Coming soon…</p>
-  </div>
+  <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
-  <div id="seasonals" class="section glow-box">
-    <h2>Seasonals</h2>
-    <p>Coming soon…</p>
-  </div>
-
-  <div id="markets" class="section glow-box">
-    <h2>Markets</h2>
-    <p>Coming soon…</p>
-  </div>
-
-  <div id="discussions" class="section glow-box">
-    <h2>Discussions</h2>
-    <p>Coming soon…</p>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
   <script>
+    function showTab(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
     async function loadOverviewData() {
-      const res = await fetch("https://api.coingecko.com/api/v3/coins/solana?localization=false&market_data=true");
+      const res = await fetch('https://api.coingecko.com/api/v3/coins/solana?localization=false&market_data=true');
       const d = await res.json();
       const m = d.market_data;
       const now = luxon.DateTime.now().setZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
-
-      document.getElementById("overviewStats").innerHTML = `
-        <table>
-          <tr><td><strong>Price:</strong></td><td>$${m.current_price.usd.toFixed(2)}</td></tr>
-          <tr><td><strong>24h Change:</strong></td><td style="color:${m.price_change_percentage_24h > 0 ? '#0f0' : '#f00'}">${m.price_change_percentage_24h.toFixed(2)}%</td></tr>
+      document.getElementById('overviewStats').innerHTML = `
+        <table class="stats">
+          <tr><td><strong>Price:</strong></td><td>$${m.current_price.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Change:</strong></td><td style="color:${m.price_change_percentage_24h>=0?'lime':'red'}">${m.price_change_percentage_24h.toFixed(2)}%</td></tr>
           <tr><td><strong>Market Cap:</strong></td><td>$${m.market_cap.usd.toLocaleString()}</td></tr>
           <tr><td><strong>24h Volume:</strong></td><td>$${m.total_volume.usd.toLocaleString()}</td></tr>
-          <tr><td><strong>24h High / Low:</strong></td><td>$${m.high_24h.usd} / $${m.low_24h.usd}</td></tr>
-          <tr><td><strong>Circulating Supply:</strong></td><td>${m.circulating_supply.toLocaleString()}</td></tr>
+          <tr><td><strong>24h High / Low:</strong></td><td>$${m.high_24h.usd.toLocaleString()} / $${m.low_24h.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>Circulating Supply:</strong></td><td>${m.circulating_supply.toLocaleString()} SOL</td></tr>
           <tr><td><strong>Rank:</strong></td><td>${d.market_cap_rank}</td></tr>
         </table>`;
-
-      document.getElementById("liveTicker").innerText =
-        `SOL $${m.current_price.usd.toFixed(2)} (${m.price_change_percentage_24h.toFixed(2)}%) – As of ${now.toFormat("ff")}`;
-    }
-
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-      [...document.querySelectorAll('.tabs button')].find(btn => btn.innerText.toLowerCase() === id).classList.add('active');
+      document.getElementById('liveTicker').innerHTML = `
+        $${m.current_price.usd.toFixed(2)} — ${m.price_change_percentage_24h.toFixed(2)}% — As of today at ${now.toFormat('HH:mm')} ${now.offsetNameShort}`;
     }
 
     loadOverviewData();
