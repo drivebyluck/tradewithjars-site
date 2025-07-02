@@ -4,50 +4,173 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SOL / TetherUS</title>
-  <link rel="icon" type="image/png" href="favicon.png" />
   <style>
     body {
       margin: 0;
-      background-color: #0F0F0F;
-      font-family: 'Trebuchet MS', sans-serif;
-      color: white;
+      background-color: #0b0b0b;
+      color: #e0e0e0;
+      font-family: "Trebuchet MS", sans-serif;
     }
 
-    .logo {
-      display: block;
-      margin: 30px auto 10px;
-      width: 150px;
-      animation: flyIn 2s ease-out forwards;
-    }
-
-    @keyframes flyIn {
-      0% {
-        transform: translateY(-100px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .red-box {
-      background-color: #1a1a1a;
-      border-radius: 12px;
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 20px;
-      margin: 20px;
-      box-shadow: 0 0 12px red;
+      animation: logoEntry 2s ease-out;
     }
 
-    /* Other locked styles preserved... */
+    .logo-container img {
+      width: 120px;
+      height: auto;
+      animation: rocketFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes rocketFloat {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes logoEntry {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .glow-box {
+      border: 2px solid rgba(255, 0, 0, 0.5);
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+      margin: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 10px 0;
+    }
+
+    .tabs button {
+      background-color: #111;
+      color: white;
+      border: 2px solid #900;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+
+    .tabs button.active {
+      background-color: #2c2c2c;
+      color: #0f0;
+    }
+
+    .section {
+      display: none;
+      padding: 20px;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    #liveTicker {
+      position: sticky;
+      top: 0;
+      background-color: #111;
+      padding: 10px;
+      text-align: center;
+      font-size: 1.2em;
+      border-bottom: 2px solid red;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
-  <img src="TradeWithJarslogo.png" class="logo" alt="TradeWithJars Logo"/>
+  <div class="logo-container">
+    <img src="rocketlogo.png" alt="Trade With Jars Logo" />
+  </div>
 
-  <!-- Remaining locked content follows unchanged (ticker, chart, overview, etc.) -->
-  <!-- Placeholder for actual content already verified -->
-  <!-- Ensure these match the previous working solusdt (3).html -->
+  <div id="liveTicker">Loading price…</div>
 
+  <div class="tabs glow-box">
+    <button class="active" onclick="showSection('overview')">Overview</button>
+    <button onclick="showSection('technicals')">Technicals</button>
+    <button onclick="showSection('news')">News</button>
+    <button onclick="showSection('seasonals')">Seasonals</button>
+    <button onclick="showSection('markets')">Markets</button>
+    <button onclick="showSection('discussions')">Discussions</button>
+  </div>
+
+  <div id="overview" class="section active glow-box">
+    <h2>Overview</h2>
+    <p>Loading live stats…</p>
+    <div id="overviewStats"></div>
+    <div class="glow-box">
+      <iframe src="https://www.tradingview.com/chart/?symbol=BINANCE:SOLUSDT"
+              width="100%" height="500" frameborder="0" allowtransparency="true"
+              style="border: none;"></iframe>
+    </div>
+  </div>
+
+  <div id="technicals" class="section glow-box">
+    <h2>Technicals</h2>
+    <p>Coming soon…</p>
+  </div>
+
+  <div id="news" class="section glow-box">
+    <h2>News</h2>
+    <p>Coming soon…</p>
+  </div>
+
+  <div id="seasonals" class="section glow-box">
+    <h2>Seasonals</h2>
+    <p>Coming soon…</p>
+  </div>
+
+  <div id="markets" class="section glow-box">
+    <h2>Markets</h2>
+    <p>Coming soon…</p>
+  </div>
+
+  <div id="discussions" class="section glow-box">
+    <h2>Discussions</h2>
+    <p>Coming soon…</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
+  <script>
+    async function loadOverviewData() {
+      const res = await fetch("https://api.coingecko.com/api/v3/coins/solana?localization=false&market_data=true");
+      const d = await res.json();
+      const m = d.market_data;
+      const now = luxon.DateTime.now().setZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+      document.getElementById("overviewStats").innerHTML = `
+        <table>
+          <tr><td><strong>Price:</strong></td><td>$${m.current_price.usd.toFixed(2)}</td></tr>
+          <tr><td><strong>24h Change:</strong></td><td style="color:${m.price_change_percentage_24h > 0 ? '#0f0' : '#f00'}">${m.price_change_percentage_24h.toFixed(2)}%</td></tr>
+          <tr><td><strong>Market Cap:</strong></td><td>$${m.market_cap.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h Volume:</strong></td><td>$${m.total_volume.usd.toLocaleString()}</td></tr>
+          <tr><td><strong>24h High / Low:</strong></td><td>$${m.high_24h.usd} / $${m.low_24h.usd}</td></tr>
+          <tr><td><strong>Circulating Supply:</strong></td><td>${m.circulating_supply.toLocaleString()}</td></tr>
+          <tr><td><strong>Rank:</strong></td><td>${d.market_cap_rank}</td></tr>
+        </table>`;
+
+      document.getElementById("liveTicker").innerText =
+        `SOL $${m.current_price.usd.toFixed(2)} (${m.price_change_percentage_24h.toFixed(2)}%) – As of ${now.toFormat("ff")}`;
+    }
+
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      [...document.querySelectorAll('.tabs button')].find(btn => btn.innerText.toLowerCase() === id).classList.add('active');
+    }
+
+    loadOverviewData();
+    setInterval(loadOverviewData, 60000);
+  </script>
 </body>
 </html>
