@@ -124,27 +124,23 @@
     color: white;
   }
 
-  .section {
-    margin: 20px auto;
-    padding: 20px;
-    width: 100%;
-     max-width: 1000px;
-    background: #1a1a1a;
-    border-radius: 12px;
-    box-shadow: 0 0 12px red;
-  }
+.section {
+  margin: 20px auto;
+  padding: 20px;
+  width: 100%;
+  max-width: 600px; /* ✅ Shrinks the width of Overview */
+  background: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 0 12px red;
+}
 
-  .hidden { display: none; }
-
-  .chart-container {
-    margin-top: 20px;
-    box-shadow: 0 0 12px red;
-    border-radius: 10px;
-    overflow: hidden;
-      max-width: 1000px;       /* ✅ LIMITS WIDTH */
-  margin-left: auto;       /* ✅ CENTERS THE CHART */
-  margin-right: auto;
-  }
+.chart-container {
+  margin: 20px auto 0;
+  max-width: 600px; /* ✅ Shrinks the width of Chart */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 12px red;
+}
 
   iframe.chart {
     width: 100%;
