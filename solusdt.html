@@ -128,18 +128,21 @@
   margin: 20px auto;
   padding: 20px;
   width: 100%;
-  max-width: 600px; /* ✅ Shrinks the width of Overview */
+  max-width: 550px;           /* ✅ narrower max width */
   background: #1a1a1a;
   border-radius: 12px;
   box-shadow: 0 0 12px red;
+  box-sizing: border-box;     /* ✅ ensures padding is inside width */
 }
 
 .chart-container {
   margin: 20px auto 0;
-  max-width: 600px; /* ✅ Shrinks the width of Chart */
+  padding: 0 10px;            /* ✅ padding to create room on mobile */
+  max-width: 550px;           /* ✅ narrower chart container */
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 0 12px red;
+  box-sizing: border-box;     /* ✅ ensures padding doesn’t expand width */
 }
 
   iframe.chart {
