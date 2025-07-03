@@ -274,45 +274,30 @@
   </div>
 </div>
     
-<div id="markets" class="section hidden">
-  <h2>Markets</h2>
-  <div class="scroll-container">
-    <div class="widget-fixed">
-      <script src="https://s2.tokeninsight.com/widgets/rating-breakdown-widget/index.js"></script>
-      <rating-breakdown-widget subject="white" language="en" token="solana"></rating-breakdown-widget>
-    </div>
+<!-- SOL/USDT Chart for Markets Section -->
+<div class="section" id="markets">
+  <div class="section-title">SOL Markets</div>
+  <div class="tradingview-widget-container" style="height:500px;">
+    <div id="tradingview_sol"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+      new TradingView.widget({
+        "width": "100%",
+        "height": 500,
+        "symbol": "BINANCE:SOLUSDT",
+        "interval": "30",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#1e1e1e",
+        "enable_publishing": false,
+        "allow_symbol_change": true,
+        "container_id": "tradingview_sol"
+      });
+    </script>
   </div>
 </div>
-
-<style>
-  .scroll-container {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .widget-fixed {
-    min-width: 1008px;
-    max-width: 1008px;
-    height: 604px;
-    margin: 0 auto;
-  }
-
-  /* Optional: adds a subtle scrollbar style for clarity */
-  .scroll-container::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  .scroll-container::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 4px;
-  }
-
-  .scroll-container::-webkit-scrollbar-track {
-    background: transparent;
-  }
-</style>
 
 
     
