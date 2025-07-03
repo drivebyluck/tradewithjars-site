@@ -278,47 +278,101 @@
   <h2>Markets</h2>
   <div id="twitterFeeds" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
 
+    <!-- solanadailyn -->
     <div class="chart-container" style="width: 100%; max-width: 600px;">
-      <a class="twitter-timeline"
-         data-theme="dark"
-         data-tweet-limit="5"
-         data-chrome="noheader nofooter noborders transparent"
-         href="https://twitter.com/solanadailyn">
-         Tweets by @solanadailyn
-      </a>
+      <div id="solanadailyn-short">
+        <a class="twitter-timeline"
+           data-theme="dark"
+           data-tweet-limit="5"
+           data-chrome="noheader nofooter noborders transparent"
+           href="https://twitter.com/solanadailyn">
+           Tweets by @solanadailyn
+        </a>
+      </div>
+      <button onclick="toggleFeed('solanadailyn')" class="expand-btn">Show More</button>
     </div>
 
+    <!-- solana -->
     <div class="chart-container" style="width: 100%; max-width: 600px;">
-      <a class="twitter-timeline"
-         data-theme="dark"
-         data-tweet-limit="5"
-         data-chrome="noheader nofooter noborders transparent"
-         href="https://twitter.com/solana">
-         Tweets by @solana
-      </a>
+      <div id="solana-short">
+        <a class="twitter-timeline"
+           data-theme="dark"
+           data-tweet-limit="5"
+           data-chrome="noheader nofooter noborders transparent"
+           href="https://twitter.com/solana">
+           Tweets by @solana
+        </a>
+      </div>
+      <button onclick="toggleFeed('solana')" class="expand-btn">Show More</button>
     </div>
 
+    <!-- solana_daily -->
     <div class="chart-container" style="width: 100%; max-width: 600px;">
-      <a class="twitter-timeline"
-         data-theme="dark"
-         data-tweet-limit="5"
-         data-chrome="noheader nofooter noborders transparent"
-         href="https://twitter.com/solana_daily">
-         Tweets by @solana_daily
-      </a>
+      <div id="solana_daily-short">
+        <a class="twitter-timeline"
+           data-theme="dark"
+           data-tweet-limit="5"
+           data-chrome="noheader nofooter noborders transparent"
+           href="https://twitter.com/solana_daily">
+           Tweets by @solana_daily
+        </a>
+      </div>
+      <button onclick="toggleFeed('solana_daily')" class="expand-btn">Show More</button>
     </div>
 
   </div>
 </div>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<script>
+  function toggleFeed(handle) {
+    const container = document.getElementById(`${handle}-short`);
+    const parent = container.parentElement;
+    container.remove();
+    const fullFeed = document.createElement("div");
+    fullFeed.innerHTML = `
+      <a class="twitter-timeline"
+         data-theme="dark"
+         data-chrome="noheader nofooter noborders transparent"
+         href="https://twitter.com/${handle}">
+         Tweets by @${handle}
+      </a>`;
+    fullFeed.id = `${handle}-full`;
+    parent.insertBefore(fullFeed, parent.querySelector('button'));
+    parent.querySelector('button').remove();
+    twttr.widgets.load();
+  }
+</script>
+
+<style>
+  .expand-btn {
+    margin-top: 10px;
+    background-color: black;
+    color: #00ffe1;
+    border: 1px solid #ff0000;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .expand-btn:hover {
+    background-color: #1a1a1a;
+    color: white;
+    border-color: #00ffe1;
+  }
+</style>
+
 
     
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-    
+
 <script>
   async function loadSolanaSeasonals() {
     const container = document.getElementById("solanaSeasonals");
