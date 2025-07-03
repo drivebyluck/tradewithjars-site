@@ -277,95 +277,30 @@
 <div id="markets" class="section hidden">
   <h2>Markets</h2>
 
-  <!-- Latest tweet from @solanadailyn -->
+  <!-- @solanadailyn -->
   <div class="chart-container" style="margin-bottom: 20px;">
-    <div id="solanadailyn-feed" class="tweet-embed"></div>
-    <div style="text-align: center;">
-      <button class="expand-btn" onclick="expandFeed('solanadailyn')">Show More</button>
-    </div>
+    <blockquote class="twitter-tweet" data-theme="dark" data-chrome="noborders transparent">
+      <a href="https://twitter.com/solanadailyn"></a>
+    </blockquote>
   </div>
 
-  <!-- Latest tweet from @solana -->
+  <!-- @solana -->
   <div class="chart-container" style="margin-bottom: 20px;">
-    <div id="solana-feed" class="tweet-embed"></div>
-    <div style="text-align: center;">
-      <button class="expand-btn" onclick="expandFeed('solana')">Show More</button>
-    </div>
+    <blockquote class="twitter-tweet" data-theme="dark" data-chrome="noborders transparent">
+      <a href="https://twitter.com/solana"></a>
+    </blockquote>
   </div>
 
-  <!-- Latest tweet from @solana_daily -->
+  <!-- @solana_daily -->
   <div class="chart-container">
-    <div id="solana_daily-feed" class="tweet-embed"></div>
-    <div style="text-align: center;">
-      <button class="expand-btn" onclick="expandFeed('solana_daily')">Show More</button>
-    </div>
+    <blockquote class="twitter-tweet" data-theme="dark" data-chrome="noborders transparent">
+      <a href="https://twitter.com/solana_daily"></a>
+    </blockquote>
   </div>
 </div>
 
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<script>
-  const handles = ['solanadailyn', 'solana', 'solana_daily'];
 
-  // Initial load of the most recent tweet
-  function loadInitialTweets() {
-    handles.forEach(handle => {
-      const container = document.getElementById(`${handle}-feed`);
-      container.innerHTML = `
-        <a class="twitter-timeline"
-           data-theme="dark"
-           data-chrome="noheader nofooter noborders transparent"
-           data-tweet-limit="1"
-           href="https://twitter.com/${handle}?ref_src=twsrc%5Etfw">
-          Tweets by @${handle}
-        </a>`;
-    });
-    twttr.widgets.load();
-  }
-
-  // Expand to full timeline
-  function expandFeed(handle) {
-    const container = document.getElementById(`${handle}-feed`);
-    container.innerHTML = `
-      <a class="twitter-timeline"
-         data-theme="dark"
-         data-chrome="noheader nofooter noborders transparent"
-         href="https://twitter.com/${handle}?ref_src=twsrc%5Etfw">
-        Tweets by @${handle}
-      </a>`;
-    twttr.widgets.load(container);
-
-    // Remove the "Show More" button
-    const btn = container.parentElement.querySelector('.expand-btn');
-    if (btn) btn.remove();
-  }
-
-  document.addEventListener('DOMContentLoaded', loadInitialTweets);
-</script>
-
-<style>
-  .expand-btn {
-    background-color: #000;
-    color: #00ffe1;
-    border: 1px solid #ff0000;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-top: 8px;
-    cursor: pointer;
-    transition: 0.2s ease;
-  }
-
-  .expand-btn:hover {
-    background-color: #1a1a1a;
-    color: white;
-    border-color: #00ffe1;
-  }
-
-  .tweet-embed {
-    display: flex;
-    justify-content: center;
-  }
-</style>
 
     
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
