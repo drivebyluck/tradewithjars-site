@@ -276,41 +276,19 @@
     
 <div id="markets" class="section hidden">
   <h2>Markets</h2>
-
-  <div class="widget-container">
-    <iframe 
-      src="https://tokeninsight.com/en/coins/solana/widgets/rating-breakdown?theme=light" 
-      style="width:100%; height:600px; border:none; overflow:hidden;" 
-      scrolling="no"
-      loading="lazy"
-      title="Solana Market Rating">
-    </iframe>
+  <div id="solanaRatingWidget" style="max-width: 100%; overflow: hidden;">
+    <div style="transform: scale(0.95); transform-origin: top center;">
+      <rating-breakdown-widget subject="white" language="en" token="solana"></rating-breakdown-widget>
+    </div>
   </div>
 </div>
-
-<style>
-  .widget-container {
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-  }
-
-  #markets iframe {
-    border-radius: 12px;
-    max-width: 100%;
-    background: white;
-  }
-</style>
 
     
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
-
+<script src="https://s2.tokeninsight.com/widgets/rating-breakdown-widget/index.js"></script>
   
 <script>
   async function loadSolanaSeasonals() {
