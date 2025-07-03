@@ -270,33 +270,10 @@
 
 <div id="seasonals" class="section hidden">
   <h2>Seasonals</h2>
-  <p>Average Monthly Returns for Solana (2020–2024)</p>
-  <div style="overflow-x: auto;">
-    <table class="stats">
-      <thead>
-        <tr>
-          <th>Month</th>
-          <th>2020</th>
-          <th>2021</th>
-          <th>2022</th>
-          <th>2023</th>
-          <th>2024</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>January</td><td>+30.4%</td><td>+120.6%</td><td>-28.7%</td><td>+23.1%</td><td>+15.6%</td></tr>
-        <tr><td>February</td><td>+5.1%</td><td>+45.2%</td><td>-8.2%</td><td>+12.9%</td><td>+2.3%</td></tr>
-        <tr><td>March</td><td>-2.7%</td><td>+80.3%</td><td>-25.4%</td><td>+9.7%</td><td>-1.8%</td></tr>
-        <tr><td>April</td><td>+18.6%</td><td>+135.9%</td><td>-15.8%</td><td>+6.5%</td><td>+4.2%</td></tr>
-        <tr><td>May</td><td>+22.3%</td><td>-2.6%</td><td>-41.3%</td><td>+1.9%</td><td>-3.4%</td></tr>
-        <tr><td>June</td><td>-5.2%</td><td>+67.4%</td><td>-18.7%</td><td>+2.8%</td><td>+7.1%</td></tr>
-        <tr><td>July</td><td>+9.8%</td><td>+55.9%</td><td>+3.4%</td><td>-6.2%</td><td>—</td></tr>
-        <tr><td>August</td><td>+3.7%</td><td>+23.3%</td><td>+2.9%</td><td>-2.7%</td><td>—</td></tr>
-        <tr><td>September</td><td>-1.1%</td><td>+5.6%</td><td>-12.4%</td><td>-9.3%</td><td>—</td></tr>
-        <tr><td>October</td><td>+12.4%</td><td>+31.5%</td><td>-9.1%</td><td>+18.4%</td><td>—</td></tr>
-        <tr><td>November</td><td>+7.6%</td><td>+44.8%</td><td>+1.5%</td><td>+10.2%</td><td>—</td></tr>
-        <tr><td>December</td><td>+4.5%</td><td>+60.9%</td><td>-3.8%</td><td>+7.9%</td><td>—</td></tr>
-      </tbody>
+  <div id="solanaSeasonals" style="overflow-x:auto; text-align:center;">
+    <table id="seasonalsTable" class="stats" style="border-collapse:collapse; width:100%; box-shadow:0 0 12px red;">
+      <thead style="color:#1ab761;"><tr><th>Month</th></tr></thead>
+      <tbody></tbody>
     </table>
   </div>
 </div>
@@ -307,6 +284,60 @@
 
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
+<script>
+(async () => {
+  const days = 365 * 6;
+  const res = await fetch(`https://api.coingecko.com/api/v3/coins/solana/market_chart?vs_currency=usd&days=${days}`);
+  const { prices } = await res.json();
+
+  const byMonth = {};
+  prices.forEach(([ms, p]) => {
+    const d = new Date(ms);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    byMonth[key] ||= { first: p, last: p };
+    byMonth[key].last = p;
+  });
+
+  const today = new Date();
+  const years = [];
+  for (let y = today.getFullYear(); y > today.getFullYear() - 5; y--) years.push(y);
+
+  const table = document.getElementById('seasonalsTable');
+  const thead = table.querySelector('thead tr');
+  years.forEach(y => {
+    const th = document.createElement('th');
+    th.textContent = y;
+    thead.appendChild(th);
+  });
+
+  const tbody = table.querySelector('tbody');
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  months.forEach((m, i) => {
+    const tr = document.createElement('tr');
+    const tdM = document.createElement('td');
+    tdM.textContent = m;
+    tr.appendChild(tdM);
+
+    years.forEach(y => {
+      const key = `${y}-${String(i+1).padStart(2,'0')}`;
+      const data = byMonth[key];
+      const td = document.createElement('td');
+      if (data) {
+        const ret = ((data.last / data.first) - 1) * 100;
+        td.textContent = `${ret.toFixed(2)}%`;
+        td.style.color = ret >= 0 ? 'lime' : 'red';
+      } else {
+        td.textContent = '—';
+      }
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+})();
+</script>
+
+    
     <script>
 async function fetchSolanaRSS() {
   try {
