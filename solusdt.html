@@ -267,7 +267,6 @@
   </div>
 </div>
     
-
 <div id="seasonals" class="section hidden">
   <h2>Seasonals</h2>
   <div id="solanaSeasonals" style="overflow-x:auto; text-align:center;">
@@ -278,7 +277,7 @@
   </div>
 </div>
 
-
+    
   <div id="markets" class="section hidden"><h2>Markets</h2><p>Coming soon.</p></div>
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
@@ -286,54 +285,88 @@
 
 <script>
 (async () => {
-  const days = 365 * 6;
-  const res = await fetch(`https://api.coingecko.com/api/v3/coins/solana/market_chart?vs_currency=usd&days=${days}`);
-  const { prices } = await res.json();
+  try {
+    const days = 6 * 365; // fetch ~6 years of data
+    const response = await fetch(`https://api.coingecko.com/api/v3/coins/solana/market_chart?vs_currency=usd&days=${days}`);
+    const { prices } = await response.json();
 
-  const byMonth = {};
-  prices.forEach(([ms, p]) => {
-    const d = new Date(ms);
-    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-    byMonth[key] ||= { first: p, last: p };
-    byMonth[key].last = p;
-  });
+    const monthly = {};
 
-  const today = new Date();
-  const years = [];
-  for (let y = today.getFullYear(); y > today.getFullYear() - 5; y--) years.push(y);
-
-  const table = document.getElementById('seasonalsTable');
-  const thead = table.querySelector('thead tr');
-  years.forEach(y => {
-    const th = document.createElement('th');
-    th.textContent = y;
-    thead.appendChild(th);
-  });
-
-  const tbody = table.querySelector('tbody');
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  months.forEach((m, i) => {
-    const tr = document.createElement('tr');
-    const tdM = document.createElement('td');
-    tdM.textContent = m;
-    tr.appendChild(tdM);
-
-    years.forEach(y => {
-      const key = `${y}-${String(i+1).padStart(2,'0')}`;
-      const data = byMonth[key];
-      const td = document.createElement('td');
-      if (data) {
-        const ret = ((data.last / data.first) - 1) * 100;
-        td.textContent = `${ret.toFixed(2)}%`;
-        td.style.color = ret >= 0 ? 'lime' : 'red';
-      } else {
-        td.textContent = '—';
-      }
-      tr.appendChild(td);
+    prices.forEach(([timestamp, price]) => {
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = date.getMonth(); // 0-indexed
+      const key = `${year}-${month}`;
+      if (!monthly[key]) monthly[key] = { start: price, end: price };
+      monthly[key].end = price;
     });
 
-    tbody.appendChild(tr);
-  });
+    const years = [];
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear; y > currentYear - 5; y--) {
+      years.push(y);
+    }
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    const table = document.createElement("table");
+    table.className = "stats";
+    table.style.width = "100%";
+    table.style.borderCollapse = "collapse";
+    table.style.marginTop = "10px";
+
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+
+    const thMonth = document.createElement("th");
+    thMonth.textContent = "Month";
+    headerRow.appendChild(thMonth);
+
+    years.forEach(year => {
+      const th = document.createElement("th");
+      th.textContent = year;
+      headerRow.appendChild(th);
+    });
+
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+
+    months.forEach((label, idx) => {
+      const row = document.createElement("tr");
+
+      const tdMonth = document.createElement("td");
+      tdMonth.textContent = label;
+      row.appendChild(tdMonth);
+
+      years.forEach(year => {
+        const td = document.createElement("td");
+        const key = `${year}-${idx}`;
+        if (monthly[key]) {
+          const { start, end } = monthly[key];
+          const pct = ((end - start) / start) * 100;
+          td.textContent = `${pct.toFixed(2)}%`;
+          td.style.color = pct >= 0 ? "lime" : "red";
+        } else {
+          td.textContent = "—";
+          td.style.color = "gray";
+        }
+        row.appendChild(td);
+      });
+
+      tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+
+    document.getElementById("solanaSeasonals").innerHTML = ""; // clear loading message
+    document.getElementById("solanaSeasonals").appendChild(table);
+  } catch (err) {
+    console.error("Failed to load seasonals data:", err);
+    document.getElementById("solanaSeasonals").innerHTML = "<p style='color:red;'>Unable to load seasonal data at this time.</p>";
+  }
 })();
 </script>
 
