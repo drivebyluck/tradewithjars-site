@@ -278,13 +278,32 @@
     ></iframe>
   </div>
 
-  <div class="chart-container" style="margin-top: 20px;">
-    <iframe class="chart"
-      src="https://www.tradingview.com/widgetembed/?frameElementId=tradingview_linechart&symbol=BINANCE:SOLUSDT&interval=M&symboledit=1&saveimage=1&theme=dark&style=1&timezone=Etc/UTC&studies=seasonality%2FSeasonality%40tv-basicstudies%1style%3Dline&withdateranges=1"
-      style="height: 500px;"
-    ></iframe>
+<div id="seasonals" class="section hidden">
+  <h2>Seasonals</h2>
+
+  <!-- Barchart SOL Seasonality Chart (Bar) -->
+  <div class="chart-container" style="margin-top:20px;">
+    <iframe
+      class="chart"
+      src="https://www.barchart.com/crypto/quotes/%5ESOLUSD/seasonality-chart?type=bar"
+      style="height:500px;"
+      frameborder="0"
+      loading="lazy">
+    </iframe>
+  </div>
+
+  <!-- Barchart SOL Seasonality Chart (Line) -->
+  <div class="chart-container" style="margin-top:20px;">
+    <iframe
+      class="chart"
+      src="https://www.barchart.com/crypto/quotes/%5ESOLUSD/seasonality-chart?type=line"
+      style="height:500px;"
+      frameborder="0"
+      loading="lazy">
+    </iframe>
   </div>
 </div>
+
 
   <div id="markets" class="section hidden"><h2>Markets</h2><p>Coming soon.</p></div>
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
