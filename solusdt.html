@@ -277,18 +277,33 @@
 <div id="markets" class="section hidden">
   <h2>Markets</h2>
 
-  <!-- TokenInsight Solana Rating Widget -->
-  <div style="width:100%; max-width:100%; margin:auto;">
-    <style>
-      rating-breakdown-widget * {
-        color: black !important;
-        fill: black !important;
-      }
-    </style>
-    <script src="https://s2.tokeninsight.com/widgets/rating-breakdown-widget/index.js"></script>
-    <rating-breakdown-widget subject="white" language="en" token="solana" style="width:100%; min-height:500px; display:block;"></rating-breakdown-widget>
+  <div class="widget-container">
+    <iframe 
+      src="https://tokeninsight.com/en/coins/solana/widgets/rating-breakdown?theme=light" 
+      style="width:100%; height:600px; border:none; overflow:hidden;" 
+      scrolling="no"
+      loading="lazy"
+      title="Solana Market Rating">
+    </iframe>
   </div>
 </div>
+
+<style>
+  .widget-container {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  #markets iframe {
+    border-radius: 12px;
+    max-width: 100%;
+    background: white;
+  }
+</style>
 
     
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
