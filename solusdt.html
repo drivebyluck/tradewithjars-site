@@ -276,10 +276,14 @@
     
 <div id="markets" class="section hidden">
   <h2>Markets</h2>
-  <div id="solanaRatingWidget" style="max-width: 100%; overflow: hidden;">
-    <div style="transform: scale(0.95); transform-origin: top center;">
-      <rating-breakdown-widget subject="white" language="en" token="solana"></rating-breakdown-widget>
-    </div>
+  <div class="chart-container" style="padding: 20px;">
+    <iframe
+      src="https://www.coinglass.com/tools/liquidation-chart?symbol=SOL"
+      width="100%"
+      height="400"
+      style="border:none;"
+      title="Total Liquidations for SOL"
+    ></iframe>
   </div>
 </div>
 
@@ -287,8 +291,6 @@
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
-
-<script src="https://s2.tokeninsight.com/widgets/rating-breakdown-widget/index.js"></script>
   
 <script>
   async function loadSolanaSeasonals() {
