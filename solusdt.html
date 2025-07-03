@@ -274,67 +274,46 @@
   </div>
 </div>
     
-<div class="section">
+<div id="markets" class="section hidden">
   <h2>Markets</h2>
-  <div id="liquidationTableWrapper" style="overflow-x: auto;">
-    <table id="liquidationTable" style="width:100%; border-collapse: collapse; color: white;">
-      <thead>
-        <tr>
-          <th style="text-align: left; padding: 8px;">Price</th>
-          <th style="text-align: left; padding: 8px;">Liquidation Amount (USD)</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <p id="liquidationError" style="color: red; display: none;">Unable to load liquidation data at this time.</p>
-  </div>
-</div>
+  <div id="twitterFeeds" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 10px;">
+
+    <div class="chart-container" style="flex: 1; min-width: 300px; max-width: 400px;">
+      <a class="twitter-timeline"
+         data-theme="dark"
+         data-tweet-limit="5"
+         data-chrome="noheader nofooter noborders transparent"
+         href="https://twitter.com/solanadailyn">
+         Tweets by @solanadailyn
+      </a>
+    </div>
+
+    <div class="chart-container" style="flex: 1; min-width: 300px; max-width: 400px;">
+      <a class="twitter-timeline"
+         data-theme="dark"
+         data-tweet-limit="5"
+         data-chrome="noheader nofooter noborders transparent"
+         href="https://twitter.com/solana">
+         Tweets by @solana
+      </a>
+    </div>
+
+    <div class="chart-container" style="flex: 1; min-width: 300px; max-width: 400px;">
+      <a class="twitter-timeline"
+         data-theme="dark"
+         data-tweet-limit="5"
+         data-chrome="noheader nofooter noborders transparent"
+         href="https://twitter.com/solana_daily">
+         Tweets by @solana_daily
+      </a>
+    </div>
 
     
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
-<script>
-async function loadLiquidations() {
-  const tableBody = document.querySelector('#liquidationTable tbody');
-  const errorMsg = document.getElementById('liquidationError');
-  tableBody.innerHTML = ''; // Clear old rows
-
-  try {
-    const res = await fetch('https://liquidation-gbyp.onrender.com/api/liquidations');
-    const data = await res.json();
-
-    if (!data.success || !data.data || !data.data.longShortAmount) throw new Error();
-
-    const rows = data.data.longShortAmount.map(entry => ({
-      price: parseFloat(entry.price),
-      amount: parseFloat(entry.liquidationVol)
-    }));
-
-    // Sort by largest liquidation amount
-    rows.sort((a, b) => b.amount - a.amount);
-
-    rows.forEach(row => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td style="padding: 8px;">$${row.price.toFixed(2)}</td>
-        <td style="padding: 8px;">$${row.amount.toLocaleString()}</td>
-      `;
-      tableBody.appendChild(tr);
-    });
-
-    errorMsg.style.display = 'none';
-  } catch {
-    errorMsg.style.display = 'block';
-  }
-}
-
-// Load on page load + refresh hourly
-loadLiquidations();
-setInterval(loadLiquidations, 3600000); // 1 hour
-</script>
-
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
     
 <script>
