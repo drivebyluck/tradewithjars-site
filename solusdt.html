@@ -274,50 +274,24 @@
   </div>
 </div>
     
-<div id="markets" class="section hidden">
+<div id="markets" class="section">
   <h2>Markets</h2>
   <div id="twitterFeeds" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
 
-    <!-- @solanadailyn -->
-    <div class="chart-container" style="width: 100%; max-width: 600px;">
-      <div id="solanadailyn-feed">
-        <a class="twitter-timeline"
-           data-theme="dark"
-           data-chrome="noheader nofooter noborders transparent"
-           data-tweet-limit="1"
-           href="https://twitter.com/solanadailyn">
-           Tweets by @solanadailyn
-        </a>
-      </div>
-      <button onclick="expandFeed('solanadailyn')" class="expand-btn">Show More</button>
+    <!-- Twitter feed cards -->
+    <div class="feed-card">
+      <div id="solanadailyn-feed" class="feed-container"></div>
+      <button class="expand-btn" onclick="expandFeed('solanadailyn')">Show More</button>
     </div>
 
-    <!-- @solana -->
-    <div class="chart-container" style="width: 100%; max-width: 600px;">
-      <div id="solana-feed">
-        <a class="twitter-timeline"
-           data-theme="dark"
-           data-chrome="noheader nofooter noborders transparent"
-           data-tweet-limit="1"
-           href="https://twitter.com/solana">
-           Tweets by @solana
-        </a>
-      </div>
-      <button onclick="expandFeed('solana')" class="expand-btn">Show More</button>
+    <div class="feed-card">
+      <div id="solana-feed" class="feed-container"></div>
+      <button class="expand-btn" onclick="expandFeed('solana')">Show More</button>
     </div>
 
-    <!-- @solana_daily -->
-    <div class="chart-container" style="width: 100%; max-width: 600px;">
-      <div id="solana_daily-feed">
-        <a class="twitter-timeline"
-           data-theme="dark"
-           data-chrome="noheader nofooter noborders transparent"
-           data-tweet-limit="1"
-           href="https://twitter.com/solana_daily">
-           Tweets by @solana_daily
-        </a>
-      </div>
-      <button onclick="expandFeed('solana_daily')" class="expand-btn">Show More</button>
+    <div class="feed-card">
+      <div id="solana_daily-feed" class="feed-container"></div>
+      <button class="expand-btn" onclick="expandFeed('solana_daily')">Show More</button>
     </div>
 
   </div>
@@ -326,23 +300,62 @@
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <script>
+  const handles = ['solanadailyn', 'solana', 'solana_daily'];
+
+  // Embed only the latest tweet initially
+  function initFeeds() {
+    handles.forEach(handle => {
+      const container = document.getElementById(`${handle}-feed`);
+      container.innerHTML = `
+        <a class="twitter-timeline"
+           data-theme="dark"
+           data-chrome="noheader nofooter noborders transparent"
+           data-tweet-limit="1"
+           href="https://twitter.com/${handle}?ref_src=twsrc%5Etfw">
+           Tweets by @${handle}
+        </a>`;
+    });
+    twttr.widgets.load();
+  }
+
+  // Expand a feed to show full timeline
   function expandFeed(handle) {
     const container = document.getElementById(`${handle}-feed`);
     container.innerHTML = `
       <a class="twitter-timeline"
          data-theme="dark"
          data-chrome="noheader nofooter noborders transparent"
-         href="https://twitter.com/${handle}">
+         href="https://twitter.com/${handle}?ref_src=twsrc%5Etfw">
          Tweets by @${handle}
       </a>`;
     twttr.widgets.load(container);
-    container.nextElementSibling.remove(); // remove "Show More" button
+
+    // Remove its Show More button
+    const btn = container.parentElement.querySelector('.expand-btn');
+    btn && btn.parentNode.removeChild(btn);
   }
+
+  document.addEventListener('DOMContentLoaded', initFeeds);
 </script>
 
 <style>
+  .feed-card {
+    width: 100%;
+    max-width: 600px;
+    background: #111;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 0 16px #ff0000;
+    text-align: center;
+  }
+  .feed-container {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }
   .expand-btn {
-    margin-top: 10px;
+    margin-top: 8px;
     background-color: black;
     color: #00ffe1;
     border: 1px solid #ff0000;
@@ -352,13 +365,13 @@
     cursor: pointer;
     transition: all 0.2s ease;
   }
-
   .expand-btn:hover {
     background-color: #1a1a1a;
     color: white;
     border-color: #00ffe1;
   }
 </style>
+
 
 
 
