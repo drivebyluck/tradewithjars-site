@@ -277,31 +277,19 @@
 <div id="markets" class="section hidden">
   <h2>Markets</h2>
 
-  <script src="https://s2.tokeninsight.com/widgets/rating-breakdown-widget/index.js"></script>
-  <rating-breakdown-widget subject="white" language="en" token="solana"></rating-breakdown-widget>
-
-  <style>
-    /* Make widget fill the section and adapt responsively */
-    rating-breakdown-widget {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-    }
-
-    /* DARKEN text & chart content inside the white widget */
-    rating-breakdown-widget * {
-      color: #111 !important;
-      fill: #111 !important;
-    }
-
-    /* Ensure mobile responsiveness */
-    @media (max-width: 768px) {
-      rating-breakdown-widget {
-        width: 100%;
+  <!-- TokenInsight Solana Rating Widget -->
+  <div style="width:100%; max-width:100%; margin:auto;">
+    <style>
+      rating-breakdown-widget * {
+        color: black !important;
+        fill: black !important;
       }
-    }
-  </style>
+    </style>
+    <script src="https://s2.tokeninsight.com/widgets/rating-breakdown-widget/index.js"></script>
+    <rating-breakdown-widget subject="white" language="en" token="solana" style="width:100%; min-height:500px; display:block;"></rating-breakdown-widget>
+  </div>
 </div>
+
     
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
