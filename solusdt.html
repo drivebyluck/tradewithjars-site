@@ -275,12 +275,40 @@
 </div>
     
   <div id="markets" class="section hidden">
+  
+<div id="markets" class="section hidden">
   <h2>Markets</h2>
-  <div style="text-align: center;">
-    <script src="https://s2.tokeninsight.com/widgets/rating-breakdown-widget/index.js"></script>
-    <rating-breakdown-widget subject="white" language="en" token="solana"></rating-breakdown-widget>
+  <div id="marketsWidget" style="display:flex; justify-content:center; align-items:center;">
+    <div style="max-width:100%; width:100%; overflow:hidden; background:#0d0d0d; padding:10px; border-radius:12px; box-shadow:0 0 15px red;">
+      <script src="https://s2.tokeninsight.com/widgets/rating-breakdown-widget/index.js"></script>
+      <rating-breakdown-widget subject="white" language="en" token="solana"></rating-breakdown-widget>
+    </div>
   </div>
+  <style>
+    rating-breakdown-widget {
+      width: 100%;
+      max-width: 100%;
+      font-family: inherit;
+    }
+
+    rating-breakdown-widget * {
+      color: #e5e5e5 !important;
+      font-family: 'Orbitron', sans-serif !important;
+    }
+
+    @media (max-width: 768px) {
+      #marketsWidget {
+        flex-direction: column;
+        padding: 0 10px;
+      }
+
+      rating-breakdown-widget {
+        width: 100%;
+      }
+    }
+  </style>
 </div>
+
 
     
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
