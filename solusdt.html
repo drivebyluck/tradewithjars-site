@@ -274,10 +274,19 @@
   </div>
 </div>
     
-<div id="markets" class="section hidden">
+<div class="section">
   <h2>Markets</h2>
-  <div id="solLiquidations" style="overflow-x:auto; text-align:left;">
-    <p>Loading Solana liquidation data…</p>
+  <div id="liquidationTableWrapper" style="overflow-x: auto;">
+    <table id="liquidationTable" style="width:100%; border-collapse: collapse; color: white;">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding: 8px;">Price</th>
+          <th style="text-align: left; padding: 8px;">Liquidation Amount (USD)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p id="liquidationError" style="color: red; display: none;">Unable to load liquidation data at this time.</p>
   </div>
 </div>
 
@@ -287,34 +296,45 @@
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
 <script>
-async function loadSolLiquidations() {
-  const container = document.getElementById('solLiquidations');
+async function loadLiquidations() {
+  const tableBody = document.querySelector('#liquidationTable tbody');
+  const errorMsg = document.getElementById('liquidationError');
+  tableBody.innerHTML = ''; // Clear old rows
+
   try {
-    const res = await fetch('https://open-api-v3.coinglass.com/api/futures/liquidation/v3/aggregated-history?symbol=SOL');
-    const json = await res.json();
-    if (json.code !== '0' || !json.data?.length) throw new Error('Invalid data');
+    const res = await fetch('https://liquidation-gbyp.onrender.com/api/liquidations');
+    const data = await res.json();
 
-    const data = json.data.slice(-24).reverse(); // last 24 hourly entries
+    if (!data.success || !data.data || !data.data.longShortAmount) throw new Error();
 
-    let html = `<table class="stats">
-      <tr><th>Hour</th><th>Long Liquidations (USD)</th><th>Short Liquidations (USD)</th></tr>`;
-    data.forEach(entry => {
-      const dt = new Date(entry.t * 1000);
-      const h = dt.toLocaleTimeString([], {hour: 'numeric', hour12: true});
-      html += `<tr><td>${h}</td><td>$${(+entry.longLiquidationUsd).toLocaleString()}</td><td>$${(+entry.shortLiquidationUsd).toLocaleString()}</td></tr>`;
+    const rows = data.data.longShortAmount.map(entry => ({
+      price: parseFloat(entry.price),
+      amount: parseFloat(entry.liquidationVol)
+    }));
+
+    // Sort by largest liquidation amount
+    rows.sort((a, b) => b.amount - a.amount);
+
+    rows.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="padding: 8px;">$${row.price.toFixed(2)}</td>
+        <td style="padding: 8px;">$${row.amount.toLocaleString()}</td>
+      `;
+      tableBody.appendChild(tr);
     });
-    html += '</table>';
-    container.innerHTML = html;
-  } catch (err) {
-    container.innerHTML = `<p style="color:red;">Unable to load liquidation data at this time.</p>`;
-    console.error(err);
+
+    errorMsg.style.display = 'none';
+  } catch {
+    errorMsg.style.display = 'block';
   }
 }
 
-// Load initially and refresh every hour
-loadSolLiquidations();
-setInterval(loadSolLiquidations, 60 * 60 * 1000);
+// Load on page load + refresh hourly
+loadLiquidations();
+setInterval(loadLiquidations, 3600000); // 1 hour
 </script>
+
 
     
 <script>
