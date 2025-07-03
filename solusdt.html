@@ -267,27 +267,60 @@
   </div>
 </div>
     
-  <div id="seasonals" class="section hidden">
-  <h2>Seasonals</h2>
-  <div class="tradingview-widget-container">
-    <div class="tradingview-widget-container__widget"></div>
+<h2>Seasonals</h2>
+<div id="seasonalityChart" style="height: 400px; box-shadow: 0 0 12px red; border-radius: 10px; margin-top: 20px;"></div>
     
   <div id="markets" class="section hidden"><h2>Markets</h2><p>Coming soon.</p></div>
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
-<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-seasonality.js" async>
-    {
-      "symbol": "BINANCE:SOLUSDT",
-      "width": "100%",
-      "height": "450",
-      "locale": "en",
-      "colorTheme": "dark",
-      "isTransparent": true
-    }
-    </script>
-    
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+<script>
+(async function() {
+  const res = await fetch('https://api.coingecko.com/api/v3/coins/solana/market_chart?vs_currency=usd&days=max');
+  const data = await res.json();
+  const monthly = {};
+
+  data.prices.forEach(([ms, price]) => {
+    const d = new Date(ms);
+    const key = d.getFullYear() + '-' + (d.getMonth()+1);
+    if (!monthly[key]) monthly[key] = { open: price, close: price };
+    monthly[key].close = price;
+  });
+
+  const avgReturns = {};
+  for (const key in monthly) {
+    const [_, month] = key.split('-').map(Number);
+    const ret = (monthly[key].close / monthly[key].open - 1) * 100;
+    avgReturns[month] = avgReturns[month] || [];
+    avgReturns[month].push(ret);
+  }
+
+  const series = [];
+  for (let m = 1; m <= 12; m++) {
+    const values = avgReturns[m] || [];
+    const avg = values.reduce((a, b) => a + b, 0) / (values.length || 1);
+    series.push({
+      time: new Date(0, m - 1).toISOString().slice(0, 10),
+      value: +avg.toFixed(2),
+    });
+  }
+
+  const chart = LightweightCharts.createChart(document.getElementById('seasonalityChart'), {
+    layout: { backgroundColor: '#1a1a1a', textColor: '#e6ffe6' },
+    grid: { vertLines: { color: '#333' }, horzLines: { color: '#333' } },
+    width: document.getElementById('seasonalityChart').clientWidth,
+    height: 400,
+  });
+
+  chart.addHistogramSeries({
+    color: 'rgba(255, 99, 132, 0.8)',
+    priceFormat: { type: 'percent', precision: 2 },
+  }).setData(series);
+})();
+</script>
+
     <script>
 async function fetchSolanaRSS() {
   try {
