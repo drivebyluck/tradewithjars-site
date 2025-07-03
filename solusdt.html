@@ -267,60 +267,89 @@
   </div>
 </div>
     
-<h2>Seasonals</h2>
-<div id="seasonalityChart" style="height: 400px; box-shadow: 0 0 12px red; border-radius: 10px; margin-top: 20px;"></div>
-    
+  <h2>Seasonals (5‑Year Comparison)</h2>
+<div id="seasonalityTableContainer" style="overflow-x:auto; margin-top:10px;">
+  <table id="seasonalityTable" class="stats" style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th style="padding:6px; text-align:left;">Month</th>
+        <!-- JS will insert year headers here -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- JS will build rows here -->
+    </tbody>
+  </table>
+</div>
   <div id="markets" class="section hidden"><h2>Markets</h2><p>Coming soon.</p></div>
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
-    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 <script>
-(async function() {
+(async () => {
+  const MAX_YEARS = 5;
   const res = await fetch('https://api.coingecko.com/api/v3/coins/solana/market_chart?vs_currency=usd&days=max');
   const data = await res.json();
-  const monthly = {};
-
+  const priceByDate = {};
   data.prices.forEach(([ms, price]) => {
-    const d = new Date(ms);
-    const key = d.getFullYear() + '-' + (d.getMonth()+1);
-    if (!monthly[key]) monthly[key] = { open: price, close: price };
-    monthly[key].close = price;
+    const d=new Date(ms), year=d.getFullYear(), month=d.getMonth()+1, day=d.getDate();
+    priceByDate[`${year}-${month}-${day}`] = price;
   });
 
-  const avgReturns = {};
-  for (const key in monthly) {
-    const [_, month] = key.split('-').map(Number);
-    const ret = (monthly[key].close / monthly[key].open - 1) * 100;
-    avgReturns[month] = avgReturns[month] || [];
-    avgReturns[month].push(ret);
+  const today = new Date();
+  const yearsData = {};
+  for (let y = 0; y < MAX_YEARS; y++) {
+    const year = today.getFullYear() - y;
+    yearsData[year] = {};
+    for (let m = 1; m <= 12; m++) {
+      // find first and last available price
+      const first = priceByDate[`${year}-${m}-1`] || Object.values(priceByDate).find((_,i,a)=>Object.keys(priceByDate)[i].startsWith(`${year}-${m}-`));
+      const last = priceByDate[`${year}-${m}-28`] || Object.values(priceByDate).reverse().find((_,i,a)=>Object.keys(priceByDate)[a.length-1-i].startsWith(`${year}-${m}-`));
+      if (first && last) yearsData[year][m] = ((last/first)-1)*100;
+      else yearsData[year][m] = null;
+    }
   }
 
-  const series = [];
+  // Build table
+  const table = document.getElementById('seasonalityTable');
+  const headerRow = table.querySelector('thead tr');
+  const tbody = table.querySelector('tbody');
+
+  Object.keys(yearsData).forEach(year => {
+    const th = document.createElement('th');
+    th.textContent = year;
+    th.style.padding = '6px';
+    headerRow.appendChild(th);
+  });
+
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   for (let m = 1; m <= 12; m++) {
-    const values = avgReturns[m] || [];
-    const avg = values.reduce((a, b) => a + b, 0) / (values.length || 1);
-    series.push({
-      time: new Date(0, m - 1).toISOString().slice(0, 10),
-      value: +avg.toFixed(2),
+    const tr = document.createElement('tr');
+    const tdMonth = document.createElement('td');
+    tdMonth.textContent = monthNames[m-1];
+    tdMonth.style.padding = '6px';
+    tr.appendChild(tdMonth);
+
+    Object.keys(yearsData).forEach(year => {
+      const td = document.createElement('td');
+      td.style.padding = '6px';
+      const val = yearsData[year][m];
+      if (val == null) td.textContent = '–';
+      else {
+        td.textContent = val.toFixed(2) + '%';
+        td.style.color = val >= 0 ? 'lime' : 'red';
+      }
+      tr.appendChild(td);
     });
+
+    tbody.appendChild(tr);
   }
-
-  const chart = LightweightCharts.createChart(document.getElementById('seasonalityChart'), {
-    layout: { backgroundColor: '#1a1a1a', textColor: '#e6ffe6' },
-    grid: { vertLines: { color: '#333' }, horzLines: { color: '#333' } },
-    width: document.getElementById('seasonalityChart').clientWidth,
-    height: 400,
-  });
-
-  chart.addHistogramSeries({
-    color: 'rgba(255, 99, 132, 0.8)',
-    priceFormat: { type: 'percent', precision: 2 },
-  }).setData(series);
 })();
 </script>
 
+
+    
     <script>
 async function fetchSolanaRSS() {
   try {
