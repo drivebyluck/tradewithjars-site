@@ -274,36 +274,40 @@
   </div>
 </div>
     
-<div id="markets" class="section">
+<div id="markets" class="section hidden">
   <h2>Markets</h2>
-  <div id="twitterFeeds" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
 
-    <!-- Twitter feed cards -->
-    <div class="feed-card">
-      <div id="solanadailyn-feed" class="feed-container"></div>
+  <!-- Latest tweet from @solanadailyn -->
+  <div class="chart-container" style="margin-bottom: 20px;">
+    <div id="solanadailyn-feed" class="tweet-embed"></div>
+    <div style="text-align: center;">
       <button class="expand-btn" onclick="expandFeed('solanadailyn')">Show More</button>
     </div>
+  </div>
 
-    <div class="feed-card">
-      <div id="solana-feed" class="feed-container"></div>
+  <!-- Latest tweet from @solana -->
+  <div class="chart-container" style="margin-bottom: 20px;">
+    <div id="solana-feed" class="tweet-embed"></div>
+    <div style="text-align: center;">
       <button class="expand-btn" onclick="expandFeed('solana')">Show More</button>
     </div>
+  </div>
 
-    <div class="feed-card">
-      <div id="solana_daily-feed" class="feed-container"></div>
+  <!-- Latest tweet from @solana_daily -->
+  <div class="chart-container">
+    <div id="solana_daily-feed" class="tweet-embed"></div>
+    <div style="text-align: center;">
       <button class="expand-btn" onclick="expandFeed('solana_daily')">Show More</button>
     </div>
-
   </div>
 </div>
 
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
 <script>
   const handles = ['solanadailyn', 'solana', 'solana_daily'];
 
-  // Embed only the latest tweet initially
-  function initFeeds() {
+  // Initial load of the most recent tweet
+  function loadInitialTweets() {
     handles.forEach(handle => {
       const container = document.getElementById(`${handle}-feed`);
       container.innerHTML = `
@@ -312,13 +316,13 @@
            data-chrome="noheader nofooter noborders transparent"
            data-tweet-limit="1"
            href="https://twitter.com/${handle}?ref_src=twsrc%5Etfw">
-           Tweets by @${handle}
+          Tweets by @${handle}
         </a>`;
     });
     twttr.widgets.load();
   }
 
-  // Expand a feed to show full timeline
+  // Expand to full timeline
   function expandFeed(handle) {
     const container = document.getElementById(`${handle}-feed`);
     container.innerHTML = `
@@ -326,54 +330,42 @@
          data-theme="dark"
          data-chrome="noheader nofooter noborders transparent"
          href="https://twitter.com/${handle}?ref_src=twsrc%5Etfw">
-         Tweets by @${handle}
+        Tweets by @${handle}
       </a>`;
     twttr.widgets.load(container);
 
-    // Remove its Show More button
+    // Remove the "Show More" button
     const btn = container.parentElement.querySelector('.expand-btn');
-    btn && btn.parentNode.removeChild(btn);
+    if (btn) btn.remove();
   }
 
-  document.addEventListener('DOMContentLoaded', initFeeds);
+  document.addEventListener('DOMContentLoaded', loadInitialTweets);
 </script>
 
 <style>
-  .feed-card {
-    width: 100%;
-    max-width: 600px;
-    background: #111;
-    border: 1px solid #555;
-    border-radius: 8px;
-    padding: 12px;
-    box-shadow: 0 0 16px #ff0000;
-    text-align: center;
-  }
-  .feed-container {
-    display: flex;
-    justify-content: center;
-    overflow: hidden;
-  }
   .expand-btn {
-    margin-top: 8px;
-    background-color: black;
+    background-color: #000;
     color: #00ffe1;
     border: 1px solid #ff0000;
-    padding: 6px 16px;
+    padding: 6px 14px;
     border-radius: 8px;
     font-weight: bold;
+    margin-top: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: 0.2s ease;
   }
+
   .expand-btn:hover {
     background-color: #1a1a1a;
     color: white;
     border-color: #00ffe1;
   }
+
+  .tweet-embed {
+    display: flex;
+    justify-content: center;
+  }
 </style>
-
-
-
 
     
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
