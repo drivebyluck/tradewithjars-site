@@ -278,46 +278,46 @@
   <h2>Markets</h2>
   <div id="twitterFeeds" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
 
-    <!-- solanadailyn -->
+    <!-- @solanadailyn -->
     <div class="chart-container" style="width: 100%; max-width: 600px;">
-      <div id="solanadailyn-short">
+      <div id="solanadailyn-feed">
         <a class="twitter-timeline"
            data-theme="dark"
-           data-tweet-limit="2"
            data-chrome="noheader nofooter noborders transparent"
+           data-tweet-limit="1"
            href="https://twitter.com/solanadailyn">
            Tweets by @solanadailyn
         </a>
       </div>
-      <button onclick="toggleFeed('solanadailyn')" class="expand-btn">Show More</button>
+      <button onclick="expandFeed('solanadailyn')" class="expand-btn">Show More</button>
     </div>
 
-    <!-- solana -->
+    <!-- @solana -->
     <div class="chart-container" style="width: 100%; max-width: 600px;">
-      <div id="solana-short">
+      <div id="solana-feed">
         <a class="twitter-timeline"
            data-theme="dark"
-           data-tweet-limit="2"
            data-chrome="noheader nofooter noborders transparent"
+           data-tweet-limit="1"
            href="https://twitter.com/solana">
            Tweets by @solana
         </a>
       </div>
-      <button onclick="toggleFeed('solana')" class="expand-btn">Show More</button>
+      <button onclick="expandFeed('solana')" class="expand-btn">Show More</button>
     </div>
 
-    <!-- solana_daily -->
+    <!-- @solana_daily -->
     <div class="chart-container" style="width: 100%; max-width: 600px;">
-      <div id="solana_daily-short">
+      <div id="solana_daily-feed">
         <a class="twitter-timeline"
            data-theme="dark"
-           data-tweet-limit="2"
            data-chrome="noheader nofooter noborders transparent"
+           data-tweet-limit="1"
            href="https://twitter.com/solana_daily">
            Tweets by @solana_daily
         </a>
       </div>
-      <button onclick="toggleFeed('solana_daily')" class="expand-btn">Show More</button>
+      <button onclick="expandFeed('solana_daily')" class="expand-btn">Show More</button>
     </div>
 
   </div>
@@ -326,22 +326,17 @@
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <script>
-  function toggleFeed(handle) {
-    const container = document.getElementById(`${handle}-short`);
-    const parent = container.parentElement;
-    container.remove();
-    const fullFeed = document.createElement("div");
-    fullFeed.innerHTML = `
+  function expandFeed(handle) {
+    const container = document.getElementById(`${handle}-feed`);
+    container.innerHTML = `
       <a class="twitter-timeline"
          data-theme="dark"
          data-chrome="noheader nofooter noborders transparent"
          href="https://twitter.com/${handle}">
          Tweets by @${handle}
       </a>`;
-    fullFeed.id = `${handle}-full`;
-    parent.insertBefore(fullFeed, parent.querySelector('button'));
-    parent.querySelector('button').remove();
-    twttr.widgets.load();
+    twttr.widgets.load(container);
+    container.nextElementSibling.remove(); // remove "Show More" button
   }
 </script>
 
@@ -364,6 +359,7 @@
     border-color: #00ffe1;
   }
 </style>
+
 
 
     
