@@ -260,12 +260,55 @@
 </div>
 
 
-  <div id="news" class="section hidden"><h2>News</h2><p>Coming soon.</p></div>
+  <div id="news" class="section hidden">
+  <h2>Solana News</h2>
+  <div id="solanaNews" style="text-align:left;">
+    <p>Loading the latest news about Solana...</p>
+  </div>
+</div>
+    
   <div id="seasonals" class="section hidden"><h2>Seasonals</h2><p>Coming soon.</p></div>
   <div id="markets" class="section hidden"><h2>Markets</h2><p>Coming soon.</p></div>
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
 
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
+
+    <script>
+async function fetchSolanaRSS() {
+  try {
+    const response = await fetch("https://api.allorigins.win/raw?url=https://cryptopotato.com/tag/solana/feed/");
+    const xml = await response.text();
+    const parser = new DOMParser();
+    const rss = parser.parseFromString(xml, "application/xml");
+    const items = rss.querySelectorAll("item");
+    let html = "<ul style='list-style:none;padding:0;margin:0;'>";
+
+    items.forEach((item, index) => {
+      if (index >= 6) return; // Limit to top 6
+      const title = item.querySelector("title").textContent;
+      const link = item.querySelector("link").textContent;
+      const pubDate = new Date(item.querySelector("pubDate").textContent);
+      const formattedDate = pubDate.toLocaleString("en-US", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+
+      html += `
+        <li style="margin-bottom:14px;">
+          <a href="${link}" target="_blank" style="color:#1ab761;font-weight:bold;text-decoration:none;">${title}</a><br>
+          <small style="color:#aaa;">${formattedDate}</small>
+        </li>`;
+    });
+
+    html += "</ul>";
+    document.getElementById("solanaNews").innerHTML = html;
+  } catch (err) {
+    document.getElementById("solanaNews").innerHTML = "<p style='color:red;'>Failed to load news. Try again later.</p>";
+  }
+}
+
+fetchSolanaRSS();
+</script>
 
   <script>
     function showTab(id) {
