@@ -258,47 +258,57 @@
 </div>
 
 <div id="markets" class="section hidden">
-  <h2>Liquidation Heat Map</h2>
+  <h2>SOLUSDT Liquidation History</h2>
   <div class="chart-container" style="padding:15px; background:#1a1a1a;">
-    <div id="heatmapGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap:4px; font-size:0.9em;"></div>
+    <canvas id="liqHistoryChart"></canvas>
   </div>
-  <p style="color:#aaa; font-size:0.9em;">Live SOLUSDT Liquidation Heatmap (Model 2) via CoinGlass Hobbyist API</p>
+  <p style="color:#aaa; font-size:0.9em;">
+    Live long vs. short liquidation (4 h interval) via CoinGlass Hobbyist API
+  </p>
   <script>
-    async function loadHeatmap() {
-      const grid = document.getElementById("heatmapGrid");
-      grid.innerHTML = "<p>Loading heatmap...</p>";
-      try {
-        const res = await fetch("https://sol-liquidation-proxy.onrender.com/api/liquidation?symbol=SOLUSDT&model=2");
-        const d = await res.json();
-        const pts = d.data.liquidationLeverageData;
-        if (!pts?.length) {
-          grid.innerHTML = "<p>No liquidation data available.</p>";
-          return;
+    async function drawLiquidationHistory() {
+      const res = await fetch(
+        'https://sol-liquidation-proxy.onrender.com/api/liquidation/history?symbol=SOLUSDT&interval=4h'
+      );
+      const { data } = await res.json();
+      const labels = data.map(d => new Date(d.time).toLocaleString());
+      const longVals  = data.map(d => +d.long_liquidation_usd);
+      const shortVals = data.map(d => +d.short_liquidation_usd);
+
+      new Chart(document.getElementById('liqHistoryChart'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Long Liquidation (USD)',
+              data: longVals,
+              backgroundColor: 'rgba(0,200,0,0.5)'
+            },
+            {
+              label: 'Short Liquidation (USD)',
+              data: shortVals,
+              backgroundColor: 'rgba(200,0,0,0.5)'
+            }
+          ]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { callback: v => '$' + v.toLocaleString() }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: '#e6ffe6' } }
+          }
         }
-        // Determine max amount for intensity scale
-        const maxAmt = Math.max(...pts.map(p=>Math.abs(p.amount))),
-              minAmt = 0;
-        grid.innerHTML = "";
-        pts.sort((a,b)=>b.amount - a.amount).forEach(p => {
-          const frac = Math.abs(p.amount) / maxAmt;
-          const hue = p.amount>0 ? 120 : 0; // green for longs, red for shorts
-          const lightness = 90 - frac*60; // darker = larger
-          const bg = `hsl(${hue},70%,${lightness}%)`;
-          grid.innerHTML += `
-            <div style="padding:6px; background:${bg}; color:#000; border-radius:4px;">
-              <div>${p.price}</div>
-              <div>${p.leverage}x</div>
-              <div>$${(Math.abs(p.amount)/1000).toFixed(1)}k</div>
-            </div>`;
-        });
-      } catch (err) {
-        grid.innerHTML = "<p style='color:red;'>Error loading heatmap.</p>";
-        console.error(err);
-      }
+      });
     }
-    loadHeatmap();
+    drawLiquidationHistory();
   </script>
 </div>
+
 
 
 
@@ -307,7 +317,7 @@
 
   <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
 
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
   async function loadSolanaSeasonals() {
