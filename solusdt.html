@@ -259,55 +259,47 @@
 
 <div id="markets" class="section hidden">
   <h2>Liquidation Heat Map</h2>
-  <div class="chart-container" style="background-color: #1a1a1a; padding: 15px;">
-    <div id="heatmapTable" style="color: white; font-size: 15px; text-align: left;">
-      <p>Loading liquidation data...</p>
-    </div>
+  <div class="chart-container" style="padding:15px; background:#1a1a1a;">
+    <div id="heatmapGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap:4px; font-size:0.9em;"></div>
   </div>
-  <p style="color: #aaa; font-size: 0.9em;">
-    Live SOLUSDT Liquidation Zones via CoinGlass API
-  </p>
+  <p style="color:#aaa; font-size:0.9em;">Live SOLUSDT Liquidation Heatmap (Model 2) via CoinGlass Hobbyist API</p>
   <script>
-    async function loadLiquidationData() {
-      const container = document.getElementById("heatmapTable");
+    async function loadHeatmap() {
+      const grid = document.getElementById("heatmapGrid");
+      grid.innerHTML = "<p>Loading heatmap...</p>";
       try {
-        const res = await fetch("https://sol-liquidation-proxy.onrender.com/api/liquidation?symbol=SOLUSDT");
-        const data = await res.json();
-
-        if (!data?.data?.liquidationLeverageData?.length) {
-          container.innerHTML = "<p>No liquidation data available.</p>";
+        const res = await fetch("https://sol-liquidation-proxy.onrender.com/api/liquidation?symbol=SOLUSDT&model=2");
+        const d = await res.json();
+        const pts = d.data.liquidationLeverageData;
+        if (!pts?.length) {
+          grid.innerHTML = "<p>No liquidation data available.</p>";
           return;
         }
-
-        const rows = data.data.liquidationLeverageData
-          .sort((a, b) => b.amount - a.amount)
-          .map(pt => `
-            <tr style="border-bottom:1px solid #333;">
-              <td style="padding:6px;">$${pt.price}</td>
-              <td style="padding:6px;">${pt.leverage}x</td>
-              <td style="padding:6px;color:${pt.amount>0?'lime':'red'};">$${pt.amount.toLocaleString()}</td>
-            </tr>`).join('');
-
-        container.innerHTML = `
-          <table style="width:100%;border-collapse:collapse;">
-            <thead>
-              <tr style="border-bottom:1px solid #444;">
-                <th style="text-align:left;padding:6px;">Price</th>
-                <th style="text-align:left;padding:6px;">Leverage</th>
-                <th style="text-align:left;padding:6px;">Amount (USD)</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>`;
+        // Determine max amount for intensity scale
+        const maxAmt = Math.max(...pts.map(p=>Math.abs(p.amount))),
+              minAmt = 0;
+        grid.innerHTML = "";
+        pts.sort((a,b)=>b.amount - a.amount).forEach(p => {
+          const frac = Math.abs(p.amount) / maxAmt;
+          const hue = p.amount>0 ? 120 : 0; // green for longs, red for shorts
+          const lightness = 90 - frac*60; // darker = larger
+          const bg = `hsl(${hue},70%,${lightness}%)`;
+          grid.innerHTML += `
+            <div style="padding:6px; background:${bg}; color:#000; border-radius:4px;">
+              <div>${p.price}</div>
+              <div>${p.leverage}x</div>
+              <div>$${(Math.abs(p.amount)/1000).toFixed(1)}k</div>
+            </div>`;
+        });
       } catch (err) {
-        container.innerHTML = `<p style="color:red;">Error loading data.</p>`;
-        console.error("Liquidation fetch error:", err);
+        grid.innerHTML = "<p style='color:red;'>Error loading heatmap.</p>";
+        console.error(err);
       }
     }
-
-    loadLiquidationData();
+    loadHeatmap();
   </script>
 </div>
+
 
 
   
