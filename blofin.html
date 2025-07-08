@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BloFin Trading</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #e6ffe6;
+      font-family: 'Trebuchet MS', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .wrapper {
+      max-width: 1000px;
+      width: 95%;
+      margin: 0 auto;
+      padding: 30px 10px;
+    }
+
+    @keyframes flyIn {
+      0% { transform: translateY(100px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes pulseUpDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    img.logo {
+      display: block;
+      margin: 0px auto 10px;
+      max-width: 220px;
+      height: auto;
+      animation: flyIn 2s ease-out forwards, pulseUpDown 3s ease-in-out infinite 2s;
+    }
+
+    .dropdown {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      z-index: 1000;
+    }
+
+    .dropbtn {
+      background-color: #017a36;
+      color: black;
+      padding: 12px 16px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #e02c2c;
+      transition: background 0.3s;
+    }
+
+    .dropbtn:hover {
+      background-color: #1c7c35;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #1a1a1a;
+      min-width: 180px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px #e02c2c;
+      z-index: 1001;
+    }
+
+    .dropdown-content a {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #333;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .section-box {
+      background: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 12px red;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 550px;
+      box-sizing: border-box;
+    }
+
+    .typewriter-text {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: .15em solid red;
+      animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: red; }
+    }
+
+    .instruction-row {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      min-height: 80px;
+      border: 2px solid red;
+      border-radius: 8px;
+      padding: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px red;
+      background: #0f0f0f;
+    }
+
+    .instruction-row:hover {
+      transform: scale(1.03);
+      z-index: 2;
+    }
+
+    .step-number {
+      width: 60px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: red;
+      border-right: 2px solid red;
+      box-shadow: inset -1px 0 5px red;
+    }
+
+    .instruction-text {
+      flex: 1;
+      padding-left: 20px;
+      font-size: 16px;
+      color: #e6ffe6;
+      text-align: left;
+      opacity: 0.7;
+    }
+
+    .instruction-row:hover .instruction-text {
+      font-size: 18px;
+    }
+
+    .instruction-row:not(:hover) {
+      opacity: 0.6;
+    }
+
+    input[type="password"] {
+      width: 85%;
+      max-width: 400px;
+      margin: 10px auto;
+      display: block;
+    }
+
+    footer {
+      margin: 40px 0 20px;
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    @media screen and (max-width: 600px) {
+      .dropbtn {
+        font-size: 16px;
+        padding: 10px 14px;
+      }
+
+      .instruction-text {
+        font-size: 15px;
+      }
+
+      .instruction-row:hover .instruction-text {
+        font-size: 17px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <img src="TradeWithJarslogo.png" alt="TradeWithJars Logo" class="logo" />
+
+    <div class="dropdown">
+      <button class="dropbtn">☰</button>
+      <div class="dropdown-content">
+        <a href="index.html">Home</a>
+        <a href="gate.html">Leverage Calculator</a>
+        <a href="crypto-news.html">Top News</a>
+        <a href="schedule.html">Presidential Schedule</a>
+        <a href="nfts.html">NFT Tracker</a>
+        <a href="solusdt.html">SOL Analysis</a>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <h2>BloFin Leverage Trading Interface</h2>
+      <label for="apiKey">Your BloFin API Key:</label>
+      <input type="password" id="apiKey" placeholder="Enter your API Key">
+
+      <label for="secretKey">Your BloFin Secret Key:</label>
+      <input type="password" id="secretKey" placeholder="Enter your Secret Key">
+
+      <button onclick="connectBlofin()" style="padding: 10px 20px; background-color: red; color: white; font-weight: bold; border: none; cursor: pointer;">Connect & Start Trading</button>
+    </div>
+
+    <div class="section-box">
+      <h3 class="typewriter-text">How to Use BloFin Trading on This Site</h3>
+      <div class="instruction-row"><div class="step-number">1</div><div class="instruction-text">Go to <a href="https://blofin.com" target="_blank" style="color: red;">BloFin.com</a> and log into your account.</div></div>
+      <div class="instruction-row"><div class="step-number">2</div><div class="instruction-text">Navigate to the API Management section under your profile or settings menu.</div></div>
+      <div class="instruction-row"><div class="step-number">3</div><div class="instruction-text">Create a new API key and label it "TradeWithJars Site Access." Copy both the <strong>API Key</strong> and <strong>Secret Key</strong>.</div></div>
+      <div class="instruction-row"><div class="step-number">4</div><div class="instruction-text">Paste your keys into the boxes above.</div></div>
+      <div class="instruction-row"><div class="step-number">5</div><div class="instruction-text">Click the connect button to begin secure trading.</div></div>
+      <div class="instruction-row"><div class="step-number">6</div><div class="instruction-text">Once connected, you'll see your account and can place or monitor trades.</div></div>
+      <div class="instruction-row"><div class="step-number">7</div><div class="instruction-text"><strong>Reminder:</strong> Keep your secret key private. This site does not store your keys.</div></div>
+    </div>
+
+    <footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
+  </div>
+
+  <script>
+    function connectBlofin() {
+      const apiKey = document.getElementById('apiKey').value;
+      const secretKey = document.getElementById('secretKey').value;
+      if (!apiKey || !secretKey) {
+        alert('Please enter both API Key and Secret Key.');
+        return;
+      }
+      alert('Mock connection established. Backend integration required for real trading.');
+    }
+  </script>
+</body>
+</html>
