@@ -235,14 +235,34 @@
   </div>
 
   <script>
-    function connectBlofin() {
-      const apiKey = document.getElementById('apiKey').value;
-      const secretKey = document.getElementById('secretKey').value;
+    async function connectBlofin() {
+      const apiKey = document.getElementById('apiKey').value.trim();
+      const secretKey = document.getElementById('secretKey').value.trim();
+
       if (!apiKey || !secretKey) {
         alert('Please enter both API Key and Secret Key.');
         return;
       }
-      alert('Mock connection established. Backend integration required for real trading.');
+
+      try {
+        const response = await fetch('https://blofin-trade-backend.onrender.com/trade', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ apiKey, secretKey, order: { symbol: "BTC/USDT", side: "buy", type: "limit", price: 30000, amount: 0.001 } })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert('✅ Connected successfully! You are ready to trade.');
+          console.log(result);
+        } else {
+          alert('❌ Failed to connect: ' + result.error);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('❌ Backend error. Please try again later.');
+      }
     }
   </script>
 </body>
