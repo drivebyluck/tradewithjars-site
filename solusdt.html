@@ -257,60 +257,58 @@
   </div>
 </div>
 
-
 <div id="markets" class="section hidden">
   <h2>Liquidation Heat Map</h2>
-  <div id="heatmapTable" style="color: white; font-size: 15px; text-align: left; overflow-x: auto;">
-    <p>Loading liquidation data...</p>
+  <div class="chart-container" style="background-color: #1a1a1a; padding: 15px;">
+    <div id="heatmapTable" style="color: white; font-size: 15px; text-align: left;">
+      <p>Loading liquidation data...</p>
+    </div>
   </div>
-  <script>
-    const apiKey = "3c232344442e4f269a96856cd4268936";  // Replace this temporarily
-    const symbol = "SOLUSDT";
-
-    fetch(`https://open-api-v4.coinglass.com/api/futures/liquidation/heatmap/model1?symbol=${symbol}`, {
-      method: "GET",
-      headers: {
-        "accept": "application/json",
-        "coinglassSecret": apiKey
-      }
-    })
-    .then(res => res.json())
-    .then(data => {
-      const points = data.data?.liquidationLeverageData || [];
-      if (!points.length) {
-        document.getElementById("heatmapTable").innerHTML = "<p>No liquidation data found.</p>";
-        return;
-      }
-
-      let html = `
-        <table style="width:100%; border-collapse: collapse; margin-top:10px;">
-          <thead><tr style="border-bottom: 1px solid #444;">
-            <th style="padding: 6px;">Price</th>
-            <th style="padding: 6px;">Leverage</th>
-            <th style="padding: 6px;">Amount (USD)</th>
-          </tr></thead>
-          <tbody>`;
-
-      points.sort((a, b) => b.amount - a.amount).forEach(pt => {
-        html += `<tr style="border-bottom: 1px solid #333;">
-          <td style="padding: 6px;">${pt.price}</td>
-          <td style="padding: 6px;">${pt.leverage}x</td>
-          <td style="padding: 6px; color: ${pt.amount > 0 ? 'lime' : 'red'};">$${pt.amount.toLocaleString()}</td>
-        </tr>`;
-      });
-
-      html += "</tbody></table>";
-      document.getElementById("heatmapTable").innerHTML = html;
-    })
-    .catch(err => {
-      document.getElementById("heatmapTable").innerHTML = `<p style="color:red;">Error loading data.</p>`;
-      console.error(err);
-    });
-  </script>
   <p style="color: #aaa; font-size: 0.9em;">
-    Powered by CoinGlass API (Model 1, Frontend Test)
+    Live SOLUSDT Liquidation Zones via CoinGlass API
   </p>
+  <script>
+    async function loadLiquidationData() {
+      const container = document.getElementById("heatmapTable");
+      try {
+        const res = await fetch("https://sol-liquidation-proxy.onrender.com/api/liquidation?symbol=SOLUSDT");
+        const data = await res.json();
+
+        if (!data?.data?.liquidationLeverageData?.length) {
+          container.innerHTML = "<p>No liquidation data available.</p>";
+          return;
+        }
+
+        const rows = data.data.liquidationLeverageData
+          .sort((a, b) => b.amount - a.amount)
+          .map(pt => `
+            <tr style="border-bottom:1px solid #333;">
+              <td style="padding:6px;">$${pt.price}</td>
+              <td style="padding:6px;">${pt.leverage}x</td>
+              <td style="padding:6px;color:${pt.amount>0?'lime':'red'};">$${pt.amount.toLocaleString()}</td>
+            </tr>`).join('');
+
+        container.innerHTML = `
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:1px solid #444;">
+                <th style="text-align:left;padding:6px;">Price</th>
+                <th style="text-align:left;padding:6px;">Leverage</th>
+                <th style="text-align:left;padding:6px;">Amount (USD)</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>`;
+      } catch (err) {
+        container.innerHTML = `<p style="color:red;">Error loading data.</p>`;
+        console.error("Liquidation fetch error:", err);
+      }
+    }
+
+    loadLiquidationData();
+  </script>
 </div>
+
 
   
   <div id="discussions" class="section hidden"><h2>Discussions</h2><p>Coming soon.</p></div>
