@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BloFin Trading Interface</title>
+  <link href="TradeWithJarslogo.png" rel="icon" type="image/png"/>
   <style>
     body {
       background-color: #1a1a1a;
@@ -12,14 +13,26 @@
       margin: 0;
       padding: 0;
     }
-    .logo {
-      width: 180px;
-      animation: floatLogo 3s ease-in-out infinite;
-      margin-top: 20px;
-    }
-    @keyframes floatLogo {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+
+@keyframes flyIn {
+  0% { transform: translateY(100px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulseUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+img.logo {
+  display: block;
+  margin: 30px auto 10px;
+  max-width: 220px;
+  animation:
+    flyIn 2s ease-out forwards,
+    pulseUpDown 3s ease-in-out infinite 2s;
+}
+    
     }
     .section {
       border: 2px solid #e02c2c;
@@ -85,12 +98,10 @@
 </head>
 <body>
 
-  <center>
-    <img src="https://tradewithjars.net/assets/logo.png" alt="Logo" class="logo">
-  </center>
+ <img alt="Trade With Jars Logo" class="logo" src="TradeWithJarslogo.png"/>
 
   <div class="section">
-    <h2>Live BloFin Trading Panel</h2>
+    <h2>Live BloFin Trading</h2>
 
     <label for="pair">Select Trading Pair</label>
     <select id="pair">
