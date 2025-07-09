@@ -228,11 +228,11 @@
       <label for="secretKey">Your BloFin Secret Key:</label>
       <input type="password" id="secretKey" placeholder="Enter your Secret Key">
 
-      <button onclick="connectBlofin()" style="padding: 10px 20px; background-color: red; color: white; font-weight: bold; border: none; cursor: pointer;">Connect & Start Trading</button>
+      <button id="connectBtn" onclick="connectBlofin()" style="padding: 10px 20px; background-color: red; color: white; font-weight: bold; border: none; cursor: pointer;">Connect & Start Trading</button>
       <button class="logout-btn" onclick="logoutBlofin()">Log Out</button>
     </div>
 
-    <div class="section-box">
+    <div id="instructionBox" class="section-box">
       <h3 class="typewriter-text">How to Use BloFin Trading on This Site</h3>
       <div class="instruction-row"><div class="step-number">1</div><div class="instruction-text">Go to <a href="https://blofin.com" target="_blank" style="color: red;">BloFin.com</a> and log into your account.</div></div>
       <div class="instruction-row"><div class="step-number">2</div><div class="instruction-text">Navigate to the API Management section under your profile or settings menu.</div></div>
@@ -247,13 +247,13 @@
   </div>
 
   <script>
-    // Load stored credentials if they exist
     window.addEventListener('DOMContentLoaded', () => {
       const storedKey = localStorage.getItem('blofin_api_key');
       const storedSecret = localStorage.getItem('blofin_secret_key');
       if (storedKey && storedSecret) {
         document.getElementById('apiKey').value = storedKey;
         document.getElementById('secretKey').value = storedSecret;
+        showInterfaceButton();
       }
     });
 
@@ -276,11 +276,22 @@
       .then(res => res.json())
       .then(data => {
         alert(data.message || 'Connected successfully.');
+        showInterfaceButton();
+        const box = document.getElementById('instructionBox');
+        if (box) box.style.display = 'none';
       })
       .catch(err => {
         alert('Error connecting to backend.');
         console.error(err);
       });
+    }
+
+    function showInterfaceButton() {
+      const btn = document.getElementById('connectBtn');
+      btn.textContent = 'Load BloFin Browser Interface';
+      btn.onclick = function () {
+        window.open('https://www.blofin.com/en-US/contract', '_blank');
+      };
     }
 
     function logoutBlofin() {
