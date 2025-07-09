@@ -2,37 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BloFin Trading Interface</title>
-    <link href="TradeWithJarslogo.png" rel="icon" type="image/png"/>
   <style>
     body {
- background-color: #0d0d0d;
-      color: #e6ffe6;
+      background-color: #1a1a1a;
+      color: white;
       font-family: 'Trebuchet MS', sans-serif;
       margin: 0;
       padding: 0;
-      text-align: center;
     }
-
-@keyframes flyIn {
-  0% { transform: translateY(100px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes pulseUpDown {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-img.logo {
-  display: block;
-  margin: 30px auto 10px;
-  max-width: 220px;
-  animation:
-    flyIn 2s ease-out forwards,
-    pulseUpDown 3s ease-in-out infinite 2s;
-}
+    .logo {
+      width: 180px;
+      animation: floatLogo 3s ease-in-out infinite;
+      margin-top: 20px;
+    }
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
     .section {
       border: 2px solid #e02c2c;
@@ -180,4 +167,5 @@ img.logo {
 
 </body>
 </html>
+
 
