@@ -1,397 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>TradeWithJars.net - Leverage</title>
-  <link href="TradeWithJarslogo.png" rel="icon" type="image/png"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BloFin Trading Interface</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap">
   <style>
     body {
-      background-color: #0d0d0d;
-      color: #e6ffe6;
-      font-family: 'Trebuchet MS', sans-serif;
+      background-color: #1a1a1a;
+      font-family: 'Orbitron', sans-serif;
+      color: white;
       margin: 0;
       padding: 0;
-      text-align: center;
     }
-    @keyframes flyIn {
-      0% { transform: translateY(100px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-    @keyframes pulseUpDown {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    img.logo {
-      display: block;
-      margin: 30px auto 10px;
-      max-width: 220px;
-      animation: flyIn 2s ease-out forwards, pulseUpDown 3s ease-in-out infinite 2s;
-    }
-    .dropdown {
-      position: fixed;
-      top: 30px;
-      right: 30px;
-      z-index: 1000;
-    }
-    .dropbtn {
-      background-color: #017a36;
-      color: black;
-      padding: 12px 16px;
-      font-size: 18px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #e02c2c;
-      transition: background 0.3s;
-    }
-    .dropbtn:hover {
-      background-color: #1c7c35;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      background-color: #1a1a1a;
-      min-width: 180px;
-      border-radius: 6px;
-      box-shadow: 0 0 10px #e02c2c;
-      z-index: 1001;
-    }
-    .dropdown-content a {
-      color: white;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      transition: background 0.3s;
-    }
-    .dropdown-content a:hover {
-      background-color: #333;
-    }
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-    .section {
-      background-color: #1a1a1a;
-      border-radius: 12px;
+    .glow-box {
+      border: 2px solid #e02c2c;
       padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #e02c2c;
+    }
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .logo img {
+      height: 80px;
+    }
+    .tradingview-widget-container {
       margin: 20px auto;
-      width: 95%;
-      max-width: 1000px;
-      box-shadow: 0 0 12px #e02c2c;
-      box-sizing: border-box;
+      max-width: 100%;
+      height: 500px;
     }
-    .section h2 {
-      color: #017a36;
-      margin-bottom: 20px;
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
     }
-    input, select, button {
-      width: 95%;
-      max-width: 500px;
-      margin: 10px auto;
+    .input-row input, .input-row select {
       padding: 10px;
-      background-color: #222;
-      color: white;
-      border: 1px solid white;
+      border: none;
       border-radius: 5px;
-      font-size: 16px;
-      display: block;
+      font-family: 'Orbitron', sans-serif;
     }
-    button {
-      background-color: black;
-      font-weight: bold;
+    .input-row button {
+      padding: 10px 20px;
+      background-color: #017a36;
+      color: white;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #333;
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #e02c2c;
     }
-    .result {
-      margin-top: 15px;
-      font-size: 16px;
-      color: white;
-    }
-    .partner-logo {
+    .footer {
+      text-align: center;
+      padding: 10px;
       margin-top: 40px;
-    }
-    footer {
-      color: #888;
       font-size: 14px;
-      margin-top: 40px;
+      color: gray;
+    }
+    .sponsor {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .sponsor img {
+      height: 30px;
     }
   </style>
 </head>
 <body>
 
-<img alt="Trade With Jars Logo" class="logo" src="TradeWithJarslogo.png"/>
-
-<div class="dropdown">
-  <button class="dropbtn">☰</button>
-  <div class="dropdown-content">
-      <a href="index.html">Home</a>
-      <a href="gate.html">Leverage Calculator</a>
-      <a href="crypto-news.html">Top News</a>
-      <a href="schedule.html">Presidential Schedule</a>
-      <a href="nfts.html">NFT Tracker</a>
-      <a href="solusdt.html">SOL Analysis</a>
-  </div>
-</div>
-
-<div class="section">
-  <h2>Leverage Calculator</h2>
-  <p style="font-size: 14px; color: #e02c2c; margin-top: -10px; margin-bottom: 25px;">(Choose Your Mode Below to Begin)</p>
-
-  <button class="btn" onclick="toggleMode('controlled')">Reduced Risk</button>
-  <button class="btn" onclick="toggleMode('degen')">Degenerate</button>
-  <button class="btn" onclick="toggleMode('scalp')">Quick Scalp</button>
-
-  <div id="controlledMode" style="display:none;">
-    <h3>Reduced Risk</h3>
-    <label>Investment Amount ($):</label><input id="c_investment" type="number">
-    <label>Target Profit ($):</label><input id="c_profit" type="number">
-    <label>Max Loss ($):</label><input id="c_loss" type="number">
-    <label>Leverage (X):</label><input id="c_leverage" type="number">
-    <label>Entry Price:</label><input id="c_entry" type="number">
-    <label>Direction:</label>
-    <select id="c_direction"><option>Long</option><option>Short</option></select>
-    <button onclick="calculateControlled()">Calculate</button>
-    <div class="result" id="c_result"></div>
+  <div class="logo">
+    <img src="https://tradewithjars.net/assets/logo.png" alt="TradeWithJars Logo">
   </div>
 
-  <div id="degenMode" style="display:none;">
-    <h3>Degenerate</h3>
-    <label>Investment Amount ($):</label><input id="d_investment" type="number">
-    <label>Target Profit ($):</label><input id="d_profit" type="number">
-    <label>Max Loss ($):</label><input id="d_loss" type="number">
-    <label>Entry Price:</label><input id="d_entry" type="number">
-    <label>Exit Price:</label><input id="d_exit" type="number">
-    <label>Direction:</label>
-    <select id="d_direction"><option>Long</option><option>Short</option></select>
-    <button onclick="calculateDegen()">Calculate</button>
-    <div class="result" id="d_result"></div>
-  </div>
-
-  <div id="scalpMode" style="display:none;">
-    <h3>Quick Scalp</h3>
-    <label>Entry Price:</label><input id="entryPriceScalp" type="number">
-    <label>Investment Amount ($):</label><input id="investmentScalp" type="number">
-    <label>Target Gain (%):</label>
-    <select id="gainScalp">
-      <option value="0">0%</option><option value="10">10%</option><option value="20">20%</option>
-      <option value="30">30%</option><option value="40">40%</option><option value="50">50%</option>
-      <option value="60">60%</option><option value="70">70%</option><option value="80">80%</option>
-      <option value="90">90%</option><option value="100">100%</option>
-    </select>
-    <label>Direction:</label>
-    <select id="directionScalp"><option value="long">Long</option><option value="short">Short</option></select>
-    <button onclick="calculateScalp()">Calculate</button>
-    <div id="scalpResults" class="result"></div>
-  </div>
-</div>
-<div class="section">
-  <h2>Solana Live</h2>
-  <div class="tradingview-widget-container">
-    <div class="tradingview-widget-container__widget"></div>
-    <div class="tradingview-widget-copyright">
-      <a href="https://www.tradingview.com/" target="_blank">Click Here For Full The Version on TradingView</a>
+  <div class="glow-box">
+    <div class="section-title">BloFin Trade Panel</div>
+    <div class="input-row">
+      <input id="symbol" placeholder="Symbol (e.g., SOLUSDT)" />
+      <select id="orderType">
+        <option value="market">Market</option>
+        <option value="limit">Limit</option>
+      </select>
+      <select id="side">
+        <option value="buy">Buy</option>
+        <option value="sell">Sell</option>
+      </select>
+      <input id="quantity" type="number" placeholder="Quantity" />
+      <input id="price" type="number" placeholder="Price (if Limit)" />
+      <input id="leverage" type="number" placeholder="Leverage (e.g., 5)" />
     </div>
-    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-    {
-      "width": "100%",
-      "height": "400",
-      "symbol": "BLOFIN:SOLUSDT.P",
-      "interval": "1",
-      "timezone": "Etc/UTC",
-      "theme": "dark",
-      "style": "1",
-      "locale": "en",
-      "hide_legend": true,
-      "hide_side_toolbar": false,
-      "allow_symbol_change": true,
-      "save_image": false,
-      "studies": [
-        "STD;Bull%Bear%Power",
-        "STD;MACD"
-      ],
-      "hide_volume": true,
-      "support_host": "https://www.tradingview.com"
-    }
-    </script>
+    <div class="input-row">
+      <button onclick="placeOrder()">Place Order</button>
+    </div>
+    <div class="input-row">
+      <button onclick="getBalance()">Check Balance</button>
+      <button onclick="getOpenOrders()">Open Orders</button>
+      <button onclick="getPositions()">Positions</button>
+    </div>
+    <div id="tradeResult" style="margin-top: 15px;"></div>
   </div>
-</div>
 
-<div class="section">
-  <h2>Trade Like Jars</h2>
-  <p>This strategy engine analyzes SOL's live price and suggests smart trade setups.</p>
-  <label>Investment ($):</label><input id="gen-investment" type="number">
-  <label>Target Profit ($):</label><input id="gen-profit" type="number">
-  <label>Number of Days:</label><input id="gen-days" type="number">
-  <button onclick="generateStrategy()">Generate Strategy</button>
-  <div id="gen-result" style="margin-top:20px;" class="result"></div>
-</div>
+  <div class="glow-box">
+    <div class="tradingview-widget-container">
+      <div id="tradingview_12345"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+      <script type="text/javascript">
+        new TradingView.widget({
+          "container_id": "tradingview_12345",
+          "width": "100%",
+          "height": 500,
+          "symbol": "BINANCE:SOLUSDT.P",
+          "interval": "1",
+          "timezone": "Etc/UTC",
+          "theme": "dark",
+          "style": "1",
+          "locale": "en",
+          "toolbar_bg": "#1a1a1a",
+          "enable_publishing": false,
+          "allow_symbol_change": true,
+          "studies": ["Volume@tv-basicstudies"]
+        });
+      </script>
+    </div>
+  </div>
 
-<div class="section partner-logo">
-  <p>PROUD PARTNER OF</p>
-  <a href="https://discord.gg/bbBPzjJk" target="_blank">
-    <img alt="Doughboi’s Bakery Logo" src="doughbois.png" width="160"/>
-  </a>
-</div>
+  <div class="sponsor">
+    <p>Proud Partner:</p>
+    <img src="https://tradewithjars.net/assets/doughbois.png" alt="Doughboi’s Bakery Logo">
+  </div>
 
-<footer>© 2025 TradeWithJars.net. All rights reserved.</footer>
-<script>
-function getDecimalPlaces(value) {
-  if (!isNaN(value)) {
-    const parts = value.toString().split(".");
-    return parts.length > 1 ? parts[1].length : 0;
-  }
-  return 2;
-}
+  <div class="footer">
+    &copy; 2025 TradeWithJars.net. All rights reserved.
+  </div>
 
-function toggleMode(mode) {
-  document.getElementById('controlledMode').style.display = 'none';
-  document.getElementById('degenMode').style.display = 'none';
-  document.getElementById('scalpMode').style.display = 'none';
-  if (mode === 'controlled') document.getElementById('controlledMode').style.display = 'block';
-  if (mode === 'degen') document.getElementById('degenMode').style.display = 'block';
-  if (mode === 'scalp') document.getElementById('scalpMode').style.display = 'block';
-}
+  <script>
+    const backend = "https://blofin-trade-backend.onrender.com";
 
-function calculateControlled() {
-  const investment = parseFloat(document.getElementById('c_investment').value);
-  const profit = parseFloat(document.getElementById('c_profit').value);
-  const loss = parseFloat(document.getElementById('c_loss').value);
-  const leverage = parseFloat(document.getElementById('c_leverage').value);
-  const entry = parseFloat(document.getElementById('c_entry').value);
-  const direction = document.getElementById('c_direction').value;
+    async function placeOrder() {
+      const symbol = document.getElementById("symbol").value;
+      const orderType = document.getElementById("orderType").value;
+      const side = document.getElementById("side").value;
+      const quantity = document.getElementById("quantity").value;
+      const price = document.getElementById("price").value;
+      const leverage = document.getElementById("leverage").value;
 
-  if (isNaN(investment) || isNaN(profit) || isNaN(loss) || isNaN(leverage) || isNaN(entry)) {
-    document.getElementById('c_result').textContent = "You must fill all fields before calculation.";
-    return;
-  }
-
-  let tp, sl;
-  const move = (profit / (investment * leverage)) * entry;
-  const stop = (loss / (investment * leverage)) * entry;
-
-  if (direction === "Long") {
-    tp = entry + move;
-    sl = entry - stop;
-  } else {
-    tp = entry - move;
-    sl = entry + stop;
-  }
-
-  const dec = getDecimalPlaces(entry);
-  document.getElementById('c_result').textContent = `Take Profit: $${tp.toFixed(dec)} | Stop Loss: $${sl.toFixed(dec)}`;
-}
-
-function calculateDegen() {
-  const investment = parseFloat(document.getElementById('d_investment').value);
-  const profit = parseFloat(document.getElementById('d_profit').value);
-  const loss = parseFloat(document.getElementById('d_loss').value);
-  const entry = parseFloat(document.getElementById('d_entry').value);
-  const exit = parseFloat(document.getElementById('d_exit').value);
-  const direction = document.getElementById('d_direction').value;
-
-  if (isNaN(investment) || isNaN(profit) || isNaN(loss) || isNaN(entry) || isNaN(exit)) {
-    document.getElementById('d_result').textContent = "You must fill all fields before calculation.";
-    return;
-  }
-
-  if ((direction === "Long" && exit <= entry) || (direction === "Short" && exit >= entry)) {
-    document.getElementById('d_result').textContent = "Invalid exit price for selected direction.";
-    return;
-  }
-
-  const leverage = Math.abs((profit / investment) / Math.abs(exit - entry) * entry);
-  const move = (loss / (investment * leverage)) * entry;
-  const sl = direction === "Long" ? entry - move : entry + move;
-  const dec = getDecimalPlaces(entry);
-
-  document.getElementById('d_result').textContent = `Leverage: ${leverage.toFixed(dec)} | Stop Loss: $${sl.toFixed(dec)}`;
-}
-
-function calculateScalp() {
-  const entry = parseFloat(document.getElementById('entryPriceScalp').value);
-  const invest = parseFloat(document.getElementById('investmentScalp').value);
-  const gainPct = parseFloat(document.getElementById('gainScalp').value);
-  const direction = document.getElementById('directionScalp').value;
-
-  if (isNaN(entry) || isNaN(invest) || isNaN(gainPct)) {
-    document.getElementById('scalpResults').textContent = "You must fill all fields before calculation.";
-    return;
-  }
-
-  const dec = getDecimalPlaces(entry);
-  const gain = invest * (gainPct / 100);
-  const risk = invest * 0.05;
-  const results = [];
-
-  [10, 20, 30, 40, 50].forEach(lev => {
-    const positionSize = invest * lev;
-    const tpMove = gain / positionSize;
-    const slMove = risk / positionSize;
-    let tp, sl;
-
-    if (direction === "long") {
-      tp = entry * (1 + tpMove);
-      sl = entry * (1 - slMove);
-    } else {
-      tp = entry * (1 - tpMove);
-      sl = entry * (1 + slMove);
+      const response = await fetch(`${backend}/place-order`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symbol, orderType, side, quantity, price, leverage })
+      });
+      const result = await response.text();
+      document.getElementById("tradeResult").innerText = result;
     }
 
-    results.push(`<div><b>${lev}x</b><br>Take Profit: $${tp.toFixed(dec)}<br>Stop Loss: $${sl.toFixed(dec)}</div>`);
-  });
+    async function getBalance() {
+      const res = await fetch(`${backend}/balance`);
+      const data = await res.text();
+      document.getElementById("tradeResult").innerText = "Balance: " + data;
+    }
 
-  document.getElementById("scalpResults").innerHTML = results.join("<br><br>");
-}
+    async function getOpenOrders() {
+      const res = await fetch(`${backend}/open-orders`);
+      const data = await res.text();
+      document.getElementById("tradeResult").innerText = "Open Orders: " + data;
+    }
 
-const allLevels = [
-  8.12, 23.80, 39.50, 49.99, 58.40, 63.25, 75.90, 89.50, 102.75, 115.30,
-  123.45, 135.00, 143.25, 150.70, 160.10, 168.90, 178.40, 185.60, 195.25,
-  205.00, 215.90, 225.40, 230.80, 240.50, 250.00, 260.60, 275.80, 289.90, 295.00
-];
+    async function getPositions() {
+      const res = await fetch(`${backend}/positions`);
+      const data = await res.text();
+      document.getElementById("tradeResult").innerText = "Positions: " + data;
+    }
+  </script>
 
-async function fetchSOLPrice() {
-  try {
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd');
-    const data = await res.json();
-    return data.solana.usd;
-  } catch (err) {
-    console.error("Error fetching SOL price:", err);
-    return null;
-  }
-}
-
-function getClosestLevels(price) {
-  const sorted = [...allLevels].sort((a, b) => a - b);
-  const supports = sorted.filter(lvl => lvl < price).slice(-3);
-  const resistances = sorted.filter(lvl => lvl > price).slice(0, 3);
-  return { supports, resistances };
-}
-
-async function generateStrategy() {
-  const investment = parseFloat(document.getElementById("gen-investment").value);
-  const target = parseFloat(document.getElementById("gen-profit").value);
-  const days = parseFloat(document.getElementById("gen-days").value);
-  const price = await fetchSOLPrice();
-
-  if (!investment || !target || !days || !price) {
-    document.getElementById("gen-result").innerHTML = "You must fill all fields before calculation.";
-    return;
-  }
-
-  const { supports, resistances } = getClosestLevels(price);
-  const strategy = `
-    <strong>SOL Live Price:</strong> $${price.toFixed(2)}<br>
-    <strong>Support Levels:</strong> $${supports.join(", $")}<br>
-    <strong>Resistance Levels:</strong> $${resistances.join(", $")}<br>
-    <strong>Strategy:</strong> Go long if it bounces from $${supports[2]}, short if rejected from $${resistances[0]}.<br>
-    <strong>Daily Target:</strong> $${(target / days).toFixed(2)}
-  `;
-  document.getElementById("gen-result").innerHTML = strategy;
-}
-</script>
 </body>
 </html>
-
