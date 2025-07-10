@@ -209,6 +209,18 @@ img.logo {
   </iframe>
 </div>
 
+  <script>
+  window.addEventListener("message", (event) => {
+    if (event.origin === "https://solana-analysis-refresh.onrender.com") {
+      const iframe = document.querySelector('iframe[src*="solana-analysis-refresh"]');
+      if (iframe && event.data.height) {
+        iframe.style.height = event.data.height + "px";
+      }
+    }
+  });
+</script>
+
+
 <div id="ticker"><span id="rssFeed">Loading headlines...</span></div>
 
 
