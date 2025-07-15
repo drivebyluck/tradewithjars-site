@@ -201,18 +201,19 @@ img.logo {
 
 <div class="section">
   <iframe 
-    src="https://solana-analysis-refresh.onrender.com/solana-analysis.html" 
+    src="https://solana-analysis-refresh.onrender.com/api/analysis" 
     width="100%" 
-    height="1200" 
-    style="border: none; background: transparent;"
-    loading="lazy">
+    height="800" 
+    style="border: none; background: transparent;" 
+    loading="lazy" 
+    id="solana-analysis-frame">
   </iframe>
 </div>
 
-  <script>
+<script>
   window.addEventListener("message", (event) => {
     if (event.origin === "https://solana-analysis-refresh.onrender.com") {
-      const iframe = document.querySelector('iframe[src*="solana-analysis-refresh"]');
+      const iframe = document.getElementById("solana-analysis-frame");
       if (iframe && event.data.height) {
         iframe.style.height = event.data.height + "px";
       }
