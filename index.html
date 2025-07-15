@@ -199,11 +199,6 @@ img.logo {
     <a href="gate.html">🔥 Try Our Proprietary Leverage Calculator 🔥</a>
   </div>
 
-<div class="section" style="padding-bottom: 0;">
-<iframe src="https://solana-analysis-refresh.onrender.com/solana-analysis.html" ... ></iframe>
-
-</div>
-
 <div class="section">
   <iframe 
     src="https://solana-analysis-refresh.onrender.com/solana-analysis.html" 
@@ -214,11 +209,23 @@ img.logo {
   </iframe>
 </div>
 
-
+  <script>
+  window.addEventListener("message", (event) => {
+    if (event.origin === "https://solana-analysis-refresh.onrender.com") {
+      const iframe = document.querySelector('iframe[src*="solana-analysis-refresh"]');
+      if (iframe && event.data.height) {
+        iframe.style.height = event.data.height + "px";
+      }
+    }
+  });
+</script>
 
 
 <div id="ticker"><span id="rssFeed">Loading headlines...</span></div>
 
+
+
+  <div id="ticker"><span id="rssFeed">Loading headlines...</span></div>
 
   <div class="section">
     <h2>Top Solana NFTs</h2>
