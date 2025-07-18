@@ -200,14 +200,14 @@ img.logo {
     <a href="gate.html">🔥 Try Our Proprietary Leverage Calculator 🔥</a>
   </div>
 
-<div class="section" id="solanaAnalysis">
-  <p style="color: white;">Loading Solana analysis...</p>
+<div id="solanaAnalysis" class="section" style="color: white; background-color: black; padding: 20px; border: 2px solid red; border-radius: 10px; margin-top: 20px;">
+  <p>Loading Solana analysis...</p>
 </div>
 
 <script>
   async function loadSolanaAnalysis() {
     try {
-      const res = await fetch("https://solana-analysis-refresh.onrender.com/api/analysis");
+      const res = await fetch("https://726a9d1f-1178-48fa-bf63-c274c21a1043-00-308byatj088kd.kirk.replit.dev/solana-analysis"); // replace with real URL
       const html = await res.text();
       document.getElementById("solanaAnalysis").innerHTML = html;
     } catch (e) {
@@ -216,6 +216,7 @@ img.logo {
   }
   loadSolanaAnalysis();
 </script>
+
 
 
 <div id="ticker"><span id="rssFeed">Loading headlines...</span></div>
